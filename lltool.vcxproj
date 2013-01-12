@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="externals\dirent.h" />
+    <ClInclude Include="externals\triangle\triangle.h" />
+    <ClInclude Include="include\llactivatevisiblevertices.h" />
+    <ClInclude Include="include\lladdvertextopolygon.h" />
+    <ClInclude Include="include\llalg.h" />
+    <ClInclude Include="include\llalgconst.h" />
+    <ClInclude Include="include\llalgfirst.h" />
+    <ClInclude Include="include\llalglist.h" />
+    <ClInclude Include="include\llalgpeakfinder.h" />
+    <ClInclude Include="include\llalgradial.h" />
+    <ClInclude Include="include\llalgsecond.h" />
+    <ClInclude Include="include\llalgslope.h" />
+    <ClInclude Include="include\llalgstripe.h" />
+    <ClInclude Include="include\llcommands.h" />
+    <ClInclude Include="include\llcreatemap.h" />
+    <ClInclude Include="include\llcreatepolygon.h" />
+    <ClInclude Include="include\llcreateworkers.h" />
+    <ClInclude Include="include\lldiamondsquare.h" />
+    <ClInclude Include="include\llexit.h" />
+    <ClInclude Include="include\llexportmap.h" />
+    <ClInclude Include="include\llfillcolormap.h" />
+    <ClInclude Include="include\llfilter.h" />
+    <ClInclude Include="include\llinactivateallvertices.h" />
+    <ClInclude Include="include\lllogger.h" />
+    <ClInclude Include="include\llmakederivatives.h" />
+    <ClInclude Include="include\llmap.h" />
+    <ClInclude Include="include\llmaplist.h" />
+    <ClInclude Include="include\llmapworker.h" />
+    <ClInclude Include="include\llpanorama.h" />
+    <ClInclude Include="include\llparsemodlist.h" />
+    <ClInclude Include="include\llpointlist.h" />
+    <ClInclude Include="include\llpolygonlist.h" />
+    <ClInclude Include="include\llquadlist.h" />
+    <ClInclude Include="include\llreaddatafile.h" />
+    <ClInclude Include="include\llreadpolygondatafile.h" />
+    <ClInclude Include="include\llremoveinactivetriangles.h" />
+    <ClInclude Include="include\llselectall.h" />
+    <ClInclude Include="include\llselectrec.h" />
+    <ClInclude Include="include\llset.h" />
+    <ClInclude Include="include\llsetatgridline.h" />
+    <ClInclude Include="include\llsetcontour.h" />
+    <ClInclude Include="include\llsetgrid.h" />
+    <ClInclude Include="include\llsetgridborder.h" />
+    <ClInclude Include="include\llsetheight.h" />
+    <ClInclude Include="include\llsetpath.h" />
+    <ClInclude Include="include\llsetvertex.h" />
+    <ClInclude Include="include\llsplitat.h" />
+    <ClInclude Include="include\llsplitatgrid.h" />
+    <ClInclude Include="include\llsplitatpolygonborder.h" />
+    <ClInclude Include="include\llsplitbetween.h" />
+    <ClInclude Include="include\llstencilpolygon.h" />
+    <ClInclude Include="include\lltrianglelist.h" />
+    <ClInclude Include="include\lltriangulation.h" />
+    <ClInclude Include="include\lltrimod.h" />
+    <ClInclude Include="include\llutils.h" />
+    <ClInclude Include="include\llworker.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="externals\triangle\triangle.cc" />
+    <ClCompile Include="src\llactivatevisiblevertices.cpp" />
+    <ClCompile Include="src\lladdvertextopolygon.cpp" />
+    <ClCompile Include="src\llalg.cpp" />
+    <ClCompile Include="src\llalgconst.cpp" />
+    <ClCompile Include="src\llalgfirst.cpp" />
+    <ClCompile Include="src\llalglist.cpp" />
+    <ClCompile Include="src\llalgpeakfinder.cpp" />
+    <ClCompile Include="src\llalgradial.cpp" />
+    <ClCompile Include="src\llalgsecond.cpp" />
+    <ClCompile Include="src\llalgslope.cpp" />
+    <ClCompile Include="src\llalgstripe.cpp" />
+    <ClCompile Include="src\llcommands.cpp" />
+    <ClCompile Include="src\llcreatemap.cpp" />
+    <ClCompile Include="src\llcreatepolygon.cpp" />
+    <ClCompile Include="src\lldiamondsquare.cpp" />
+    <ClCompile Include="src\llexit.cpp" />
+    <ClCompile Include="src\llexportmap.cpp" />
+    <ClCompile Include="src\llfillcolormap.cpp" />
+    <ClCompile Include="src\llfilter.cpp" />
+    <ClCompile Include="src\llinactivateallvertices.cpp" />
+    <ClCompile Include="src\lllogger.cpp" />
+    <ClCompile Include="src\llmakederivatives.cpp" />
+    <ClCompile Include="src\llmap.cpp" />
+    <ClCompile Include="src\llmaplist.cpp" />
+    <ClCompile Include="src\llmapworker.cpp" />
+    <ClCompile Include="src\llpanorama.cpp" />
+    <ClCompile Include="src\llparsemodlist.cpp" />
+    <ClCompile Include="src\llpointlist.cpp" />
+    <ClCompile Include="src\llpolygonlist.cpp" />
+    <ClCompile Include="src\llquadlist.cpp" />
+    <ClCompile Include="src\llreaddatafile.cpp" />
+    <ClCompile Include="src\llreadpolygondatafile.cpp" />
+    <ClCompile Include="src\llremoveinactivetriangles.cpp" />
+    <ClCompile Include="src\llselectall.cpp" />
+    <ClCompile Include="src\llselectrec.cpp" />
+    <ClCompile Include="src\llset.cpp" />
+    <ClCompile Include="src\llsetatgridline.cpp" />
+    <ClCompile Include="src\llsetcontour.cpp" />
+    <ClCompile Include="src\llsetgrid.cpp" />
+    <ClCompile Include="src\llsetgridborder.cpp" />
+    <ClCompile Include="src\llsetheight.cpp" />
+    <ClCompile Include="src\llsetpath.cpp" />
+    <ClCompile Include="src\llsetvertex.cpp" />
+    <ClCompile Include="src\llsplitat.cpp" />
+    <ClCompile Include="src\llsplitatgrid.cpp" />
+    <ClCompile Include="src\llsplitatpolygonborder.cpp" />
+    <ClCompile Include="src\llsplitbetween.cpp" />
+    <ClCompile Include="src\llstencilpolygon.cpp" />
+    <ClCompile Include="src\lltool.cpp" />
+    <ClCompile Include="src\lltrianglelist.cpp" />
+    <ClCompile Include="src\lltriangulation.cpp" />
+    <ClCompile Include="src\lltrimod.cpp" />
+    <ClCompile Include="src\llutils.cpp" />
+    <ClCompile Include="src\llworker.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <UseOfMfc>Static</UseOfMfc>
+    <UseOfAtl>Static</UseOfAtl>
+    <PlatformToolset>v100</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <StackReserveSize>10000000</StackReserveSize>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <ExceptionHandling>Async</ExceptionHandling>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <LargeAddressAware>true</LargeAddressAware>
+      <AdditionalDependencies>Advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>10000000</StackReserveSize>
+      <GenerateMapFile>true</GenerateMapFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -2,17 +2,26 @@
 
 #include "..\include\llalg.h"
 #include "..\include\llmaplist.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
-llAlg::llAlg(char *_map) : llWorker() {
-	map = _map;
+llAlg::llAlg(char *_alg_list, char *_map) : llWorker() {
+	std_mapname  = _map;
+	std_alg_list = _alg_list;
+}
+
+int llAlg::Prepare(void) {
+	if (!llWorker::Prepare()) return 0;
+
+	alg_list = std_alg_list;
+	mapname  = std_mapname;
+
+	return 1;
 }
 
 int llAlg::RegisterOptions(void) {
 	if (!llWorker::RegisterOptions()) return 0;
 
+	RegisterValue("-map",      &mapname);
+	RegisterValue("-alg",      &alg_list);
 	RegisterValue("-multiply", &multiply);
 	RegisterValue("-add",      &add);
 
@@ -23,10 +32,10 @@ int llAlg::Init(void) {
 	llWorker::Init();
 
 	//get the corresponding map from the global map container
-	if (map) {
-		heightmap = _llMapList()->GetMap(map);
-		if (!heightmap) {
-			_llLogger()->WriteNextLine(-LOG_FATAL, "%s: map [%s] not found", command_name, map);
+	if (mapname) {
+		map = _llMapList()->GetMap(mapname);
+		if (!map) {
+			_llLogger()->WriteNextLine(-LOG_FATAL, "%s: map [%s] not found", command_name, mapname);
 			return 0;
 		}
 	}

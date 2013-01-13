@@ -1,7 +1,6 @@
 #ifndef _PLLACTIVATEVISIBLEVERTICES_H_
 #define _PLLACTIVATEVISIBLEVERTICES_H_
 
-#include <iostream>
 #include "../include/lltrimod.h"
 
 class llActivateVisibleVertices : public llTriMod {
@@ -18,6 +17,7 @@ public:
 		return new llActivateVisibleVertices(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

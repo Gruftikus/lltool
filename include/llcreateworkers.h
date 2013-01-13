@@ -1,61 +1,64 @@
 
-#include <iostream>
+
 #include "../include/llworker.h"
 #include "../include/llmap.h"
 #include "../include/llcommands.h"
 
 //Workers:
-#include "..\include\llselectrec.h"
+#include "../include/llcreatemap.h"
+#include "../include/llselectrec.h"
 
-#include "..\include\llalg.h"
-#include "..\include\llalglist.h"
-#include "..\include\llalgconst.h"
-#include "..\include\llalgfirst.h"
-#include "..\include\llalgsecond.h"
-#include "..\include\llalgslope.h"
-#include "..\include\llalgstripe.h"
-#include "..\include\llalgradial.h"
-#include "..\include\llalgpeakfinder.h"
-#include "..\include\llparsemodlist.h"
-#include "..\include\llcreatemap.h"
+//Alg-based:
+#include "../include/llalg.h"
+#include "../include/llalglist.h"
+#include "../include/llalgconst.h"
+#include "../include/llalgfirst.h"
+#include "../include/llalgpeakfinder.h"
+#include "../include/llalgradial.h"
+#include "../include/llalgsecond.h"
+#include "../include/llalgslope.h"
+#include "../include/llalgstripe.h"
 
 //Map-based workers:
-#include "..\include\llexportmap.h"
-#include "..\include\llsetheight.h"
-#include "..\include\llselectall.h"
+#include "../include/llmapworker.h"
+#include "../include/lldiamondsquare.h"
+#include "../include/llfillcolormap.h"
+#include "../include/llfilter.h"
+#include "../include/llexportmap.h"
+#include "../include/llmakederivatives.h"
+#include "../include/llsetheight.h"
+#include "../include/llselectall.h"
+#include "../include/lltriangulation.h"
 
-#include "..\include\llfillcolormap.h"
+//Vertex-setters:
+#include "../include/llset.h"
+#include "../include/lladdvertextopolygon.h"
+#include "../include/llcreatepolygon.h"
+#include "../include/llpanorama.h"
+#include "../include/llreaddatafile.h"
+#include "../include/llreadpolygondatafile.h"
+#include "../include/llsetatgridline.h"
+#include "../include/llsetcontour.h"
+#include "../include/llsetgrid.h"
+#include "../include/llsetgridborder.h"
+#include "../include/llsetvertex.h"
 
-#include "..\include\lldiamondsquare.h"
-#include "..\include\llfilter.h"
-#include "..\include\llmakederivatives.h"
+//Triangle-modifiers:
+#include "../include/lltrimod.h"
+#include "../include/llactivatevisiblevertices.h"
+#include "../include/llremoveinactivetriangles.h"
+#include "../include/llsplitat.h"
+#include "../include/llsplitatgrid.h"
+#include "../include/llsplitatpolygonborder.h"
+#include "../include/llsplitbetween.h"
+#include "../include/llstencilpolygon.h"
 
-#include "..\include\llsetvertex.h"
-#include "..\include\llsetgrid.h"
-#include "..\include\llsetgridborder.h"
-#include "..\include\llsetatgridline.h"
-#include "..\include\lladdvertextopolygon.h"
-#include "..\include\llcreatepolygon.h"
-#include "..\include\llreadpolygondatafile.h"
-#include "..\include\llreaddatafile.h"
-#include "..\include\llsetcontour.h"
-#include "..\include\llpanorama.h"
-
-#include "..\include\lltriangulation.h"
-
-#include "..\include\llsplitat.h"
-#include "..\include\llsplitatgrid.h"
-#include "..\include\llsplitbetween.h"
-#include "..\include\llsplitatpolygonborder.h"
-#include "..\include\llstencilpolygon.h"
-#include "..\include\llremoveinactivetriangles.h"
-#include "..\include\llactivatevisiblevertices.h"
-
+//Triangle-Exporters:
+#include "../include/llexportmaptoobj.h"
 
 void CreateWorkers(llCommands *_batch) {
 
-		//Workers:
-	_batch->RegisterWorker(new llParseModList());
+	//Workers:
 	_batch->RegisterWorker(new llSelectRec());
 
 	//Alg-based:
@@ -103,5 +106,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llStencilPolygon());
 	_batch->RegisterWorker(new llRemoveInactiveTriangles());
 	_batch->RegisterWorker(new llActivateVisibleVertices());
+
+	_batch->RegisterWorker(new llExportMapToObj());
 
 }

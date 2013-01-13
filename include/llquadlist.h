@@ -22,8 +22,8 @@ public:
 	int x, y; //current position in the 2d-grid
 
 	//constructor
-	llQuad(int _x, int _y, float _x1, float _y1, float _x2, float _y2);
 	llQuad();
+	llQuad(int _x, int _y, float _x1, float _y1, float _x2, float _y2);
 
 	void SetMaxPoints(int _maxpoints) {
 		maxpoints = _maxpoints;

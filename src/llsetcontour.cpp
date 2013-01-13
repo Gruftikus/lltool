@@ -1,13 +1,15 @@
 #include "..\include\llsetcontour.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
 llSetContour::llSetContour() : llSet() {
-
 	SetCommandName("ContourLine");
+}
+
+int llSetContour::Prepare(void) {
+	if (!llSet::Prepare()) return 0;
 
 	findmin = findmax = linear = onlyintracell = setmin = setmax = 0;
+
+	return 1;
 }
 
 int llSetContour::RegisterOptions(void) {
@@ -59,8 +61,8 @@ int llSetContour::Init(void) {
 		for (float x=_llUtils()->x00+offsetx+gridx; x<=(_llUtils()->x11); x+=gridx) {
 			if (lastflag==-1 && findmin) {
 				for (float x1=x-gridx; x1<=x; x1++) {
-					if (heightmap->GetZ(x1,y) < minz) {
-						minz = heightmap->GetZ(x1, y);
+					if (map->GetZ(x1,y) < minz) {
+						minz = map->GetZ(x1, y);
 						minx = x1;
 						if (onlyintracell && int(x1/cellsize_x)*int(cellsize_x)==int(x1)) {
 							lastflag = 0;
@@ -71,8 +73,8 @@ int llSetContour::Init(void) {
 			}
 			if (lastflag==1 && findmax) {
 				for (float x1=x-gridx; x1<=x; x1++) {
-					if (heightmap->GetZ(x1,y) > maxz) {
-						maxz = heightmap->GetZ(x1, y);
+					if (map->GetZ(x1,y) > maxz) {
+						maxz = map->GetZ(x1, y);
 						maxx = x1;
 						if (onlyintracell && int(x1/cellsize_x)*int(cellsize_x)==int(x1)) {
 							lastflag = 0;
@@ -83,18 +85,18 @@ int llSetContour::Init(void) {
 			}
 
 
-			if (((heightmap->GetZ(x,y) > z) && (heightmap->GetZ(x-gridx,y) < z))
-				|| ((heightmap->GetZ(x,y) < z) && (heightmap->GetZ(x-gridx,y) > z))) {
+			if (((map->GetZ(x,y) > z) && (map->GetZ(x-gridx,y) < z))
+				|| ((map->GetZ(x,y) < z) && (map->GetZ(x-gridx,y) > z))) {
 					//breakline crossing
-					float myx = x-gridx*(heightmap->GetZ(x,y)-z)/
-						(heightmap->GetZ(x,y)
-						- heightmap->GetZ(x-gridx,y));
+					float myx = x-gridx*(map->GetZ(x,y)-z)/
+						(map->GetZ(x,y)
+						- map->GetZ(x-gridx,y));
 					if (!linear) {
 						myx = 0;
 						float numx = 0;
 						for (float x1=x-gridx; x1<=x; x1++) {
-							if ((heightmap->GetZ(x1,y) < z && heightmap->GetZ(x1-minab,y) >= z)
-								|| (heightmap->GetZ(x1,y) > z && heightmap->GetZ(x1-minab,y) <= z)) {
+							if ((map->GetZ(x1,y) < z && map->GetZ(x1-minab,y) >= z)
+								|| (map->GetZ(x1,y) > z && map->GetZ(x1-minab,y) <= z)) {
 									myx+=x1;
 									numx++;
 							}
@@ -106,7 +108,7 @@ int llSetContour::Init(void) {
 						}
 					}
 					int flag=1;
-					if (heightmap->GetZ(x,y) < heightmap->GetZ(x-gridx,y)) 
+					if (map->GetZ(x,y) < map->GetZ(x-gridx,y)) 
 						flag=-1;
 					if (lastflag==-1 && flag==1 && minz<99998) { 
 						if (points->GetMinDistance(minx,y) > minab) { //  && 
@@ -130,23 +132,23 @@ int llSetContour::Init(void) {
 					//float minab_grid=-1;
 					float minab_grid = minab;
 					if (points->GetMinDistance(myx,y) > minab && points->GetMinDistanceGrid(myx,y,1) > minab_grid) {
-						int p = points->AddPoint(myx, y, heightmap->GetZ(myx,y));	
+						int p = points->AddPoint(myx, y, map->GetZ(myx,y));	
 						con_points++;
 						points->SetFlag(p, flag);
-						if (setmin && heightmap->GetZ(x-gridx,y) < z && points->GetMinDistance(x-gridx,y) > minab) {
-							points->AddPoint(x-gridx, y, heightmap->GetZ(x-gridx,y)); 
+						if (setmin && map->GetZ(x-gridx,y) < z && points->GetMinDistance(x-gridx,y) > minab) {
+							points->AddPoint(x-gridx, y, map->GetZ(x-gridx,y)); 
 							con_points++;
 						}
-						if (setmin && heightmap->GetZ(x,y) < z && points->GetMinDistance(x,y) > minab) {
-							points->AddPoint(x, y, heightmap->GetZ(x,y)); 
+						if (setmin && map->GetZ(x,y) < z && points->GetMinDistance(x,y) > minab) {
+							points->AddPoint(x, y, map->GetZ(x,y)); 
 							con_points++;
 						}
-						if (setmax && heightmap->GetZ(x-gridx,y) > z && points->GetMinDistance(x-gridx,y) > minab) {
-							points->AddPoint(x-gridx, y, heightmap->GetZ(x-gridx,y)); 
+						if (setmax && map->GetZ(x-gridx,y) > z && points->GetMinDistance(x-gridx,y) > minab) {
+							points->AddPoint(x-gridx, y, map->GetZ(x-gridx,y)); 
 							con_points++;
 						}
-						if (setmax && heightmap->GetZ(x,y) > z && points->GetMinDistance(x,y) > minab) {
-							points->AddPoint(x,y,heightmap->GetZ(x,y)); 
+						if (setmax && map->GetZ(x,y) > z && points->GetMinDistance(x,y) > minab) {
+							points->AddPoint(x, y, map->GetZ(x,y)); 
 							con_points++;
 						}
 
@@ -166,8 +168,8 @@ int llSetContour::Init(void) {
 
 			if (lastflag==-1 && findmin) {
 				for (float y1=y-gridy; y1<=y; y1++) {
-					if (heightmap->GetZ(x,y1) < minz) {
-						minz = heightmap->GetZ(x, y1);
+					if (map->GetZ(x,y1) < minz) {
+						minz = map->GetZ(x, y1);
 						miny = y1;
 						if (onlyintracell && int(y1/cellsize_y)*int(cellsize_y)==int(y1)) {
 							lastflag = 0;
@@ -178,8 +180,8 @@ int llSetContour::Init(void) {
 			}
 			if (lastflag==1 && findmax) {
 				for (float y1=y-gridy; y1<=y; y1++) {
-					if (heightmap->GetZ(x,y1) > maxz) {
-						maxz = heightmap->GetZ(x, y1);
+					if (map->GetZ(x,y1) > maxz) {
+						maxz = map->GetZ(x, y1);
 						maxy = y1;
 						if (onlyintracell && int(y1/cellsize_y)*int(cellsize_y)==int(y1)) {
 							lastflag = 0;
@@ -189,18 +191,18 @@ int llSetContour::Init(void) {
 				}
 			}
 
-			if (((heightmap->GetZ(x,y) > z ) && (heightmap->GetZ(x,y-gridy) < z))
-				|| ((heightmap->GetZ(x,y) < z ) && (heightmap->GetZ(x,y-gridy) > z))) {
+			if (((map->GetZ(x,y) > z ) && (map->GetZ(x,y-gridy) < z))
+				|| ((map->GetZ(x,y) < z ) && (map->GetZ(x,y-gridy) > z))) {
 					//breakline crossing
-					float myy = y-gridy*(heightmap->GetZ(x,y)-z)/
-						(heightmap->GetZ(x,y)
-						- heightmap->GetZ(x,y-gridy));
+					float myy = y-gridy*(map->GetZ(x,y)-z)/
+						(map->GetZ(x,y)
+						- map->GetZ(x,y-gridy));
 					if (!linear) {
 						myy = 0;
 						float numy = 0;
 						for (float y1=y-gridy; y1<=y; y1++) {
-							if ((heightmap->GetZ(x,y1) < z && heightmap->GetZ(x,y1-minab) >= z)
-								|| (heightmap->GetZ(x,y1) > z && heightmap->GetZ(x,y1-minab) <= z)) {
+							if ((map->GetZ(x,y1) < z && map->GetZ(x,y1-minab) >= z)
+								|| (map->GetZ(x,y1) > z && map->GetZ(x,y1-minab) <= z)) {
 									myy += y1;
 									numy++;
 							}
@@ -212,7 +214,7 @@ int llSetContour::Init(void) {
 						}
 					}
 					int flag = 1;
-					if (heightmap->GetZ(x,y) < heightmap->GetZ(x,y-gridy)) 
+					if (map->GetZ(x,y) < map->GetZ(x,y-gridy)) 
 						flag=-1;
 					if (lastflag==-1 && flag==1 && minz<99998) { 
 						if (points->GetMinDistance(x,miny) > minab) { 
@@ -237,23 +239,23 @@ int llSetContour::Init(void) {
 					//float minab_grid=-1;
 					float minab_grid = minab;
 					if (points->GetMinDistance(x,myy) > minab && points->GetMinDistanceGrid(x,myy,2) > minab_grid) {
-						int p = points->AddPoint(x,myy,heightmap->GetZ(x,myy));	
+						int p = points->AddPoint(x, myy, map->GetZ(x,myy));	
 						con_points++;
 						points->SetFlag(p, flag);
-						if (setmin && heightmap->GetZ(x,y-gridy) < z && points->GetMinDistance(x,y-gridy) > minab) {
-							points->AddPoint(x, y-gridy, heightmap->GetZ(x,y-gridy)); 
+						if (setmin && map->GetZ(x,y-gridy) < z && points->GetMinDistance(x,y-gridy) > minab) {
+							points->AddPoint(x, y-gridy, map->GetZ(x,y-gridy)); 
 							con_points++;
 						}
-						if (setmin && heightmap->GetZ(x,y) < z && points->GetMinDistance(x,y) > minab) {
-							points->AddPoint(x, y, heightmap->GetZ(x,y)); 
+						if (setmin && map->GetZ(x,y) < z && points->GetMinDistance(x,y) > minab) {
+							points->AddPoint(x, y, map->GetZ(x,y)); 
 							con_points++;
 						}
-						if (setmax && heightmap->GetZ(x,y-gridy)>z && points->GetMinDistance(x,y-gridy) > minab) {
-							points->AddPoint(x, y-gridy, heightmap->GetZ(x,y-gridy)); 
+						if (setmax && map->GetZ(x,y-gridy)>z && points->GetMinDistance(x,y-gridy) > minab) {
+							points->AddPoint(x, y-gridy, map->GetZ(x,y-gridy)); 
 							con_points++;
 						}
-						if (setmax && heightmap->GetZ(x,y) > z && points->GetMinDistance(x,y) > minab) {
-							points->AddPoint(x, y, heightmap->GetZ(x,y)); 
+						if (setmax && map->GetZ(x,y) > z && points->GetMinDistance(x,y) > minab) {
+							points->AddPoint(x, y, map->GetZ(x,y)); 
 							con_points++;
 						}
 

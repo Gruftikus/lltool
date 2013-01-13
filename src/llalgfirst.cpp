@@ -1,15 +1,9 @@
 
-
 #include "..\include\llalgfirst.h"
 #include "..\include\llmaplist.h"
 
-#include <string.h>
-#include <stdio.h>
+llAlgFirst::llAlgFirst(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 
-//constructor
-llAlgFirst::llAlgFirst(char *_alg_list, char *_map) : llAlg(_map) {
-
-	alg_list    = _alg_list;
 	loc_ceiling = 0;
 
 	SetCommandName("AlgFirstOrder");
@@ -17,10 +11,6 @@ llAlgFirst::llAlgFirst(char *_alg_list, char *_map) : llAlg(_map) {
 
 int llAlgFirst::RegisterOptions(void) {
 	if (!llAlg::RegisterOptions()) return 0;
-
-	RegisterValue("-map", &sourcename);
-	RegisterValue("-alg", &alg_list);
-
 	return 1;
 }
 
@@ -41,8 +31,8 @@ double llAlgFirst::GetValue(float _x, float _y, double *_value) {
 	if (!mapx1 || !mapy1) return 0.;
 
 	double loc_value = 0;
-	unsigned int xx = heightmap->GetRawX(_x);
-	unsigned int yy = heightmap->GetRawY(_y);
+	unsigned int xx = map->GetRawX(_x);
+	unsigned int yy = map->GetRawY(_y);
 
 	if (_x>=x00 && _x<=x11 && _y>=y00 && _y<=y11) {
 		loc_value =
@@ -65,8 +55,6 @@ double llAlgFirst::GetValue(float _x, float _y, double *_value) {
 }
 
 int llAlgFirst::Init(void) {
-	if (Used("-map"))
-		map = sourcename;
 
 	if (!llAlg::Init()) return 0;
 
@@ -78,19 +66,16 @@ int llAlgFirst::Init(void) {
 		}
 		algs->AddAlg(this);
 	}
-	
-	if (!Used("-map"))
-		sourcename = map;
 
-	char * namex1 = new char[strlen(sourcename)+5];
-	sprintf_s(namex1, strlen(sourcename)+5, "%s_d1x", sourcename);
+	char * namex1 = new char[strlen(mapname) + 5];
+	sprintf_s(namex1, strlen(mapname)+5, "%s_d1x", mapname);
 	mapx1 = _llMapList()->GetMap(namex1);
 	if (!mapx1) {
 		_llLogger()->WriteNextLine(-LOG_WARNING,"%s: derivative map %s not existing", command_name, namex1);
 		return 0;
 	}
-	char * namey1 = new char[strlen(sourcename)+5];
-	sprintf_s(namey1, strlen(sourcename)+5, "%s_d1y", sourcename);
+	char * namey1 = new char[strlen(mapname) + 5];
+	sprintf_s(namey1, strlen(mapname)+5, "%s_d1y", mapname);
 	mapy1 = _llMapList()->GetMap(namey1);
 	if (!mapy1) {
 		_llLogger()->WriteNextLine(-LOG_WARNING,"%s: derivative map %s not existing", command_name, namey1);

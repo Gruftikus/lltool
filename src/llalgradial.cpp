@@ -1,12 +1,12 @@
 #include "..\include\llalgradial.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
-llAlgRadial::llAlgRadial(char *_alg_list, char *_map) : llAlg(_map) {
-
-	alg_list    = _alg_list;
+llAlgRadial::llAlgRadial(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	loc_ceiling = 0;
+	SetCommandName("AlgRadial");
+}
+
+int llAlgRadial::Prepare(void) {
+	if (!llAlg::Prepare()) return 0;
 
 	my_near = 0;
 	my_far  = 100000;
@@ -15,19 +15,19 @@ llAlgRadial::llAlgRadial(char *_alg_list, char *_map) : llAlg(_map) {
 	x = 0.f;
 	y = 0.f;
 
-	SetCommandName("AlgRadial");
+	return 1;
 }
 
 int llAlgRadial::RegisterOptions(void) {
 	if (!llAlg::RegisterOptions()) return 0;
 
-	RegisterValue("-near",   &my_near);
-	RegisterValue("-far",    &my_far);
+	RegisterValue("-near",    &my_near);
+	RegisterValue("-far",     &my_far);
 	RegisterValue("-nearval", &value_at_near);
-	RegisterValue("-farval", &value_at_far);
-	RegisterValue("-x",      &x);
-	RegisterValue("-y",      &y);
-	RegisterValue("-alg",    &alg_list);
+	RegisterValue("-farval",  &value_at_far);
+	RegisterValue("-x",       &x);
+	RegisterValue("-y",       &y);
+	RegisterValue("-alg",     &alg_list);
 
 	return 1;
 }
@@ -57,8 +57,6 @@ double llAlgRadial::GetValue(float _x, float _y, double *_value) {
 		loc_value = value_at_far;
 	else 
 		loc_value = value_at_near + (value_at_far - value_at_near) * ( (z - my_near) / (my_far - my_near));
-
-	//std::cout << _x << " : " << _y << " : " << loc_value << std::endl;
 
 	if (loc_value > loc_ceiling) 
 		loc_ceiling = loc_value;

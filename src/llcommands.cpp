@@ -5,19 +5,8 @@
 #include "../include/llcommands.h"
 #include "../include/llmaplist.h"
 
-//#include <string.h>
-#include <stdio.h>
-#include <time.h>
-
-
 #ifndef _MSC_VER
 #include "def.h"
-#else
-
-#include <iostream>
-
-#include <direct.h>
-#include <stdlib.h>
 #endif
 
 
@@ -310,6 +299,7 @@ repeat:
 		}
 	} else {
 		com = worker->GetCommandIndex();
+		worker->Prepare();
 	}
 
 	if (com==-1 || !worker) {
@@ -323,10 +313,10 @@ repeat:
 		//saveptr2 = NULL;
 
 		if (!worker->CheckFlag(ptr)) {
-			ptr2 = strtok_int(ptr, '=',&saveptr2);
+			ptr2 = strtok_int(ptr, '=', &saveptr2);
 			if (ptr2!=NULL && strlen(ptr2)>0) {
 				if (worker->CheckValue(ptr)) {
-					ptr2 = strtok_int(NULL, '=',&saveptr2);
+					ptr2 = strtok_int(NULL, '=', &saveptr2);
 					if (ptr2)
 						worker->AddValue(ptr2);
 					else {

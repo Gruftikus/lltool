@@ -7,7 +7,6 @@ class llAlgRadial : public llAlg {
 
 private:
 
-	char *alg_list;
 	float my_near, my_far;
 	float value_at_near, value_at_far, x, y;
 
@@ -24,6 +23,7 @@ public:
 		return new llAlgRadial(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

@@ -1,14 +1,18 @@
 #include "..\include\llcreatemap.h"
 #include "..\include\llmaplist.h"
 
-//constructor
 llCreateMap::llCreateMap() : llWorker() {
-
 	SetCommandName("CreateMap");
+}
+
+int llCreateMap::Prepare(void) {
+	if (!llWorker::Prepare()) return 0;
+
 	mapname = NULL;
 	z       = 1.0;
 	even    = 0;
 
+	return 1;
 }
 
 int llCreateMap::RegisterOptions(void) {
@@ -23,7 +27,7 @@ int llCreateMap::RegisterOptions(void) {
 	RegisterValue("-zscale",  &z);
 	RegisterValue("-name",    &mapname);
 
-	RegisterFlag("-even",     &even);
+	RegisterFlag ("-even",    &even);
 
 	return 1;
 }

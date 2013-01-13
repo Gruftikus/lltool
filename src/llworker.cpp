@@ -3,9 +3,7 @@
 #include "..\include\llutils.h"
 #include "..\include\lllogger.h"
 
-//constructor
 llWorker::llWorker() {
-
 	command_name = NULL;
 
 	name.resize(0);
@@ -14,7 +12,6 @@ llWorker::llWorker() {
 	f_value.resize(0);
 	d_value.resize(0);
 	s_value.resize(0);
-
 }
 
 int llWorker::RegisterFlag(char *_name, int *_flag, int _opt) {
@@ -72,7 +69,6 @@ int llWorker::CheckFlag (char *_flag) {
 
 int llWorker::CheckValue(char *_value) {
 	for (unsigned int i=0; i<name.size(); i++) {
-		//std::cout << "checked: " << name[i] << std::endl;
 		if (_stricmp(_value, name[i]) == 0) {
 			used[i] = 1;
 			if (i_value[i]) {
@@ -148,7 +144,7 @@ int llWorker::Prepare(void) {
 int llWorker::Init(void) {
 	for (unsigned int i=0; i<name.size(); i++) {
 		if ((opt[i] & LLWORKER_OBL_OPTION) && used[i] == 0) {
-			_llLogger()->WriteNextLine(-LOG_WARNING,"%s: obligatory option [%s] missing", command_name, name[i]);
+			_llLogger()->WriteNextLine(-LOG_WARNING, "%s: obligatory option [%s] missing", command_name, name[i]);
 			return 0;
 		}
 	}
@@ -157,7 +153,7 @@ int llWorker::Init(void) {
 
 void llWorker::Print(void) {
 
-	_llLogger()->WriteNextLine(LOG_COMMAND,"%s ", GetCommandName());
+	_llLogger()->WriteNextLine(LOG_COMMAND, "%s ", GetCommandName());
 
 	for (unsigned int i=0; i<name.size(); i++) {
 		if (used[i]) {

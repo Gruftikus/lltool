@@ -3,16 +3,12 @@
 
 #include "llworker.h"
 
-#include <iostream>
-#include <windows.h>
-
 class llExit : public llWorker {
 
 protected:
 
 public:
 
-	//constructor
 	llExit();
 
 	virtual llWorker * Clone() {

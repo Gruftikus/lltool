@@ -1,7 +1,6 @@
 #ifndef _PLLSETVERTEX_H_
 #define _PLLSETVERTEX_H_
 
-#include <iostream>
 #include "../include/llset.h"
 
 class llSetVertex : public llSet {

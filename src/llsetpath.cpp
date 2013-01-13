@@ -3,7 +3,6 @@
 
 #include "..\include\llsetpath.h"
 
-//constructor
 llSetPath::llSetPath() : llWorker() {
 	SetCommandName("SetPath");
 }

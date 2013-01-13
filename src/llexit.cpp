@@ -3,15 +3,9 @@
 #include "..\include\llexit.h"
 #include "..\include\lllogger.h"
 
-#include <string.h>
-#include <stdio.h>
 
-
-//constructor
 llExit::llExit() : llWorker() {
-
 	SetCommandName("Exit");
-
 }
 
 int llExit::RegisterOptions(void) {

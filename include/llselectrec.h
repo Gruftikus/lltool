@@ -1,8 +1,6 @@
 #ifndef _PLLSELECTREC_H_
 #define _PLLSELECTREC_H_
 
-#include <iostream>
-#include <windows.h>
 #include "../include/llmapworker.h"
 #include "../include/llutils.h"
 
@@ -14,15 +12,14 @@ protected:
 	
 public:
 
-	//constructor
 	llSelectRec();
 
 	virtual llWorker * Clone() {
 		return new llSelectRec(*this);
 	}
 
-	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	int RegisterOptions(void);
+	int Init(void);
 
 };
 

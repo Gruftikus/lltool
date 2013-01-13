@@ -18,7 +18,10 @@ public:
 	llPolygon(int _n1, int _n2, char *_name, llPointList *_r);
 	char *name;
 	int AddPoint(int _n);
-	int GetPoint(unsigned int _n) {if (_n<p.size()) return p[_n];return -1;};
+	int GetPoint(unsigned int _n) {
+		if (_n<p.size()) return p[_n];
+		return -1;
+	};
 	int GetSize(void) {return p.size();};
 
 	int IsPointInsidePolygon(float _x, float _y);
@@ -41,9 +44,13 @@ public:
 	llPolygon * GetPolygon(char *_name);
 	llPolygon * GetPolygon(unsigned int _n) {return p[_n];};
 
-	int GetSize(){return p.size();};
+	int GetSize() {
+		return p.size();
+	};
 
-	void SetMap(llMap *_map) {map = _map;};
+	void SetMap(llMap *_map) {
+		map = _map;
+	};
 
 	int AddPolygon(float _x1, float _y1, float _x2, float _y2, char *_name);
 

@@ -1,7 +1,6 @@
 #ifndef _PLLREADPOLYGONDATAFILE_H_
 #define _PLLREADPOLYGONDATAFILE_H_
 
-#include <iostream>
 #include "../include/llset.h"
 
 class llReadPolygonDataFile : public llSet {
@@ -18,6 +17,7 @@ public:
 		return new llReadPolygonDataFile(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

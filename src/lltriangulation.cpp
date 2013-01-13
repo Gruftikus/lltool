@@ -4,11 +4,8 @@
 #define REAL double
 #include "..\externals\triangle\triangle.h"
 
-//constructor
 llTriangulation::llTriangulation() : llMapWorker() {
-
 	SetCommandName("MakeTriangulation");
-
 }
 
 int llTriangulation::RegisterOptions(void) {

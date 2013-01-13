@@ -13,8 +13,6 @@
 
 #define LLCOM_GAMEMODE_CMD "GameMode"
 
-#include <iostream>
-#include <stdarg.h>
 #include <vector>
 
 #include "../include/lllogger.h"
@@ -31,9 +29,10 @@ class llCommands {
 	char     *filename;
 	llLogger *mesg;
 	llUtils  *utils;
-	std::vector<char*> lines;
+
+	std::vector<char*>     lines;
 	std::vector<llWorker*> worker_cache;
-	unsigned int line_pointer;
+	unsigned int           line_pointer;
 
 	char dummyline[LLCOM_MAX_LINE];
 	char linenew[LLCOM_MAX_LINE2];
@@ -42,7 +41,7 @@ class llCommands {
 	
 
 	char *section;
-	int section_is_good;
+	int   section_is_good;
 	unsigned int current_dump_line;
 
 	int gamemode, noskipinfo;

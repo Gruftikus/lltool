@@ -1,17 +1,7 @@
-//base class for all algorithms
-
 #include "..\include\llselectrec.h"
-#include <string.h>
-#include <stdio.h>
-#include <windows.h>
-#include <direct.h>
-#include <winreg.h>
 
-//constructor
 llSelectRec::llSelectRec() : llWorker() {
-
 	SetCommandName("SelectRec");
-
 }
 
 int llSelectRec::RegisterOptions(void) {

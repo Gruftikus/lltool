@@ -3,7 +3,6 @@
 
 #define LLWORKER_OBL_OPTION 1
 
-#include <iostream>
 #include <vector>
 
 class llWorker {
@@ -73,10 +72,8 @@ class llWorker {
 	int AddValue  (char *_value);
 
 	int SetValue (char *_name, char *_value) {
-		//std::cout << _name << std::endl;
 		if (!CheckValue(_name)) return 0;
-		//std::cout << _value << std::endl;
-		if (!AddValue(_value)) return 0;
+		if (!AddValue(_value))  return 0;
 		return 1;
 	};
 

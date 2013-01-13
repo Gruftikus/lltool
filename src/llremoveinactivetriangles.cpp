@@ -1,12 +1,8 @@
 #include "..\include\llremoveinactivetriangles.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
+
 llRemoveInactiveTriangles::llRemoveInactiveTriangles() : llTriMod() {
-
 	SetCommandName("RemoveInactiveTriangles");
-
 }
 
 int llRemoveInactiveTriangles::RegisterOptions(void) {

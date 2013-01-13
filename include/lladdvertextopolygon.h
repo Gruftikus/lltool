@@ -1,7 +1,6 @@
 #ifndef _PLLADDVERTEXTOPOLYGON_H_
 #define _PLLADDVERTEXTOPOLYGON_H_
 
-#include <iostream>
 #include "../include/llset.h"
 
 class llAddVertexToPolygon : public llSet {
@@ -9,7 +8,7 @@ class llAddVertexToPolygon : public llSet {
 private:
 
 	float x1, y1;
-	char *polygon_name;
+	char  *polygon_name;
 
 public:
 
@@ -19,6 +18,7 @@ public:
 		return new llAddVertexToPolygon(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

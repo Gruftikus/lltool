@@ -1,7 +1,6 @@
 #ifndef _PLLTRIMOD_H_
 #define _PLLTRIMOD_H_
 
-#include <iostream>
 #include "../include/llworker.h"
 #include "../include/llmaplist.h"
 
@@ -9,8 +8,8 @@ class llTriMod : public llWorker {
 
 protected:
 
-    llMap          *heightmap;
-	char           *map;
+    llMap          *map;
+	char           *mapname;
 	llPointList    *points;
 	llTriangleList *triangles;
 
@@ -25,6 +24,7 @@ public:
 		return new llWorker(*this);
 	}
 
+	virtual int Prepare(void);
 	virtual int RegisterOptions(void);
 	virtual int Init(void);
 

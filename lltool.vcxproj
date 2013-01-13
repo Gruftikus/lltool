@@ -31,6 +31,7 @@
     <ClInclude Include="include\lldiamondsquare.h" />
     <ClInclude Include="include\llexit.h" />
     <ClInclude Include="include\llexportmap.h" />
+    <ClInclude Include="include\llexportmaptoobj.h" />
     <ClInclude Include="include\llfillcolormap.h" />
     <ClInclude Include="include\llfilter.h" />
     <ClInclude Include="include\llinactivateallvertices.h" />
@@ -40,7 +41,6 @@
     <ClInclude Include="include\llmaplist.h" />
     <ClInclude Include="include\llmapworker.h" />
     <ClInclude Include="include\llpanorama.h" />
-    <ClInclude Include="include\llparsemodlist.h" />
     <ClInclude Include="include\llpointlist.h" />
     <ClInclude Include="include\llpolygonlist.h" />
     <ClInclude Include="include\llquadlist.h" />
@@ -87,6 +87,7 @@
     <ClCompile Include="src\lldiamondsquare.cpp" />
     <ClCompile Include="src\llexit.cpp" />
     <ClCompile Include="src\llexportmap.cpp" />
+    <ClCompile Include="src\llexportmaptoobj.cpp" />
     <ClCompile Include="src\llfillcolormap.cpp" />
     <ClCompile Include="src\llfilter.cpp" />
     <ClCompile Include="src\llinactivateallvertices.cpp" />
@@ -96,7 +97,6 @@
     <ClCompile Include="src\llmaplist.cpp" />
     <ClCompile Include="src\llmapworker.cpp" />
     <ClCompile Include="src\llpanorama.cpp" />
-    <ClCompile Include="src\llparsemodlist.cpp" />
     <ClCompile Include="src\llpointlist.cpp" />
     <ClCompile Include="src\llpolygonlist.cpp" />
     <ClCompile Include="src\llquadlist.cpp" />

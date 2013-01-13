@@ -1,10 +1,6 @@
 #include "..\include\llsetvertex.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
 llSetVertex::llSetVertex() : llSet() {
-
 	SetCommandName("SetVertex");
 }
 
@@ -21,10 +17,10 @@ int llSetVertex::RegisterOptions(void) {
 int llSetVertex::Init(void) {
 	if (!llSet::Init()) return 0;
 
-	if (!heightmap->IsInMap(x, y)) {
+	if (!map->IsInMap(x, y)) {
 		_llLogger()->WriteNextLine(LOG_ERROR,"Point (%f, %f) not in map", x, y);
 	} else {
-		points->AddPoint(x, y, heightmap->GetZ(x, y));	
+		points->AddPoint(x, y, map->GetZ(x, y));	
 	}
 
 	return 1;

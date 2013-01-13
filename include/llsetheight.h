@@ -20,8 +20,9 @@ public:
 		return new llSetHeight(*this);
 	}
 
-	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	int Prepare(void);
+	int RegisterOptions(void);
+	int Init(void);
 
 };
 

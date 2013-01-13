@@ -4,23 +4,19 @@
 #include <string.h>
 #include <stdio.h>
 
-llMapList& _fllMapList()
-{
+llMapList& _fllMapList() {
     static llMapList* ans = new llMapList();
     return *ans;
 }
 
-llMapList * _llMapList()
-{
+llMapList * _llMapList() {
     return &_fllMapList();
 }
 
-//constructor
-llMapList::llMapList() {
 
+llMapList::llMapList() {
 	map_list.resize(0);
 	map_name.resize(0);
-	
 }
 
 
@@ -68,6 +64,7 @@ int llMapList::AddMap(char *_name, llMap *_map, char *_oldmap) {
 	triangle_list[size] = triangle_list[num];
 	polygon_list.resize(size + 1);
 	polygon_list[size]  = polygon_list[num];
+
 	return 1;
 }
 

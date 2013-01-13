@@ -1,7 +1,6 @@
 #ifndef _PLLALGPEAKFINDER_H_
 #define _PLLALGPEAKFINDER_H_
 
-#include <iostream>
 #include "../include/llmap.h"
 #include "../include/llalglist.h"
 #include "../include/llpointlist.h"
@@ -28,6 +27,7 @@ public:
 		return new llAlgPeakFinder(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 };

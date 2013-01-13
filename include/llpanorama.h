@@ -1,7 +1,6 @@
 #ifndef _PLLPANORAMA_H_
 #define _PLLPANORAMA_H_
 
-#include <iostream>
 #include "../include/llset.h"
 
 class llPanorama : public llSet {
@@ -18,6 +17,7 @@ public:
 		return new llPanorama(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

@@ -1,29 +1,28 @@
 #include "..\include\llalgstripe.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
-llAlgStripe::llAlgStripe(char *_alg_list, char *_map) : llAlg(_map) {
-
-	alg_list = _alg_list;
-
+llAlgStripe::llAlgStripe(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	loc_ceiling = 0;
+	SetCommandName("AlgLayer");
+}
+
+int llAlgStripe::Prepare(void) {
+	if (!llAlg::Prepare()) return 0;
 
 	lowest           = -8000;
 	highest          =  8000;
 	value_at_lowest  =  0.2f;
 	value_at_highest =  1.0f;
 
-	SetCommandName("AlgLayer");
+	return 1;
 }
 
 int llAlgStripe::RegisterOptions(void) {
 	if (!llAlg::RegisterOptions()) return 0;
 
-	RegisterValue("-highest", &highest);
-	RegisterValue("-lowest",  &lowest);
-	RegisterValue("-minval",  &value_at_lowest);
-	RegisterValue("-maxval",  &value_at_highest);	
+	RegisterValue("-zmax",      &highest);
+	RegisterValue("-zmin",      &lowest);
+	RegisterValue("-zminval",   &value_at_lowest);
+	RegisterValue("-zmaxval",   &value_at_highest);	
 
 	return 1;
 }
@@ -45,7 +44,7 @@ double llAlgStripe::GetValue(float _x, float _y, double *_value) {
 
 	double loc_value = value_at_highest;
 
-	float z = heightmap->GetZ(_x, _y);
+	float z = map->GetZ(_x, _y);
 
 	if (z < lowest) 
 		loc_value = value_at_lowest;

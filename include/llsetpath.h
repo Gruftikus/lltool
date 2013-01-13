@@ -21,8 +21,8 @@ public:
 		return new llSetPath(*this);
 	}
 
-	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	int RegisterOptions(void);
+	int Init(void);
 
 };
 

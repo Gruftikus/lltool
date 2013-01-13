@@ -1,7 +1,6 @@
 #ifndef _PLLSET_H_
 #define _PLLSET_H_
 
-#include <iostream>
 #include "../include/llworker.h"
 #include "../include/llmaplist.h"
 
@@ -9,14 +8,12 @@ class llSet : public llWorker {
 
 protected:
 
-    llMap       *heightmap;
-	char        *map;
+    llMap       *map;
+	char        *mapname;
 	llPointList *points;
 
 public:
-
     
-    //constructor
     llSet();
 
 	virtual llWorker * Clone() {
@@ -24,6 +21,7 @@ public:
 		return new llWorker(*this);
 	}
 
+	virtual int Prepare(void);
 	virtual int RegisterOptions(void);
 	virtual int Init(void);
 

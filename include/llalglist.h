@@ -18,7 +18,7 @@ public:
 	llAlgCollection();
 
 	void AddAlg(llAlg *_alg) {
-		alg_list.resize(alg_list.size()+1);
+		alg_list.resize(alg_list.size() + 1);
 		alg_list[alg_list.size()-1] = _alg;
 	}
 
@@ -44,9 +44,7 @@ public:
 		}
 		if (_value) *_value = value;
 		return value;
-	}
-
-					
+	}			
 };
 
 class       llAlgList;
@@ -72,7 +70,6 @@ public:
 	}
 
 	llAlgCollection *GetAlgCollection(char* _name);
-
 };
 
 class llCreateAlgCollection : public llWorker {

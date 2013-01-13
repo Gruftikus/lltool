@@ -1,7 +1,6 @@
 #ifndef _PLLSPLITAT_H_
 #define _PLLSPLITAT_H_
 
-#include <iostream>
 #include "../include/lltrimod.h"
 
 class llSplitAt : public llTriMod {
@@ -18,6 +17,7 @@ public:
 		return new llSplitAt(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

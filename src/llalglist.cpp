@@ -1,27 +1,21 @@
 //a list of algorithms
 
 #include "..\include\llalglist.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
+
 llAlgCollection::llAlgCollection() {
 	alg_list.resize(0);	
 }
 
-
-llAlgList& _fllAlgList()
-{
+llAlgList& _fllAlgList() {
     static llAlgList* ans = new llAlgList();
     return *ans;
 }
 
-llAlgList * _llAlgList()
-{
+llAlgList * _llAlgList() {
     return &_fllAlgList();
 }
 
-//constructor
 llAlgList::llAlgList() {
 	collections.resize(0);
 	collections.resize(0);
@@ -44,7 +38,6 @@ int llAlgList::AddAlgCollection(char *_name, llAlgCollection *_col) {
 
 llAlgCollection *llAlgList::GetAlgCollection(char* _name) {
 	for (int i=0; i<GetSize(); i++) {
-		//std::cout << col_name[i] << std::endl;
 		if (_stricmp(_name, col_name[i]) == 0)
 			return collections[i];
 	}

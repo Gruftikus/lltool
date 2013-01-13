@@ -1,8 +1,6 @@
 #ifndef _PLLSELECTALL_H_
 #define _PLLSELECTALL_H_
 
-#include <iostream>
-#include <windows.h>
 #include "../include/llmapworker.h"
 #include "../include/llutils.h"
 
@@ -20,8 +18,8 @@ public:
 		return new llSelectAll(*this);
 	}
 
-	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	int RegisterOptions(void);
+	int Init(void);
 
 };
 

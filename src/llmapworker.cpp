@@ -2,13 +2,18 @@
 
 #include "..\include\llmapworker.h"
 #include "..\include\llmaplist.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
+
 llMapWorker::llMapWorker() : llWorker() {
+}
+
+int llMapWorker::Prepare(void) {
+	if (!llWorker::Prepare()) return 0;
+
 	map     = NULL;
 	mapname = NULL;
+
+	return 1;
 }
 
 int llMapWorker::RegisterOptions(void) {

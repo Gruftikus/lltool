@@ -1,7 +1,6 @@
 #ifndef _PLLALGFIRST_H_
 #define _PLLALGFIRST_H_
 
-#include <iostream>
 #include "../include/llmap.h"
 #include "../include/llalglist.h"
 
@@ -9,8 +8,6 @@ class llAlgFirst : public llAlg {
 
 private:
 
-	char *alg_list;
-	char *sourcename;
 	llMap *mapx1, *mapy1;
 
 public:

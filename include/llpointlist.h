@@ -165,6 +165,14 @@ public:
 		return v[_n].z;
 	}
 
+	float GetU(int _n) {
+		return uv[_n].u;
+	}
+
+	float GetV(int _n) {
+		return uv[_n].v;
+	}
+
 	void SetX(int _n, float _x) {
 		v[_n].x = _x;
 	}
@@ -191,7 +199,7 @@ public:
 	int GetIntersection(int _p1, int _p2, int _p3, int _p4, float *_x, float *_y);
 
 	float GetMinDistance(float _x, float _y, float _radius = -1.0f, llQuad *_quad = NULL);
-	float GetMinDistanceGrid(float _x, float _y, int _flag = 0);
+	float GetMinDistanceGrid(float _x, float _y, float _grid, int _flag = 0);
 
 	float CalculateAngle(float _v1x, float _v1y, float _v1z, float _v2x, float _v2y, float _v2z);
 

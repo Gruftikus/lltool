@@ -1,11 +1,12 @@
 #include "..\include\llsplitatgrid.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
 llSplitAtGrid::llSplitAtGrid() : llTriMod() {
-
 	SetCommandName("SplitAtGrid");
+}
+
+int llSplitAtGrid::Prepare(void) {
+	if (!llTriMod::Prepare()) return 0;
+	return 1;
 }
 
 int llSplitAtGrid::RegisterOptions(void) {
@@ -28,13 +29,13 @@ int llSplitAtGrid::Init(void) {
 
 	if (Used("-x")) {
 		for (float y=floor(_llUtils()->y00/gridy)*gridy; y<=_llUtils()->y11; y+=gridy) {
-			triangles->DivideAt(false, y, heightmap);    
+			triangles->DivideAt(false, y, map);    
 		}
 	}
 
 	if (Used("-y")) {
 		for (float x=floor(_llUtils()->x00/gridx)*gridx; x<=_llUtils()->x11; x+=gridx) {
-			triangles->DivideAt(true, x, heightmap);    
+			triangles->DivideAt(true, x, map);    
 		}
 	}
 

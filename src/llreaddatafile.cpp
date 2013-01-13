@@ -1,10 +1,7 @@
 #include "..\include\llreaddatafile.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
+
 llReadDataFile::llReadDataFile() : llSet() {
-
 	SetCommandName("ReadDataFile");
 }
 
@@ -35,10 +32,10 @@ int llReadDataFile::Init(void) {
 		float x, y;
 		if ((strlen(linex)>2) && (linex[0]!=';') && (linex[0]!='#') && (linex[0]!='[')) {
 			if (sscanf_s(line,"%f %f",&x,&y) == 2) {
-				if (!heightmap->IsInMap(x,y)) {
+				if (!map->IsInMap(x,y)) {
 					_llLogger()->WriteNextLine(LOG_ERROR, "Point (%.0f,%.0f) not in map", x, y);
 				} else {
-					points->AddPoint(x, y, heightmap->GetZ(x,y));	
+					points->AddPoint(x, y, map->GetZ(x,y));	
 					lp++;
 				}
 			} else 

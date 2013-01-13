@@ -7,8 +7,6 @@
 #include "..\include\llpolygonlist.h"
 #include "..\include\lltrianglelist.h"
 
-
-
 class       llMapList;
 llMapList* _llMapList();
 llMapList& _fllMapList();
@@ -52,19 +50,16 @@ public:
 	llPointList *GetPointList(char *_map) {
 		int map_p = GetMapNum(_map);
 		if (map_p<0) return NULL;
-		//cout << map_p << point_list[map_p] << endl;
 		return point_list[map_p];
 	}
 	llTriangleList *GetTriangleList(char *_map) {
 		int map_p = GetMapNum(_map);
 		if (map_p<0) return NULL;
-		//cout << map_p << triangle_list[map_p] << endl;
 		return triangle_list[map_p];
 	}
 	llPolygonList *GetPolygonList(char *_map) {
 		int map_p = GetMapNum(_map);
 		if (map_p<0) return NULL;
-		//cout << map_p << polygon_list[map_p] << endl;
 		return polygon_list[map_p];
 	}
 

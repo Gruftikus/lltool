@@ -4,11 +4,9 @@
 
 //constructor
 llPointList::llPointList(int n, llQuadList * _quads) {
-
 	Resize(n + 1);
-	counter=0;
-	quads = _quads;
-
+	counter = 0;
+	quads   = _quads;
 } 
 
 int llPointList::AddPoint(float _x, float _y, float _z) {
@@ -17,18 +15,18 @@ int llPointList::AddPoint(float _x, float _y, float _z) {
 		if (!quads->AddPoint(_x, _y, counter)) return -1;
 	}
 
-	v[counter] = llVector3(floor(_x+.5f), floor(_y+.5f), _z);
+	v[counter]  = llVector3(floor(_x+.5f), floor(_y+.5f), _z);
 	float tex_x = (_x-tex00x)/(tex11x-tex00x);
 	float tex_y = (_y-tex00y)/(tex11y-tex00y);
 	uv[counter] = llCoord(tex_x,tex_y);
-	active[counter] = 1;
+	active[counter]     = 1;
 	tmp_active[counter] = 1;
-	flag[counter] = 0;
+	flag[counter]       = 0;
 
 	counter++;
 
 	if (counter == v.size()) {
-		Resize(counter+1000);
+		Resize(counter + 1000);
 	}
 	return counter-1;
 }
@@ -87,25 +85,29 @@ int  llPointList::GetClosestPoint(float _x, float _y) {
 	return num;
 }
 
-float llPointList::GetMinDistanceGrid(float _x, float _y, int _flag) {
+float llPointList::GetMinDistanceGrid(float _x, float _y, float _grid, int _flag) {
 	//flag=0: all, =1: x, =2:y
 
+	if (_grid < 0) return -_grid;  //Disabled, return a default value
 
-	float mingrid=float(floor(_x/4096.f)*4096);
-	float maxgrid=mingrid+4096.f;
+	float mingrid = float(floor(_x/_grid)*int(_grid));
+	float maxgrid = mingrid+_grid;
 
-	float min=4096.f;
+	float min = 4096.f;
 	if (_flag ==0 || _flag == 1) {
-		min=fabs(_x - mingrid);
-		if (fabs(maxgrid - _x) < min)  min=fabs(maxgrid - _x);
+		min = fabs(_x - mingrid);
+		if (fabs(maxgrid - _x) < min)  
+			min = fabs(maxgrid - _x);
 	}
 
-	mingrid=float(floor(_y/4096.f)*4096);
-	maxgrid=mingrid+4096.f;
+	mingrid = float(floor(_y/_grid)*int(_grid));
+	maxgrid = mingrid+_grid;
 
 	if (_flag == 0 || _flag == 2) {
-		if (fabs(_y-mingrid) < min)  min=fabs(_y-mingrid);
-		if (fabs(maxgrid-_y) < min)  min=fabs(maxgrid-_y);
+		if (fabs(_y-mingrid) < min)  
+			min = fabs(_y-mingrid);
+		if (fabs(maxgrid-_y) < min)  
+			min = fabs(maxgrid-_y);
 	}
 	return min;
 }

@@ -7,23 +7,21 @@
 #include <stdio.h>
 #include <iostream>
 
-llLogger& _fllLogger()
-{
+llLogger& _fllLogger() {
     static llLogger* ans = new llLogger();
     return *ans;
 }
 
-llLogger * _llLogger()
-{
+llLogger * _llLogger() {
     return &_fllLogger();
 }
 
 llLogger::llLogger() {
-	write_pointer =  LOG_NUM_LINES;
-	read_pointer = LOG_NUM_LINES - 1;
+	write_pointer = LOG_NUM_LINES;
+	read_pointer  = LOG_NUM_LINES - 1;
 	tot_lines = counter = 0;
-	for (int i=0;i<LOG_NUM_LINES;i++) {
-		lines[i]= NULL;
+	for (int i=0; i<LOG_NUM_LINES; i++) {
+		lines[i] = NULL;
 	}
 	logfile = NULL;
 }

@@ -1,7 +1,6 @@
 #ifndef _PLLSTENCILPOLYGON_H_
 #define _PLLSTENCILPOLYGON_H_
 
-#include <iostream>
 #include "../include/lltrimod.h"
 
 class llStencilPolygon : public llTriMod {
@@ -18,6 +17,7 @@ public:
 		return new llStencilPolygon(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

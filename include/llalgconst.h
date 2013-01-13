@@ -1,15 +1,12 @@
 #ifndef _PLLALGCONST_H_
 #define _PLLALGCONST_H_
 
-#include <iostream>
 #include "../include/llmap.h"
 #include "../include/llalglist.h"
 
 class llAlgConst : public llAlg {
 
 private:
-
-	char *alg_list;
 
 public:
 
@@ -23,6 +20,7 @@ public:
 		return new llAlgConst(*this);
 	}
 
+	int    Prepare(void);
 	int    Init(void);
 };
 

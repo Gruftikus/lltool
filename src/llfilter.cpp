@@ -3,46 +3,39 @@
 #include "..\include\llmakederivatives.h"
 
 
-//constructor
-llFilter::llFilter() : llWorker() {
-
+llFilter::llFilter() : llMapWorker() {
 	SetCommandName("Filter");
-	sourcename = NULL;
+}
+
+int llFilter::Prepare(void) {
+	if (!llMapWorker::Prepare()) return 0;
+
 	targetname = NULL;
 	makeshort = 0;
 	overwrite = 0;
 	makederivatives = 0;
+
+	return 1;
 }
 
 int llFilter::RegisterOptions(void) {
-	if (!llWorker::RegisterOptions()) return 0;
+	if (!llMapWorker::RegisterOptions()) return 0;
 
-	RegisterValue("-source", &sourcename);
-	RegisterValue("-target", &targetname);
-	RegisterValue("-n",      &dist);
-	RegisterFlag("-use16bit", &makeshort);
-	RegisterFlag("-overwrite", &overwrite);
-	RegisterFlag("-MakeDerivatives", &makederivatives);
+	RegisterValue("-target",          &targetname);
+	RegisterValue("-n",               &dist);
+	RegisterFlag ("-use16bit",        &makeshort);
+	RegisterFlag ("-overwrite",       &overwrite);
+	RegisterFlag ("-MakeDerivatives", &makederivatives);
 
 	return 1;
 }
 
 int llFilter::Init(void) {
-	if (!llWorker::Init()) return 0;
-
-	if (!Used("-source"))
-		sourcename = "_heightmap";
+	if (!llMapWorker::Init()) return 0;
 
 	if (!Used("-target")) {
-		targetname = new char[strlen(sourcename)+10];
-		sprintf_s(targetname, strlen(sourcename)+10, "%s_filtered", sourcename);
-	}
-
-	llMap *oldmap = _llMapList()->GetMap(sourcename);
-
-	if (!oldmap) {
-		_llLogger()->WriteNextLine(-LOG_ERROR,"%s: map %s not found", command_name, sourcename);
-		return 0;
+		targetname = new char[strlen(mapname)+10];
+		sprintf_s(targetname, strlen(mapname)+10, "%s_filtered", mapname);
 	}
 
 	llMap *newmap = _llMapList()->GetMap(targetname);
@@ -52,10 +45,10 @@ int llFilter::Init(void) {
 		_llMapList()->DeleteMap(targetname);
 	}
 
-	int widthx = oldmap->GetWidthX();
-	int widthy = oldmap->GetWidthY();
+	int widthx = map->GetWidthX();
+	int widthy = map->GetWidthY();
 
-	float defaultheight = oldmap->GetDefaultHeight();
+	float defaultheight = map->GetDefaultHeight();
 	newmap = new llMap(widthx, widthy, makeshort, defaultheight);
 //	float minheight = defaultheight + 1.0f;
 
@@ -73,7 +66,7 @@ int llFilter::Init(void) {
 
 			for (int  xx=x1; xx<=x2; xx++) {
 				for (int  yy=y1; yy<=y2; yy++) {
-					float height = oldmap->GetElementRaw(xx,yy);
+					float height = map->GetElementRaw(xx,yy);
 //					if (height > minheight) {
 						mean +=  height;
 						num++;
@@ -88,31 +81,35 @@ int llFilter::Init(void) {
 		}
 	}
 
-	newmap->SetCoordSystem(oldmap->GetX1(), oldmap->GetY1(), oldmap->GetX2(), oldmap->GetY2(), oldmap->GetZScale());
+	newmap->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale());
 	
 	if (overwrite) {
 		for (int y=0; y<widthy; y++) {
 			for (int x=0; x<widthx; x++) {
-				oldmap->SetElementRaw(x, y, newmap->GetElementRaw(x,y));
+				map->SetElementRaw(x, y, newmap->GetElementRaw(x,y));
 			}
 		}
 		delete newmap;
-		newmap = oldmap;
+		newmap = map;
 	}
 	
 	//Filtered map shares the points, etc with its master
-	llPointList    * points    = _llMapList()->GetPointList(sourcename);
-	llTriangleList * triangles = _llMapList()->GetTriangleList(sourcename);
-	llPolygonList  * polygons  = _llMapList()->GetPolygonList(sourcename);
+	llPointList    * points    = _llMapList()->GetPointList(mapname);
+	llTriangleList * triangles = _llMapList()->GetTriangleList(mapname);
+	llPolygonList  * polygons  = _llMapList()->GetPolygonList(mapname);
 
 	_llMapList()->AddMap(targetname, newmap, points, triangles, polygons);
 
 	if (makederivatives) {
 		llMakeDerivatives *der = new llMakeDerivatives();
 		if (!der->RegisterOptions()) return 0;
-		//cout << der->SetValue("-source", targetname) << endl;
-		if (!der->Init()) return 0;
-		_llMapList()->ExchangeMap(targetname, oldmap);
+		
+		if (!der->Init()) {
+			delete der;
+			return 0;
+		}
+		_llMapList()->ExchangeMap(targetname, map);
+		delete der;
 	}
 
 	return 1;

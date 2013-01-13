@@ -1,15 +1,13 @@
 #ifndef _PLLMAKEDERIVATIVES_H_
 #define _PLLMAKEDERIVATIVES_H_
 
-#include <iostream>
-#include "../include/llworker.h"
+#include "../include/llmapworker.h"
 #include "../include/llmap.h"
 
-class llMakeDerivatives : public llWorker {
+class llMakeDerivatives : public llMapWorker {
 
 protected:
 
-	char *sourcename;
 	int   makeshort;
 
 	float x1max;
@@ -25,8 +23,9 @@ public:
 		return new llMakeDerivatives(*this);
 	}
 
-	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	int Prepare(void);
+	int RegisterOptions(void);
+	int Init(void);
 
 };
 

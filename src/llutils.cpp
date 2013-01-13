@@ -269,14 +269,12 @@ int WriteUInt(FILE *fptr,unsigned int n,int swap)
 }
 
 
-llUtils& _fllUtils()
-{
+llUtils& _fllUtils() {
     static llUtils* ans = new llUtils();
     return *ans;
 }
 
-llUtils * _llUtils()
-{
+llUtils * _llUtils() {
     return &_fllUtils();
 }
 
@@ -370,12 +368,12 @@ int llUtils::AddFlag(const char *_name) {
 			break;
 		}
 	}
-	flag_list[num_flags] = tmp;
-	flag_value[num_flags] = val;
-	flag_value_f[num_flags] = 0.0;
+	flag_list[num_flags]        = tmp;
+	flag_value[num_flags]       = val;
+	flag_value_f[num_flags]     = 0.0;
 	flag_description[num_flags] = NULL;
-	flag_enable[num_flags] = 1;
-	flag_hidden[num_flags] = 0;
+	flag_enable[num_flags]      = 1;
+	flag_hidden[num_flags]      = 0;
 
 	num_flags++;
 	return 1;
@@ -383,8 +381,8 @@ int llUtils::AddFlag(const char *_name) {
 
 int llUtils::EnableFlag(const char *_name) {
 	//mesg->WriteNextLine(LOG_ERROR,"Enable flag [%s]",myname);
-	for (unsigned int i=0;i<num_flags;i++) {
-		if (_stricmp(_name,flag_list[i])==0) {
+	for (unsigned int i=0; i<num_flags; i++) {
+		if (_stricmp(_name, flag_list[i]) == 0) {
 			flag_enable[i] = 1;
 			return 1;
 		}
@@ -393,8 +391,8 @@ int llUtils::EnableFlag(const char *_name) {
 }
 
 int llUtils::DisableFlag(const char *_name) {
-	for (unsigned int i=0;i<num_flags;i++) {
-		if (_stricmp(_name,flag_list[i])==0) {
+	for (unsigned int i=0; i<num_flags; i++) {
+		if (_stricmp(_name, flag_list[i]) == 0) {
 			flag_enable[i] = 0;
 			return 1;
 		}
@@ -404,19 +402,20 @@ int llUtils::DisableFlag(const char *_name) {
 
 int llUtils::IsEnabled(const char *_name) {
 	unsigned int pos=strlen(_name);
-	for (unsigned int i=0;i<strlen(_name);i++) {
-		if (_name[i]=='=') pos=i;
+	for (unsigned int i=0; i<strlen(_name); i++) {
+		if (_name[i] == '=') 
+			pos = i;
 	}
 	for (unsigned int i=0;i<num_flags;i++) {
 		if (_strnicmp(_name,flag_list[i],pos)==0 && pos==strlen(flag_list[i])) {
-			if (pos==strlen(_name)) {
+			if (pos == strlen(_name)) {
 				return flag_enable[i];
 			} else {
 				char *val = (char *)GetValue(flag_list[i]);
 				char * newname = new char[strlen(_name+pos+1)+1];
-				strcpy_s(newname,strlen(_name+pos+1)+1,_name+pos+1);
+				strcpy_s(newname, strlen(_name+pos+1)+1, _name+pos+1);
 				StripQuot(&newname);
-				if (_stricmp(newname,val)==0) {					
+				if (_stricmp(newname, val) == 0) {					
 					return flag_enable[i];
 				}
 			}
@@ -427,8 +426,8 @@ int llUtils::IsEnabled(const char *_name) {
 
 int llUtils::SetValue(const char *_name, const char *_value) {
 	AddFlag(_name);
-	for (unsigned int i=0;i<num_flags;i++) {
-		if (_stricmp(_name,flag_list[i])==0) {
+	for (unsigned int i=0; i<num_flags; i++) {
+		if (_stricmp(_name, flag_list[i]) == 0) {
 			flag_value[i] = _value;
 			sscanf_s(_value, "%lf", &(flag_value[i]));
 			return 1;
@@ -439,8 +438,8 @@ int llUtils::SetValue(const char *_name, const char *_value) {
 
 int llUtils::SetHidden(const char *_name) {
 	AddFlag(_name);
-	for (unsigned int i=0;i<num_flags;i++) {
-		if (_stricmp(_name,flag_list[i])==0) {
+	for (unsigned int i=0; i<num_flags; i++) {
+		if (_stricmp(_name, flag_list[i]) == 0) {
 			flag_hidden[i] = 1;
 			return 1;
 		}
@@ -449,31 +448,35 @@ int llUtils::SetHidden(const char *_name) {
 }
 
 const char* llUtils::GetValue(const char *_name) {
-	int p=0;
-	if (_stricmp(_name,"_flaglist")==0) {
+	int p = 0;
+	if (_stricmp(_name, "_flaglist") == 0) {
 		char tmp[LOG_MAX_LENGTH];
-		sprintf_s(tmp,100000,"\0");
-		for (unsigned int i=0;i<num_flags;i++) {
+		sprintf_s(tmp, LOG_MAX_LENGTH, "\0");
+		for (unsigned int i=0; i<num_flags; i++) {
 			if (flag_enable[i] && (_stricmp(flag_list[i],"_modlist")!=0) && !flag_hidden[i]) {
-				int g=strlen(tmp);
+				int g = strlen(tmp);
 				if (flag_value[i]) {
-					if (p>0) sprintf_s(tmp,100000-g,"%s,%s=%s",tmp,flag_list[i],flag_value[i]); 
-					else sprintf_s(tmp,100000,"%s=%s",flag_list[i],flag_value[i]); 
+					if (p > 0) 
+						sprintf_s(tmp, LOG_MAX_LENGTH-g, "%s,%s=%s", tmp, flag_list[i], flag_value[i]); 
+					else 
+						sprintf_s(tmp, LOG_MAX_LENGTH, "%s=%s", flag_list[i], flag_value[i]); 
 					p++;
 				} else {
-					if (p>0) sprintf_s(tmp,100000-g,"%s,%s",tmp,flag_list[i]); 
-					else sprintf_s(tmp,100000,"%s",flag_list[i]); 
+					if (p > 0) 
+						sprintf_s(tmp, LOG_MAX_LENGTH-g, "%s,%s", tmp, flag_list[i]); 
+					else 
+						sprintf_s(tmp, LOG_MAX_LENGTH, "%s", flag_list[i]); 
 					p++;
 				}
 			}
 		}
-		char *tmp2 = new char[strlen(tmp)+1];
-		strcpy_s(tmp2,strlen(tmp)+1,tmp);
+		char *tmp2 = new char[strlen(tmp)+1];  //mem leak, but should not happen too often...
+		strcpy_s(tmp2, strlen(tmp)+1, tmp);
 		return tmp2;
 	}
-	for (unsigned int i=0;i<num_flags;i++) {
+	for (unsigned int i=0; i<num_flags; i++) {
 		if (_stricmp(_name,flag_list[i])==0) {
-			if (flag_value[i]) return flag_value[i];
+			if (flag_value[i])  return flag_value[i];
 			if (flag_enable[i]) return "1";
 			return "0";
 		}
@@ -495,8 +498,8 @@ double llUtils::GetValueF(const char *_name) {
 
 int llUtils::SetDescription(const char *_name, char *_value) {
 	AddFlag(_name);
-	for (unsigned int i=0;i<num_flags;i++) {
-		if (_stricmp(_name,flag_list[i])==0) {
+	for (unsigned int i=0; i<num_flags; i++) {
+		if (_stricmp(_name, flag_list[i]) == 0) {
 			flag_description[i] = _value;
 			return 1;
 		}
@@ -505,8 +508,8 @@ int llUtils::SetDescription(const char *_name, char *_value) {
 }
 
 char* llUtils::GetDescription(const char *_name) {
-	for (unsigned int i=0;i<num_flags;i++) {
-		if (_stricmp(_name,flag_list[i])==0) {
+	for (unsigned int i=0; i<num_flags; i++) {
+		if (_stricmp(_name,flag_list[i]) == 0) {
 			return flag_description[i];
 		}
 	}
@@ -514,7 +517,7 @@ char* llUtils::GetDescription(const char *_name) {
 }
 
 char * llUtils::GetFlagViaDescription(const char *_value) {
-	for (unsigned int i=0;i<num_flags;i++) {
+	for (unsigned int i=0; i<num_flags; i++) {
 		if (flag_description[i]) {
 			if (_stricmp(_value,flag_description[i])==0) {
 				return flag_list[i];
@@ -526,19 +529,18 @@ char * llUtils::GetFlagViaDescription(const char *_value) {
 
 
 int llUtils::WriteFlags(FILE *wfile) {
-
-	for (unsigned int i=0;i<num_flags;i++) {
+	for (unsigned int i=0; i<num_flags; i++) {
 		if (flag_enable[i] && !flag_hidden[i]) {
 			if (flag_value[i]) {
-				fprintf(wfile,"SetFlag -name=%s -value=\"%s\"\n",flag_list[i],flag_value[i]);
+				fprintf(wfile,"SetFlag -name=%s -value=\"%s\"\n", flag_list[i], flag_value[i]);
 			} else {
-				fprintf(wfile,"SetFlag -name=%s\n",flag_list[i]);
+				fprintf(wfile,"SetFlag -name=%s\n", flag_list[i]);
 			} 
 		} else if (!flag_hidden[i]) {
 			if (flag_value[i]) {
-				fprintf(wfile,"SetFlag -name=%s -value=\"%s\" -unselect\n",flag_list[i],flag_value[i]);
+				fprintf(wfile,"SetFlag -name=%s -value=\"%s\" -unselect\n", flag_list[i], flag_value[i]);
 			} else {
-				fprintf(wfile,"SetFlag -name=%s -unselect\n",flag_list[i]);
+				fprintf(wfile,"SetFlag -name=%s -unselect\n", flag_list[i]);
 			} 
 		} 
 	}

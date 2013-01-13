@@ -1,10 +1,6 @@
 #include "..\include\llsetgridborder.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
 llSetGridBorder::llSetGridBorder() : llSet() {
-
 	SetCommandName("SetGridBorder");
 }
 
@@ -29,24 +25,24 @@ int llSetGridBorder::Init(void) {
 	for (float x=floor(_llUtils()->x00/gridx)*gridx; x<=(_llUtils()->x11); x+=gridx) {
 		float x1=x;
 		if (x >= _llUtils()->x11) x1 = _llUtils()->x11;
-		if (points->GetMinDistance(x1, _llUtils()->y00) > minab && (heightmap->GetZ(x1,_llUtils()->y00) > zmin || zused)) {
-			points->AddPoint(x1, _llUtils()->y00, heightmap->GetZ(x1,_llUtils()->y00));	
+		if (points->GetMinDistance(x1, _llUtils()->y00) > minab && (map->GetZ(x1,_llUtils()->y00) > zmin || zused)) {
+			points->AddPoint(x1, _llUtils()->y00, map->GetZ(x1,_llUtils()->y00));	
 			//gen_npoints++;
 		}
-		if (points->GetMinDistance(x1, _llUtils()->y11) > minab && (heightmap->GetZ(x1,_llUtils()->y11) > zmin || zused)) {
-			points->AddPoint(x1, _llUtils()->y11, heightmap->GetZ(x1,_llUtils()->y11));	
+		if (points->GetMinDistance(x1, _llUtils()->y11) > minab && (map->GetZ(x1,_llUtils()->y11) > zmin || zused)) {
+			points->AddPoint(x1, _llUtils()->y11, map->GetZ(x1,_llUtils()->y11));	
 			//gen_npoints++;
 		}
 	}
 	for (float y=floor(_llUtils()->y00/gridy)*gridy; y<=(_llUtils()->y11); y+=gridy) {
 		float y1=y;
 		if (y >= _llUtils()->y11) y1 = _llUtils()->y11;
-		if (points->GetMinDistance(_llUtils()->x00,y1) > minab && (heightmap->GetZ(_llUtils()->x00,y1) > zmin || zused)) {
-			points->AddPoint(_llUtils()->x00, y1, heightmap->GetZ(_llUtils()->x00,y1));	
+		if (points->GetMinDistance(_llUtils()->x00,y1) > minab && (map->GetZ(_llUtils()->x00,y1) > zmin || zused)) {
+			points->AddPoint(_llUtils()->x00, y1, map->GetZ(_llUtils()->x00,y1));	
 			//gen_npoints++;
 		}
-		if (points->GetMinDistance(_llUtils()->x11,y1) > minab && (heightmap->GetZ(_llUtils()->x11,y1) > zmin || zused)) {
-			points->AddPoint(_llUtils()->x11, y1, heightmap->GetZ(_llUtils()->y11,y1));	
+		if (points->GetMinDistance(_llUtils()->x11,y1) > minab && (map->GetZ(_llUtils()->x11,y1) > zmin || zused)) {
+			points->AddPoint(_llUtils()->x11, y1, map->GetZ(_llUtils()->y11,y1));	
 			//gen_npoints++;
 		}
 	}

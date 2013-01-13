@@ -1,20 +1,19 @@
 #include "..\include\llalgslope.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
-llAlgSlope::llAlgSlope(char *_alg_list, char *_map) : llAlg(_map) {
-
-	alg_list = _alg_list;
-	
+llAlgSlope::llAlgSlope(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	loc_ceiling = 0;
+	SetCommandName("AlgLinear");
+}
+
+int llAlgSlope::Prepare(void) {
+	if (!llAlg::Prepare()) return 0;
 
 	lowest           = -8000;
 	highest          =  8000;
 	value_at_lowest  =  0.2f;
 	value_at_highest =  1.0f;
 
-	SetCommandName("AlgLinear");
+	return 1;
 }
 
 int llAlgSlope::RegisterOptions(void) {
@@ -24,7 +23,6 @@ int llAlgSlope::RegisterOptions(void) {
 	RegisterValue("-zmin",     &lowest);
 	RegisterValue("-zminval",  &value_at_lowest);
 	RegisterValue("-zmaxval",  &value_at_highest);	
-	RegisterValue("-alg",      &alg_list);
 
 	return 1;
 }
@@ -46,7 +44,7 @@ double llAlgSlope::GetValue(float _x, float _y, double *_value) {
 
 	double loc_value = 0;
 
-	float z = heightmap->GetZ(_x, _y);
+	float z = map->GetZ(_x, _y);
 
 	if (z < lowest) 
 		loc_value = value_at_lowest;

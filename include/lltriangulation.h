@@ -1,7 +1,6 @@
 #ifndef _PLLTRIANGULATION_H_
 #define _PLLTRIANGULATION_H_
 
-#include <iostream>
 #include "../include/llworker.h"
 #include "../include/llmapworker.h"
 

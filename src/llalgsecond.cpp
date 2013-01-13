@@ -2,24 +2,13 @@
 #include "..\include\llalgsecond.h"
 #include "..\include\llmaplist.h"
 
-#include <string.h>
-#include <stdio.h>
-
-
-//constructor
-llAlgSecond::llAlgSecond(char *_alg_list, char *_map) : llAlg(_map) {
-	alg_list    = _alg_list;
+llAlgSecond::llAlgSecond(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	loc_ceiling = 0;
-
 	SetCommandName("AlgSecondOrder");
 }
 
 int llAlgSecond::RegisterOptions(void) {
 	if (!llAlg::RegisterOptions()) return 0;
-
-	RegisterValue("-map", &sourcename);
-	RegisterValue("-alg", &alg_list);
-
 	return 1;
 }
 
@@ -41,8 +30,8 @@ double llAlgSecond::GetValue(float _x, float _y, double *_value) {
 	if (!mapx2 || !mapy2) return 0.;
 
 	double loc_value = 0;
-	unsigned int xx = heightmap->GetRawX(_x);
-	unsigned int yy = heightmap->GetRawY(_y);
+	unsigned int xx = map->GetRawX(_x);
+	unsigned int yy = map->GetRawY(_y);
 
 	if (_x>=x00 && _x<=x11 && _y>=y00 && _y<=y11) {
 		loc_value =
@@ -65,9 +54,6 @@ double llAlgSecond::GetValue(float _x, float _y, double *_value) {
 }
 
 int llAlgSecond::Init(void) {
-	if (Used("-map"))
-		map = sourcename;
-
 	if (!llAlg::Init()) return 0;
 
 	if (alg_list) {
@@ -79,18 +65,15 @@ int llAlgSecond::Init(void) {
 		algs->AddAlg(this);
 	}
 
-	if (!Used("-map"))
-		sourcename = map;
-
-	char * namex2 = new char[strlen(sourcename)+5];
-	sprintf_s(namex2, strlen(sourcename)+5, "%s_d2x", sourcename);
+	char * namex2 = new char[strlen(mapname) + 5];
+	sprintf_s(namex2, strlen(mapname)+5, "%s_d2x", mapname);
 	mapx2 = _llMapList()->GetMap(namex2);
 	if (!mapx2) {
 		_llLogger()->WriteNextLine(-LOG_WARNING,"%s: derivative map %s not existing", command_name, namex2);
 		return 0;
 	}
-	char * namey2 = new char[strlen(sourcename)+5];
-	sprintf_s(namey2, strlen(sourcename)+5, "%s_d1y", sourcename);
+	char * namey2 = new char[strlen(mapname) + 5];
+	sprintf_s(namey2, strlen(mapname)+5, "%s_d1y", mapname);
 	mapy2 = _llMapList()->GetMap(namey2);
 	if (!mapy2) {
 		_llLogger()->WriteNextLine(-LOG_WARNING,"%s: derivative map %s not existing", command_name, namey2);

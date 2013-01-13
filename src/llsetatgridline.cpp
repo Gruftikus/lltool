@@ -1,10 +1,6 @@
 #include "..\include\llsetatgridline.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
 llSetAtGridLine::llSetAtGridLine() : llSet() {
-
 	SetCommandName("SetAtGridLine");
 }
 
@@ -50,12 +46,12 @@ int llSetAtGridLine::Init(void) {
 				if (segend[i]-segstart[i]>2*minab && segaktive[i]) {
 					float mymax = -1;
 					float myx   = segstart[i]+minab;
-					float z     = heightmap->GetZ(segstart[i]+minab,y);
-					float slope = (heightmap->GetZ(segend[i]-minab,y) -z ) / (segend[i] - segstart[i] - 2*minab);
+					float z     = map->GetZ(segstart[i] + minab, y);
+					float slope = (map->GetZ(segend[i]-minab,y) -z ) / (segend[i] - segstart[i] - 2*minab);
 
 					for (float x1 = segstart[i]+minab ;x1 < segend[i]-minab; x1++) {
-						float walldiff = (z + slope * (x1 - (segstart[i]+minab))) - heightmap->GetZ(x1,y);
-						if (walldiff > max && walldiff>mymax && (heightmap->GetZ(x1,y)>zmin || zused)) {
+						float walldiff = (z + slope * (x1 - (segstart[i]+minab))) - map->GetZ(x1,y);
+						if (walldiff > max && walldiff>mymax && (map->GetZ(x1,y)>zmin || zused)) {
 							mymax = walldiff;
 							myx   = x1;
 						}
@@ -63,7 +59,7 @@ int llSetAtGridLine::Init(void) {
 
 					if (mymax>0) {
 						//Split segment
-						points->AddPoint(myx,y,heightmap->GetZ(myx,y));	
+						points->AddPoint(myx, y, map->GetZ(myx,y));	
 						//gen_npoints++;
 						gb_points++;
 						segaktive[i]=0;
@@ -92,14 +88,14 @@ int llSetAtGridLine::Init(void) {
 
 				//is segment large enough?
 				if (segend[i]-segstart[i]>2*minab && segaktive[i]) {
-					float mymax=-1;
-					float myy=segstart[i]+minab;
-					float z=heightmap->GetZ(x,segstart[i]+minab);
-					float slope=(heightmap->GetZ(x,segend[i]-minab) -z ) / (segend[i] - segstart[i] - 2*minab);
+					float mymax = -1;
+					float myy   = segstart[i] + minab;
+					float z     = map->GetZ(x,segstart[i]+minab);
+					float slope = (map->GetZ(x,segend[i]-minab) -z ) / (segend[i] - segstart[i] - 2*minab);
 
 					for (float y1 = segstart[i]+minab ;y1 < segend[i]-minab; y1++) {
-						float walldiff = (z + slope * (y1 - (segstart[i]+minab))) - heightmap->GetZ(x,y1);
-						if (walldiff > max && walldiff>mymax && (heightmap->GetZ(x,y1)>zmin || zused)) {
+						float walldiff = (z + slope * (y1 - (segstart[i]+minab))) - map->GetZ(x,y1);
+						if (walldiff > max && walldiff>mymax && (map->GetZ(x,y1)>zmin || zused)) {
 							mymax = walldiff;
 							myy   = y1;
 						}
@@ -107,7 +103,7 @@ int llSetAtGridLine::Init(void) {
 
 					if (mymax>0) {
 						//Split segment
-						points->AddPoint(x,myy,heightmap->GetZ(x,myy));	
+						points->AddPoint(x, myy, map->GetZ(x,myy));	
 						//gen_npoints++;
 						gb_points++;
 						segaktive[i]          = 0;

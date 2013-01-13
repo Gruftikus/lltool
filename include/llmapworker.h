@@ -1,7 +1,6 @@
 #ifndef _PLLMAPWORKER_H_
 #define _PLLMAPWORKER_H_
 
-#include <iostream>
 #include "../include/llworker.h"
 #include "../include/llmaplist.h"
 #include "../include/lltrianglelist.h"
@@ -29,6 +28,7 @@ public:
 		return new llWorker(*this);
 	}
 
+	virtual int Prepare(void);
 	virtual int RegisterOptions(void);
 	virtual int Init(void);
 

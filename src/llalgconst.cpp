@@ -1,13 +1,12 @@
 #include "..\include\llalgconst.h"
 
-#include <string.h>
-#include <stdio.h>
-
-
-
-//constructor
-llAlgConst::llAlgConst(char*_alg_list, char *_map) : llAlg(_map) {
+llAlgConst::llAlgConst(char*_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	SetCommandName("AlgConst");
+}
+
+int llAlgConst::Prepare(void) {
+	if (!llAlg::Prepare()) return 0;
+	return 1;
 }
 
 double llAlgConst::GetCeiling(double *_ceiling) {

@@ -1,15 +1,13 @@
 #ifndef _PLLFILLCOLORMAP_H_
 #define _PLLFILLCOLORMAP_H_
 
-#include <iostream>
-#include "../include/llworker.h"
+#include "../include/llmapworker.h"
 #include "../include/llmap.h"
 
-class llFillColorMap : public llWorker {
+class llFillColorMap : public llMapWorker {
 
 protected:
 
-	char *mapname;
 	char *alg_list_red, *alg_list_blue, *alg_list_green, *alg_list_alpha;
 
 public:
@@ -20,8 +18,9 @@ public:
 		return new llFillColorMap(*this);
 	}
 
-	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	int Prepare(void);
+	int RegisterOptions(void);
+	int Init(void);
 
 };
 

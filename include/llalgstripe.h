@@ -1,7 +1,6 @@
 #ifndef _PLLALGSTRIPE_H_
 #define _PLLALGSTRIPE_H_
 
-#include <iostream>
 #include "../include/llmap.h"
 #include "../include/llalglist.h"
 
@@ -10,8 +9,6 @@ class llAlgStripe : public llAlg {
 private:
 
 	float lowest, highest, value_at_lowest, value_at_highest;
-
-	char *alg_list;
 
 public:
 
@@ -25,6 +22,7 @@ public:
 		return new llAlgStripe(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

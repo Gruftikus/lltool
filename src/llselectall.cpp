@@ -1,11 +1,6 @@
 #include "..\include\llselectall.h"
-#include <string.h>
-#include <stdio.h>
-#include <windows.h>
-#include <direct.h>
-#include <winreg.h>
 
-//constructor
+
 llSelectAll::llSelectAll() : llMapWorker() {
 	SetCommandName("SelectAll");
 }

@@ -154,6 +154,9 @@ public:
 	unsigned int GetWidthX(void) {return widthx;};
 	unsigned int GetWidthY(void) {return widthy;};
 
+	void SetElementRaw(unsigned int _x, unsigned int _y, double _val) {
+		SetElementRaw(_x, _y, (float) _val);
+	}
 	void SetElementRaw(unsigned int _x, unsigned int _y, float _val) {
 		if (_x >= widthx || _y >= widthy) return;
 		if (sdata) sdata->SetElement(_x+_y*widthx, _val);

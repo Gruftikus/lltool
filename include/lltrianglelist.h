@@ -15,8 +15,8 @@
 #define IS_TERMINAL  -3
 #define IS_FORK      -4
 #define IS_GOOD       0
-#define HAS_1SWAP       1
-#define HAS_2SWAP       2
+#define HAS_1SWAP     1
+#define HAS_2SWAP     2
 
 
 class llTriangle {
@@ -28,7 +28,7 @@ private:
 
 	llPointList * points;
 	int strip_id;
-	int num_neighbor[3],edge_flag[3];
+	int num_neighbor[3], edge_flag[3];
 	//lltriangle *tri_neighbor[3];
 	int is_terminal, neighbor_pos;
 	int done_flag;
@@ -43,17 +43,17 @@ public:
 	int touched_flag;
 	void SetCorrectParity(void);
 
-	int GetPoint1(void) {return p1;};
-	int GetPoint2(void) {return p2;};
-	int GetPoint3(void) {return p3;};
-	int GetParity(void) {return parity;};
+	int  GetPoint1(void)   {return p1;};
+	int  GetPoint2(void)   {return p2;};
+	int  GetPoint3(void)   {return p3;};
+	int  GetParity(void)   {return parity;};
 	void SetPoint1(int _p) {p1 = _p;};
 	void SetPoint2(int _p) {p2 = _p;};
 	void SetPoint3(int _p) {p3 = _p;};
-	int Pattern(int _p1, int _p2); //returns binary pattern for p1 and p2
+	int  Pattern(int _p1, int _p2); //returns binary pattern for p1 and p2
 
 	void SetStripID(int _id) {strip_id = _id;};
-	int GetStripID(void) {return strip_id;};
+	int  GetStripID(void)    {return strip_id;};
 
 	int SetNeighbor(int _num, int _num_triangle);
 	int SetNeighbor(int _num_triangle);

@@ -3,20 +3,24 @@
 #include "..\include\llalglist.h"
 
 //constructor
-llFillColorMap::llFillColorMap() : llWorker() {
-
+llFillColorMap::llFillColorMap() : llMapWorker() {
 	SetCommandName("FillColorMap");
-	mapname        = NULL;
+}
+
+int llFillColorMap::Prepare(void) {
+	if (!llMapWorker::Prepare()) return 0;
+
 	alg_list_blue  = NULL;
 	alg_list_red   = NULL;
 	alg_list_green = NULL;
 	alg_list_alpha = NULL;
+
+	return 1;
 }
 
 int llFillColorMap::RegisterOptions(void) {
-	if (!llWorker::RegisterOptions()) return 0;
+	if (!llMapWorker::RegisterOptions()) return 0;
 
-	RegisterValue("-map",       &mapname,        LLWORKER_OBL_OPTION);
 	RegisterValue("-algblue",   &alg_list_blue);
 	RegisterValue("-algred",    &alg_list_red);
 	RegisterValue("-alggreen",  &alg_list_green);
@@ -26,7 +30,7 @@ int llFillColorMap::RegisterOptions(void) {
 }
 
 int llFillColorMap::Init(void) {
-	if (!llWorker::Init()) return 0;
+	if (!llMapWorker::Init()) return 0;
 
 	llAlgCollection *algs_blue = NULL;
 	if (Used("-algblue")) {
@@ -61,12 +65,6 @@ int llFillColorMap::Init(void) {
 		}
 	}
 
-	llMap *map = _llMapList()->GetMap(mapname);
-	if (!map) {
-		_llLogger()->WriteNextLine(-LOG_ERROR,"%s: map '%s' not found", command_name, mapname);
-		return 0;
-	}
-
 	unsigned int widthx = map->GetWidthX();
 	unsigned int widthy = map->GetWidthY();
 
@@ -78,7 +76,6 @@ int llFillColorMap::Init(void) {
 			}
 			if (algs_red) {
 				unsigned char red = unsigned char(255*algs_red->GetValue(map->GetCoordX(x), map->GetCoordX(y)));
-				//std::cout << (unsigned int) red << std::endl;
 				map->SetRed(x, y, red);
 			}
 			if (algs_green) {

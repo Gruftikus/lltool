@@ -1,7 +1,6 @@
 #ifndef _PLLSETGRIDBORDER_H_
 #define _PLLSETGRIDBORDER_H_
 
-#include <iostream>
 #include "../include/llset.h"
 
 class llSetGridBorder : public llSet {

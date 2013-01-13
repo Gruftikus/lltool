@@ -1,7 +1,6 @@
 #ifndef _PLLINACTIVATEALLVERTICES_H_
 #define _PLLINACTIVATEALLVERTICES_H_
 
-#include <iostream>
 #include "../include/llworker.h"
 #include "../include/llmapworker.h"
 

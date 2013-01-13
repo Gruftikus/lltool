@@ -1,7 +1,6 @@
 #ifndef _PLLSETGRID_H_
 #define _PLLSETGRID_H_
 
-#include <iostream>
 #include "../include/llset.h"
 
 class llSetGrid : public llSet {

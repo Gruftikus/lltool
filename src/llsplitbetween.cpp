@@ -1,10 +1,6 @@
 #include "..\include\llsplitbetween.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
 llSplitBetween::llSplitBetween() : llTriMod() {
-
 	SetCommandName("SplitBetween");
 }
 
@@ -23,7 +19,7 @@ int llSplitBetween::RegisterOptions(void) {
 int llSplitBetween::Init(void) {
 	if (!llTriMod::Init()) return 0;
 
-	triangles->DivideBetween(x1, y1, x2, y2, heightmap);  
+	triangles->DivideBetween(x1, y1, x2, y2, map);  
 
 	_llLogger()->WriteNextLine(LOG_COMMAND,"%s: done", command_name);
 

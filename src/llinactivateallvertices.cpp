@@ -1,11 +1,9 @@
 #include "..\include\llinactivateallvertices.h"
 #include "..\include\llmaplist.h"
 
-//constructor
+
 llInactivateAllVertices::llInactivateAllVertices() : llMapWorker() {
-
 	SetCommandName("InactivateAllVertices");
-
 }
 
 int llInactivateAllVertices::RegisterOptions(void) {

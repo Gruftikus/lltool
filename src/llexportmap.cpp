@@ -3,10 +3,15 @@
 
 //constructor
 llExportMap::llExportMap() : llMapWorker() {
-
 	SetCommandName("ExportMap");
+}
+
+int llExportMap::Prepare(void) {
+	if (!llMapWorker::Prepare()) return 0;
+
 	filename = NULL;
 
+	return 1;
 }
 
 int llExportMap::RegisterOptions(void) {
@@ -14,7 +19,7 @@ int llExportMap::RegisterOptions(void) {
 
 	RegisterValue("-filename", &filename);
 	RegisterValue("-depth",    &bits);
-	RegisterFlag("-compress",  &compress);
+	RegisterFlag ("-compress", &compress);
 	
 	return 1;
 }
@@ -23,7 +28,7 @@ int llExportMap::Init(void) {
 	if (!llMapWorker::Init()) return 0;
 
 	if (!Used("-filename"))
-		filename = "world.bmp";
+		filename = "map.bmp";
 	if (!Used("-depth"))
 		bits = 24;
 

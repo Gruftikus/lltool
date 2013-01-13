@@ -1,17 +1,16 @@
 #ifndef _PLLFILTER_H_
 #define _PLLFILTER_H_
 
-#include <iostream>
-#include "../include/llworker.h"
+#include "../include/llmapworker.h"
 #include "../include/llmap.h"
 
-class llFilter : public llWorker {
+class llFilter : public llMapWorker {
 
 protected:
 
-	char *sourcename, *targetname;
-	int dist;
-	int makeshort, overwrite, makederivatives;
+	char *targetname;
+	int   dist;
+	int   makeshort, overwrite, makederivatives;
 
 public:
 
@@ -21,8 +20,9 @@ public:
 		return new llFilter(*this);
 	}
 
-	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	int Prepare(void);
+	int RegisterOptions(void);
+	int Init(void);
 
 };
 

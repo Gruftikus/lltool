@@ -1,7 +1,6 @@
 #ifndef _PLLSPLITBETWEEN_H_
 #define _PLLSPLITBETWEEN_H_
 
-#include <iostream>
 #include "../include/lltrimod.h"
 
 class llSplitBetween : public llTriMod {

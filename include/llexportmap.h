@@ -1,7 +1,6 @@
 #ifndef _PLLEXPORTMAP_H_
 #define _PLLEXPORTMAP_H_
 
-#include <iostream>
 #include "../include/llworker.h"
 #include "../include/llmapworker.h"
 
@@ -20,8 +19,9 @@ public:
 		return new llExportMap(*this);
 	}
 
-	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	int Prepare(void);
+	int RegisterOptions(void);
+	int Init(void);
 
 };
 

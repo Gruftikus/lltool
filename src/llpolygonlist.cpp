@@ -2,9 +2,9 @@
 
 llPolygon::llPolygon(int _n1, int _n2, char *_name, llPointList *_r) {
 	p.resize(2);
-	p[0] = _n1;
-	p[1] = _n2;
-	name = _name;
+	p[0]   = _n1;
+	p[1]   = _n2;
+	name   = _name;
 	points = _r;
 }
 
@@ -21,10 +21,10 @@ int llPolygon::IsPointInsidePolygon(float _x, float _y) {
 	int num=0;
 	int v = points->GetPoint(_x, _y);
 	for (int i = 0; i < GetSize();i++) {
-		int i1= GetPoint(i);
-		int i2= GetPoint(0);//close the poly
-		if (i<GetSize()-1)
-			i2= GetPoint(i+1);
+		int i1 = GetPoint(i);
+		int i2 = GetPoint(0);//close the poly
+		if (i < GetSize()-1)
+			i2 = GetPoint(i+1);
 
 		if ((i2 == v || i1 == v) && v != -1) return 1;
 
@@ -66,16 +66,16 @@ int llPolygonList::AddPolygon(float _x1, float _y1, float _x2, float _y2, char *
 	strcpy_s(myname2,strlen(_name)+1,_name);
 
 	int point1 = points->GetPoint(_x1, _y1);
-	if (point1<0)
-		point1=points->AddPoint(_x1, _y1, map->GetZ(_x1, _y1));
+	if (point1 < 0)
+		point1 = points->AddPoint(_x1, _y1, map->GetZ(_x1, _y1));
 	int point2 = points->GetPoint(_x2, _y2);
-	if (point2<0)
-		point2=points->AddPoint(_x2, _y2, map->GetZ(_x2, _y2));
+	if (point2 < 0)
+		point2 = points->AddPoint(_x2, _y2, map->GetZ(_x2, _y2));
 	
 	p.resize(p.size()+1);
 
 	llPolygon * mypoly = new llPolygon(point1, point2, myname2, points);
-	p[p.size()-1]=mypoly;
+	p[p.size()-1] = mypoly;
 
 	return 1;
 }
@@ -90,8 +90,8 @@ int llPolygonList::AddVertexToPolygon(float _x, float _y, char *_name) {
 	}
 
 	int point1 = points->GetPoint(_x, _y);
-	if (point1<0)
-		point1=points->AddPoint(_x, _y, map->GetZ(_x, _y));
+	if (point1 < 0)
+		point1 = points->AddPoint(_x, _y, map->GetZ(_x, _y));
 
 	mypoly->AddPoint(point1);
 

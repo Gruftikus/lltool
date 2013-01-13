@@ -1,7 +1,6 @@
 #ifndef _PLLSETCONTOUR_H_
 #define _PLLSETCONTOUR_H_
 
-#include <iostream>
 #include "../include/llset.h"
 
 class llSetContour : public llSet {
@@ -20,6 +19,7 @@ public:
 		return new llSetContour(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

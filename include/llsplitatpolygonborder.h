@@ -1,7 +1,6 @@
 #ifndef _PLLSPLITATPOLYGONBORDER_H_
 #define _PLLSPLITATPOLYGONBORDER_H_
 
-#include <iostream>
 #include "../include/lltrimod.h"
 
 class llSplitAtPolygonBorder : public llTriMod {
@@ -18,6 +17,7 @@ public:
 		return new llSplitAtPolygonBorder(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

@@ -1,11 +1,15 @@
 #include "..\include\llsplitat.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
 llSplitAt::llSplitAt() : llTriMod() {
-
 	SetCommandName("SplitAt");
+}
+
+int llSplitAt::Prepare(void) {
+	if (!llTriMod::Prepare()) return 0;
+
+	x = y = 0;
+
+	return 1;
 }
 
 int llSplitAt::RegisterOptions(void) {
@@ -27,10 +31,10 @@ int llSplitAt::Init(void) {
 	}
 
 	if (Used("-x")) {
-		triangles->DivideAt(true, x, heightmap);    	    
+		triangles->DivideAt(true, x, map);    	    
 	}
 	if (Used("-y")) {
-		triangles->DivideAt(false, y, heightmap);    	    
+		triangles->DivideAt(false, y, map);    	    
 	}
 
 	_llLogger()->WriteNextLine(LOG_COMMAND,"%s: done", command_name);

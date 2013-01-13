@@ -1,12 +1,15 @@
 #include "..\include\llreadpolygondatafile.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
 llReadPolygonDataFile::llReadPolygonDataFile() : llSet() {
-
 	SetCommandName("ReadPolygonDataFile");
+}
 
+int llReadPolygonDataFile::Prepare(void) {
+	if (!llSet::Prepare()) return 0;
+
+	polygon_name = filename = NULL;
+
+	return 1;
 }
 
 int llReadPolygonDataFile::RegisterOptions(void) {
@@ -22,9 +25,9 @@ int llReadPolygonDataFile::RegisterOptions(void) {
 int llReadPolygonDataFile::Init(void) {
 	if (!llSet::Init()) return 0;
 
-	llPolygonList *polygons = _llMapList()->GetPolygonList(map);
+	llPolygonList *polygons = _llMapList()->GetPolygonList(mapname);
 	if (!polygons) {
-		_llLogger()->WriteNextLine(-LOG_FATAL, "%s: no polygon list in map [%s]", command_name, map);
+		_llLogger()->WriteNextLine(-LOG_FATAL, "%s: no polygon list in map [%s]", command_name, mapname);
 		return 0;
 	}
 

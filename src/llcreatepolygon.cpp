@@ -1,12 +1,7 @@
 #include "..\include\llcreatepolygon.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
 llCreatePolygon::llCreatePolygon() : llSet() {
-
 	SetCommandName("CreatePolygon");
-
 }
 
 int llCreatePolygon::RegisterOptions(void) {
@@ -25,9 +20,9 @@ int llCreatePolygon::RegisterOptions(void) {
 int llCreatePolygon::Init(void) {
 	if (!llSet::Init()) return 0;
 
-	llPolygonList *polygons = _llMapList()->GetPolygonList(map);
+	llPolygonList *polygons = _llMapList()->GetPolygonList(mapname);
 	if (!polygons) {
-		_llLogger()->WriteNextLine(-LOG_FATAL, "%s: no polygon list in map [%s]", command_name, map);
+		_llLogger()->WriteNextLine(-LOG_FATAL, "%s: no polygon list in map [%s]", command_name, mapname);
 		return 0;
 	}
 

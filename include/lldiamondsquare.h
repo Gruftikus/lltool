@@ -1,16 +1,13 @@
 #ifndef _PLLDIAMONDSQUARE_H_
 #define _PLLDIAMONDSQUARE_H_
 
-#include <iostream>
-#include "../include/llworker.h"
+#include "../include/llmapworker.h"
 #include "../include/llmap.h"
 
-class llDiamondSquare : public llWorker {
+class llDiamondSquare : public llMapWorker {
 
 protected:
 
-	int   steps;
-	char *mapname;
 	float range, offset;
 	char *alg_list;
 
@@ -22,8 +19,9 @@ public:
 		return new llDiamondSquare(*this);
 	}
 
-	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	int Prepare(void);
+	int RegisterOptions(void);
+	int Init(void);
 
 };
 

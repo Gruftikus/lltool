@@ -1,7 +1,6 @@
 #ifndef _PLLALGSLOPE_H_
 #define _PLLALGSLOPE_H_
 
-#include <iostream>
 #include "../include/llmap.h"
 #include "../include/llalglist.h"
 
@@ -10,8 +9,6 @@ class llAlgSlope : public llAlg {
 private:
 
 	float lowest, highest, value_at_lowest, value_at_highest;
-
-	char *alg_list;
 
 public:
 
@@ -24,6 +21,7 @@ public:
 		return new llAlgSlope(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Init(void);
 

@@ -1,13 +1,15 @@
 #include "..\include\llalgpeakfinder.h"
-#include <string.h>
-#include <stdio.h>
 
-//constructor
-llAlgPeakFinder::llAlgPeakFinder(char *_alg_list, char *_map) : llAlg(_map) {
-
-	alg_list = _alg_list;
-
+llAlgPeakFinder::llAlgPeakFinder(char *_alg_list, char *_map) : llAlg(alg_list, _map) {
 	loc_ceiling = 0;
+
+	points = new llPointList(100, NULL);
+
+	SetCommandName("AlgPeakFinder");
+};
+
+int llAlgPeakFinder::Prepare(void) {
+	if (!llAlg::Prepare()) return 0;
 
 	radius           = 4096.f;
 	scan_radius      = 8192.f;
@@ -16,19 +18,16 @@ llAlgPeakFinder::llAlgPeakFinder(char *_alg_list, char *_map) : llAlg(_map) {
 	linear           = 0;
 	lowest           = -2000.f;
 
-	points = new llPointList(100, NULL);
-
-	SetCommandName("AlgPeakFinder");
-
-};
+	return 1;
+}
 
 int llAlgPeakFinder::RegisterOptions(void) {
 	if (!llAlg::RegisterOptions()) return 0;
 
 	RegisterFlag( "-linear",     &linear);
 	RegisterValue("-lowest",     &lowest);
-	RegisterValue("-minval",     &value_at_lowest);
-	RegisterValue("-maxval",     &value_at_highest);
+	RegisterValue("-outsideval", &value_at_lowest);
+	RegisterValue("-insideval",  &value_at_highest);
 	RegisterValue("-radius",     &radius);
 	RegisterValue("-scanradius", &scan_radius);
 
@@ -47,7 +46,7 @@ int llAlgPeakFinder::Init(void) {
 		algs->AddAlg(this);
 	}
 
-	int stepsize = 1024;
+	float stepsize = scan_radius/4.0f;
 	int numfound = 0;
 
 	//let us scan over the heightmap 
@@ -56,7 +55,7 @@ int llAlgPeakFinder::Init(void) {
 
 			if (points->GetMinDistance(x,y) > scan_radius) {
 				int is_highest = 1;
-				float z = heightmap->GetZ(x,y);
+				float z = map->GetZ(x,y);
 
 				//check for distance in pointlist
 
@@ -64,13 +63,13 @@ int llAlgPeakFinder::Init(void) {
 				for (float x1 = 0; x1 < scan_radius; x1 +=stepsize) {
 					for (float y1 = 0; y1 < scan_radius; y1 +=stepsize) {
 						//is this point the highest point?
-						if (heightmap->GetZ(x+x1,y+y1)>z || heightmap->GetZ(x-x1,y+y1)>z ||
-							heightmap->GetZ(x+x1,y-y1)>z || heightmap->GetZ(x-x1,y-y1)>z) {
-								is_highest=0;
+						if (map->GetZ(x+x1,y+y1)>z || map->GetZ(x-x1,y+y1)>z ||
+							map->GetZ(x+x1,y-y1)>z || map->GetZ(x-x1,y-y1)>z) {
+								is_highest = 0;
 								break;
 						}
 					}
-					if (is_highest==0) break;
+					if (is_highest == 0) break;
 				}
 
 				if (is_highest) {
@@ -105,7 +104,7 @@ double llAlgPeakFinder::GetValue(float _x, float _y, double *_value) {
 
 	double loc_value = value_at_lowest;
 
-	double z = double(heightmap->GetZ(_x, _y));
+	double z = double(map->GetZ(_x, _y));
 
 	if (points->GetMinDistance(_x, _y) < radius && z > lowest) {
 		loc_value = value_at_highest; 

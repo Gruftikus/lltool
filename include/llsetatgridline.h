@@ -1,7 +1,6 @@
 #ifndef _PLLSETATGRIDLINE_H_
 #define _PLLSETATGRIDLINE_H_
 
-#include <iostream>
 #include "../include/llset.h"
 
 class llSetAtGridLine : public llSet {

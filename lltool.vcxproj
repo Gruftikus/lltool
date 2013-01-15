@@ -52,6 +52,7 @@
     <ClInclude Include="include\llset.h" />
     <ClInclude Include="include\llsetatgridline.h" />
     <ClInclude Include="include\llsetcontour.h" />
+    <ClInclude Include="include\llsetflag.h" />
     <ClInclude Include="include\llsetgrid.h" />
     <ClInclude Include="include\llsetgridborder.h" />
     <ClInclude Include="include\llsetheight.h" />
@@ -108,6 +109,7 @@
     <ClCompile Include="src\llset.cpp" />
     <ClCompile Include="src\llsetatgridline.cpp" />
     <ClCompile Include="src\llsetcontour.cpp" />
+    <ClCompile Include="src\llsetflag.cpp" />
     <ClCompile Include="src\llsetgrid.cpp" />
     <ClCompile Include="src\llsetgridborder.cpp" />
     <ClCompile Include="src\llsetheight.cpp" />

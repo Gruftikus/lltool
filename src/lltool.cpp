@@ -88,13 +88,20 @@ int main(int argc, char **argv) {
 
 	mesg->Dump();
 
-	
 
 	float minab=256;
 	_llUtils()->SetValue("_mindistance", "256");
 	_llUtils()->SetValue("_cellsize_x", "4096");
 	_llUtils()->SetValue("_cellsize_y", "4096");
+
+	_llUtils()->SetValue("_quadsize_x", "4096");
+	_llUtils()->SetValue("_quadsize_y", "4096");
+	_llUtils()->SetValue("_quad_levels", "2");
+
+
 	_llUtils()->SetValue("_dds_tool", "s3tc.exe");
+
+
 
 	__int64 time_statistics[LLCOM_MAX_WORKERS];
 	int time_statistics_cmd[LLCOM_MAX_WORKERS];

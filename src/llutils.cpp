@@ -429,7 +429,7 @@ int llUtils::SetValue(const char *_name, const char *_value) {
 	for (unsigned int i=0; i<num_flags; i++) {
 		if (_stricmp(_name, flag_list[i]) == 0) {
 			flag_value[i] = _value;
-			sscanf_s(_value, "%lf", &(flag_value[i]));
+			sscanf_s(_value, "%lf", &(flag_value_f[i]));
 			return 1;
 		}
 	}

@@ -11,6 +11,7 @@ class llQuad {
 private:
 
 	int npoints, maxpoints;
+	llQuad *subquads[2][2];
 
 	std::vector<int>   points;
 	std::vector<float> points_x;
@@ -18,12 +19,18 @@ private:
 
 public:
 
-	float x1,y1,x2,y2; //corner coordinates
+	float x1, y1, x2, y2; //corner coordinates
 	int x, y; //current position in the 2d-grid
 
 	//constructor
 	llQuad();
 	llQuad(int _x, int _y, float _x1, float _y1, float _x2, float _y2);
+
+	int SetSubQuad(unsigned int _x, unsigned int _y, llQuad *_quad) {
+		if (_x > 1 || _y > 1) return 0;
+		subquads[_x][_y] = _quad;
+		return 1;
+	}
 
 	void SetMaxPoints(int _maxpoints) {
 		maxpoints = _maxpoints;
@@ -78,7 +85,7 @@ private:
 	std::vector<llQuad> v;
 	unsigned int counter;
 	unsigned int pointer;
-	llLogger *mesg;
+	llLogger   *mesg;
 	llQuadList *subtree;
 
 public:
@@ -93,10 +100,9 @@ public:
 		}
 	};
 
-
 	int AddPoint(float _x, float _y, int _num); 
 
-	int AddQuad(int _p1, int _p2, float _x1, float _y1, float _x2, float _y2);
+	llQuad *AddQuad(int _p1, int _p2, float _x1, float _y1, float _x2, float _y2);
 
 	void Reset(void) {
 		pointer=0;
@@ -114,11 +120,17 @@ public:
 
 	llQuad * GetQuad(float _x, float _y, int _num = -1);
 
+	llQuad * GetQuad(int _x, int _y);
+
 	llQuad * GetQuad(unsigned int _n) {
 		return &(v[_n]);
 	}
+
+	void SetSubQuads(llQuadList *_sub) {
+		subtree = _sub;
+	}
 	
-	void SubQuadLevels(int _levels);
+	//void SubQuadLevels(int _levels);
 
 	int GetCurrentX(void) {
 		return v[pointer].x;

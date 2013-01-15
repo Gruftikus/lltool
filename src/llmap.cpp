@@ -95,3 +95,61 @@ loop:
 	if (rnd > rnd_widthy) goto loop;
 	return rnd;
 }
+
+llQuadList *llMap::GenerateQuadList(void) {
+
+	float quadsize_x = (float) _llUtils()->GetValueF("_quadsize_x");
+	float quadsize_y = (float) _llUtils()->GetValueF("_quadsize_y");
+	int   levels     = (int)   _llUtils()->GetValueF("_quad_levels");
+
+	if (!quadsize_x) {
+		mesg->WriteNextLine(-LOG_ERROR, "'_quadsize_x' not defined, cannot generate the quads ");
+		return NULL;
+	}
+	if (!quadsize_y) {
+		mesg->WriteNextLine(-LOG_ERROR, "'_quadsize_y' not defined, cannot generate the quads ");
+		return NULL;
+	}
+	if (!levels) {
+		mesg->WriteNextLine(-LOG_ERROR, "'_quad_levels' not defined, cannot generate the quads ");
+		return NULL;
+	}
+
+	llQuadList *master = NULL;
+	llQuadList *last   = NULL;
+
+	while (levels) {
+		int quadx1 = int(floor(x1 / quadsize_x));
+		int quady1 = int(floor(y1 / quadsize_y));
+		int quadx2 = int(floor(x2 / quadsize_x));
+		int quady2 = int(floor(y2 / quadsize_y));
+
+		int nquads = (quadx2-quadx1+1) * (quady2-quady1+1);
+	
+		llQuadList *quads= new llQuadList(mesg, nquads);
+		if (!master) {
+			mesg->WriteNextLine(-LOG_INFO, "The map covers %i quads at %i level(s)", nquads, levels);
+			master = quads;
+		}
+
+		for (int ix=quadx1; ix<=quadx2; ix++) {
+			for (int iy=quady1; iy<=quady2; iy++) {
+				llQuad *myquad = quads->AddQuad(ix, iy, float(ix) * quadsize_x,
+					float(iy)   * quadsize_y,
+					float(ix+1) * quadsize_x,
+					float(iy+1) * quadsize_y);
+				if (last) {
+					llQuad *lastquad = last->GetQuad(ix/2, iy/2);
+					lastquad->SetSubQuad(ix % 2, iy % 2, myquad);
+				}
+			}
+		}
+		levels--;
+		quadsize_x /= 2.0f;
+		quadsize_y /= 2.0f;
+		if (last) quads->SetSubQuads(last);
+		last = quads;
+	}
+
+	return master;
+}

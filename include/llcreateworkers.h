@@ -7,6 +7,8 @@
 //Workers:
 #include "../include/llcreatemap.h"
 #include "../include/llselectrec.h"
+#include "../include/llexit.h"
+#include "../include/llsetflag.h"
 
 //Alg-based:
 #include "../include/llalg.h"
@@ -60,6 +62,8 @@ void CreateWorkers(llCommands *_batch) {
 
 	//Workers:
 	_batch->RegisterWorker(new llSelectRec());
+	_batch->RegisterWorker(new llExit());
+	_batch->RegisterWorker(new llSetFlag());
 
 	//Alg-based:
 	_llAlgList()->AddAlgCollection("_heightmap_alg", new llAlgCollection());

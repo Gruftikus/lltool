@@ -7,6 +7,7 @@
 
 #include "../include/lllogger.h"
 #include "../include/llcommands.h"
+#include "../include/llquadlist.h"
 
 
 class llShortarray {
@@ -346,6 +347,8 @@ public:
 		SetElementRaw(_x, _y, float((int(GetElementRaw(_x, _y)) & 0x00ffffff) | (_val << 24)));
 		return 1;
 	}
+
+	llQuadList *GenerateQuadList(void);
 
 };
 

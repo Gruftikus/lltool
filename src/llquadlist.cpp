@@ -15,9 +15,19 @@ llQuad::llQuad(int _x, int _y, float _x1, float _y1, float _x2, float _y2) {
 
     npoints   = 0;
     maxpoints = 65535;
+
+	subquads[0][0] = NULL;
+	subquads[1][0] = NULL;
+	subquads[0][1] = NULL;
+	subquads[1][1] = NULL;
 }
 
-llQuad::llQuad() {}
+llQuad::llQuad() {
+	subquads[0][0] = NULL;
+	subquads[1][0] = NULL;
+	subquads[0][1] = NULL;
+	subquads[1][1] = NULL;
+}
 
 int llQuad::GetMinDistance(float *_min, float _x, float _y, float _radius) {
 	int my_case = 1; //check quad (default)
@@ -65,17 +75,17 @@ llQuadList::llQuadList(llLogger * _mesg, int _pos_x, int _pos_y, int _x, int _y,
 	}
 } 
 
-int llQuadList::AddQuad(int _p1, int _p2, float _x1, float _y1, float _x2, float _y2) {
-	if (counter>=v.size()) {
+llQuad *llQuadList::AddQuad(int _p1, int _p2, float _x1, float _y1, float _x2, float _y2) {
+	if (counter >= v.size()) {
 		v.resize(v.size() + 1);
 	}
 
 	v[counter] = llQuad(_p1, _p2, _x1, _y1, _x2, _y2);
 	counter++;
-	return counter-1;
+	return &(v[counter - 1]);
 }
 
-llQuad * llQuadList::GetQuad(float _x, float _y, int _num) {
+llQuad *llQuadList::GetQuad(float _x, float _y, int _num) {
 
 	int num = _num;
 	if (_num<0) {
@@ -86,7 +96,7 @@ llQuad * llQuadList::GetQuad(float _x, float _y, int _num) {
 		//}
 		num = 0;
 	}
-	for (unsigned int i=0;i<counter;i++) {
+	for (unsigned int i=0; i<counter; i++) {
 		if (v[i].x1-0.5f <= _x && v[i].x2+0.5f >= _x && v[i].y1-0.5f <= _y && v[i].y2+0.5f >= _y) {
 			if (!num)
 				return &(v[i]);
@@ -95,11 +105,22 @@ llQuad * llQuadList::GetQuad(float _x, float _y, int _num) {
 		}
 	}
 	if (_num < 0) {
-		mesg->WriteNextLine(-LOG_FATAL,"Quad not found (x=%f ,y=%f)",_x,_y);
+		mesg->WriteNextLine(-LOG_ERROR,"Quad not found (x=%f ,y=%f)",_x,_y);
 	}
 	return NULL;
 };
 
+llQuad *llQuadList::GetQuad(int _x, int _y) {
+	for (unsigned int i=0; i<counter; i++) {
+		if (v[i].x == _x && v[i].y == _y) {
+			return &(v[i]);
+		}
+	}
+	mesg->WriteNextLine(-LOG_ERROR,"Quad not found (x=%i ,y=%i)", _x, _y);
+	return NULL;
+}
+
+#if 0
 void llQuadList::SubQuadLevels(int _levels) {
 	if (!_levels) return;
 	subtree = new llQuadList(mesg, v.size()*4);
@@ -110,8 +131,7 @@ void llQuadList::SubQuadLevels(int _levels) {
 		exit(-1);
 	}
 }
-
-
+#endif
 
 int llQuadList::AddPoint(float _x, float _y, int _num) {
 	llQuad * myquad=GetQuad(_x, _y, 0);

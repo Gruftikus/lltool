@@ -44,7 +44,8 @@ int llCreateMap::Init(void) {
 	_llUtils()->x11 = x2;
 	_llUtils()->y11 = y2;
 
-	llPointList    *points     = new llPointList(0, NULL); //BUGBUG: quad list should be taken from global place
+	llQuadList     *quads      = heightmap->GenerateQuadList();
+	llPointList    *points     = new llPointList(0, quads); 
 	llPolygonList  *polygons   = new llPolygonList(points, heightmap);
 	llTriangleList *triangles  = new llTriangleList(0, points);
 		

@@ -94,43 +94,44 @@ int llWorker::CheckValue(char *_value) {
 }
 
 int llWorker::AddValue(char *_value) {
-	if (checked_value == 1) {
-		char *dummy = new char[strlen(_value)+1];
-		char *odummy = dummy;
-		strcpy_s(dummy, strlen(_value)+1, _value);
-		_llUtils()->StripQuot(&dummy);
-		char *dummy2 = _llUtils()->ReplaceFlags(dummy);
-		sscanf_s(dummy2, "%i", i_value[checked_pos]);
-		delete dummy2;
-		delete odummy;
-	} else if (checked_value == 2) {
-		char *dummy = new char[strlen(_value)+1];
-		char *odummy = dummy;
-		strcpy_s(dummy, strlen(_value)+1, _value);
-		_llUtils()->StripQuot(&dummy);
-		char *dummy2 = _llUtils()->ReplaceFlags(dummy);
-		sscanf_s(dummy2, "%f", f_value[checked_pos]);
-		delete dummy2;
-		delete odummy;
-	} else if (checked_value == 3) {
-		char *dummy = new char[strlen(_value)+1];
-		char *odummy = dummy;
-		strcpy_s(dummy, strlen(_value)+1, _value);
-		_llUtils()->StripQuot(&dummy);
-		char *dummy2 = _llUtils()->ReplaceFlags(dummy);
-		sscanf_s(dummy2, "%lf", d_value[checked_pos]);
-		delete dummy2;
-		delete odummy;
-	} else if (checked_value == 4) {
-		char *dummy = new char[strlen(_value)+1];
-		char *odummy = dummy;
-		strcpy_s(dummy, strlen(_value)+1, _value);
-		_llUtils()->StripQuot(&dummy);
-		char *dummy2 = _llUtils()->ReplaceFlags(dummy);
-		delete odummy;
-		*(s_value[checked_pos]) = dummy2;
-	} 
+	char *dummy = new char[strlen(_value)+1];
+	strcpy_s(dummy, strlen(_value)+1, _value);
+	_llUtils()->StripQuot(&dummy);
+	if (dummy) {
+		if (checked_value == 1) {
+			i_value_cache[checked_pos] = dummy;
+		} else if (checked_value == 2) {
+			f_value_cache[checked_pos] = dummy;
+		} else if (checked_value == 3) {
+			d_value_cache[checked_pos] = dummy;
+		} else if (checked_value == 4) {
+			s_value_cache[checked_pos] = dummy;
+		} 
+	} else return 0;
 	return checked_value;
+}
+
+int llWorker::ReplaceFlags(void) {
+	for (unsigned int i=0; i<name.size(); i++) {
+		if (i_value_cache[i]) {
+			char *dummy = _llUtils()->ReplaceFlags(i_value_cache[i]);
+			sscanf_s(dummy, "%i", i_value[i]);
+			delete dummy;
+		} else if (f_value_cache[i]) {
+			char *dummy = _llUtils()->ReplaceFlags(f_value_cache[i]);
+			sscanf_s(dummy, "%f", f_value[i]);
+			delete dummy;
+		} else if (d_value_cache[i]) {
+			char *dummy = _llUtils()->ReplaceFlags(d_value_cache[i]);
+			sscanf_s(dummy, "%lf", d_value[i]);
+			delete dummy;
+		} else if (s_value_cache[i]) {
+			char *dummy = _llUtils()->ReplaceFlags(s_value_cache[i]);
+			//std::cout << dummy << std::endl;
+			*(s_value[i]) = dummy; //BUGBUG
+		}  
+	}
+	return 1;
 }
 
 int llWorker::Used(char *_flag) {
@@ -169,23 +170,29 @@ void llWorker::Print(void) {
 
 	for (unsigned int i=0; i<name.size(); i++) {
 		if (used[i]) {
-			if (i_value[i]) {
-				_llLogger()->AddToLine(' ');
-				_llLogger()->AddToLine(name[i]);
-				_llLogger()->AddToLine("=", *(i_value[i]));
-			} else if (f_value[i]) {
-				_llLogger()->AddToLine(' ');
-				_llLogger()->AddToLine(name[i]);
-				_llLogger()->AddToLine("=", *(f_value[i]), 0);
-			} else if (d_value[i]) {
-				_llLogger()->AddToLine(' ');
-				_llLogger()->AddToLine(name[i]);
-				_llLogger()->AddToLine("=", *(d_value[i]), 0);
-			} else if (s_value[i] && *s_value[i]) {
+			if (i_value_cache[i]) {
 				_llLogger()->AddToLine(' ');
 				_llLogger()->AddToLine(name[i]);
 				_llLogger()->AddToLine("=\"");
-				_llLogger()->AddToLine(*(s_value[i]));
+				_llLogger()->AddToLine(i_value_cache[i]);
+				_llLogger()->AddToLine('\"');
+			} else if (f_value_cache[i]) {
+				_llLogger()->AddToLine(' ');
+				_llLogger()->AddToLine(name[i]);
+				_llLogger()->AddToLine("=\"");
+				_llLogger()->AddToLine(f_value_cache[i]);
+				_llLogger()->AddToLine('\"');
+			} else if (d_value_cache[i]) {
+				_llLogger()->AddToLine(' ');
+				_llLogger()->AddToLine(name[i]);
+				_llLogger()->AddToLine("=\"");
+				_llLogger()->AddToLine(d_value_cache[i]);
+				_llLogger()->AddToLine('\"');
+			} else if (s_value_cache[i]) {
+				_llLogger()->AddToLine(' ');
+				_llLogger()->AddToLine(name[i]);
+				_llLogger()->AddToLine("=\"");
+				_llLogger()->AddToLine(s_value_cache[i]);
 				_llLogger()->AddToLine('\"');
 			} else if (flag[i]) {
 				_llLogger()->AddToLine(' ');

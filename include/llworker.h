@@ -19,6 +19,10 @@ class llWorker {
 	 std::vector<float*>  f_value;
 	 std::vector<double*> d_value;
 	 std::vector<char**>  s_value;
+	 std::vector<char*>   i_value_cache;
+	 std::vector<char*>   f_value_cache;
+	 std::vector<char*>   d_value_cache;
+	 std::vector<char*>   s_value_cache;
 	 std::vector<int>     opt;
 	 std::vector<int>     used;
 
@@ -36,6 +40,14 @@ class llWorker {
 		 d_value[size] = NULL;
 		 s_value.resize(size + 1);
 		 s_value[size] = NULL;
+		 i_value_cache.resize(size + 1);
+		 i_value_cache[size] = NULL;
+		 f_value_cache.resize(size + 1);
+		 f_value_cache[size] = NULL;
+		 d_value_cache.resize(size + 1);
+		 d_value_cache[size] = NULL;
+		 s_value_cache.resize(size + 1);
+		 s_value_cache[size] = NULL;
 		 opt.resize(size + 1);
 		 opt[size] = 0;
 		 used.resize(size + 1);
@@ -70,6 +82,7 @@ class llWorker {
 	int CheckFlag (char *_flag);
 	int CheckValue(char *_value);
 	int AddValue  (char *_value);
+	int ReplaceFlags(void);
 
 	int SetValue (char *_name, char *_value) {
 		if (!CheckValue(_name)) return 0;

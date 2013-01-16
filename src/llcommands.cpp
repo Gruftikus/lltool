@@ -297,44 +297,45 @@ repeat:
 				worker                         ->SetCommandIndex(com);
 				worker                         ->RegisterOptions();
 				worker                         ->Prepare();
-			}
+
+				ptr = strtok_int(NULL,' ', &saveptr1);
+				while(ptr != NULL) {
+					if (!worker->CheckFlag(ptr)) {
+						ptr2 = strtok_int(ptr, '=', &saveptr2);
+						if (ptr2!=NULL && strlen(ptr2)>0) {
+							if (worker->CheckValue(ptr)) {
+								ptr2 = strtok_int(NULL, '=', &saveptr2);
+								if (ptr2)
+									worker->AddValue(ptr2);
+								else {
+									mesg->WriteNextLine(LOG_ERROR, LLCOM_SYNTAX_ERROR, ptr, CurrentCommand);
+									return com;
+								}
+							} else {
+								mesg->WriteNextLine(LOG_ERROR, LLCOM_UNKNOWN_OPTION, ptr, CurrentCommand);
+							}
+						}
+					}
+					ptr = strtok_int(NULL, ' ', &saveptr1);
+				}
+				goto exit;
+			} //if stricmp
 		}
 	} else {
 		com = worker->GetCommandIndex();
 		worker->Prepare();
 	}
 
+exit:
+
 	if (com==-1 || !worker) {
 		mesg->WriteNextLine(LOG_ERROR, "Unknown command [%s]", ptr);
 		return com;
 	}
 
-	ptr = strtok_int(NULL,' ', &saveptr1);
-
-	while(ptr != NULL) {
-		//saveptr2 = NULL;
-
-		if (!worker->CheckFlag(ptr)) {
-			ptr2 = strtok_int(ptr, '=', &saveptr2);
-			if (ptr2!=NULL && strlen(ptr2)>0) {
-				if (worker->CheckValue(ptr)) {
-					ptr2 = strtok_int(NULL, '=', &saveptr2);
-					if (ptr2)
-						worker->AddValue(ptr2);
-					else {
-						mesg->WriteNextLine(LOG_ERROR, LLCOM_SYNTAX_ERROR, ptr, CurrentCommand);
-						return com;
-					}
-				} else {
-					mesg->WriteNextLine(LOG_ERROR, LLCOM_UNKNOWN_OPTION, ptr, CurrentCommand);
-				}
-			}
-		}
-		ptr = strtok_int(NULL, ' ', &saveptr1);
-	}
-
 	//afterburner
 	worker->Print();
+	worker->ReplaceFlags();
 	worker->Exec();
 	return com;
 

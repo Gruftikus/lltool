@@ -22,8 +22,8 @@ int llSetHeight::RegisterOptions(void) {
 	return 1;
 }
 
-int llSetHeight::Init(void) {
-	if (!llMapWorker::Init()) return 0;
+int llSetHeight::Exec(void) {
+	if (!llMapWorker::Exec()) return 0;
 
 	if (usegameunits) zmin /= map->GetZScale(); //convert to heightmap units
 	

@@ -32,9 +32,8 @@ int llExportMapToObj::RegisterOptions(void) {
 	return 1;
 }
 
-int llExportMapToObj::Init(void) {
-
-	if (!llTriMod::Init()) return 0;
+int llExportMapToObj::Exec(void) {
+	if (!llTriMod::Exec()) return 0;
 
 	if (!Used("-filename"))
 		filename = "map.obj";

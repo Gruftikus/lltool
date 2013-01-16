@@ -197,6 +197,7 @@ int llCommands::GetCommand(void) {
 			return 0;
 	}
 
+#if 0
 check_again:
 	//check for flag replacement
 	for (unsigned int i=0; i<strlen(linex); i++) {
@@ -244,6 +245,7 @@ check_again:
 			}
 		}
 	}
+#endif
 
 repeat:
 	//check for flags
@@ -333,7 +335,7 @@ repeat:
 
 	//afterburner
 	worker->Print();
-	worker->Init();
+	worker->Exec();
 	return com;
 
 }

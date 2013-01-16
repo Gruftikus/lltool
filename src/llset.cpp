@@ -23,8 +23,8 @@ int llSet::RegisterOptions(void) {
 	return 1;
 }
 
-int llSet::Init(void) {
-	llWorker::Init();
+int llSet::Exec(void) {
+	llWorker::Exec();
 
 	if (!Used("-map"))
 		mapname = "_heightmap";

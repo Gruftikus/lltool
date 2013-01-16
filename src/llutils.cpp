@@ -321,6 +321,91 @@ void llUtils::StripComment(char *_tmp) {
 	}
 }
 
+char *llUtils::ReplaceFlags(char *_in) {
+	//replaces $flag with its value
+
+	//first copy the string into tmp
+	char *tmp = new char[strlen(_in) + 1];
+	strcpy_s(tmp, strlen(_in)+1, _in);
+	char *linenew = NULL;
+
+check_again:
+	//check for flag replacement
+	for (unsigned int i=0; i<strlen(tmp); i++) {
+		if ((tmp)[i]=='$') {
+			if (!(tmp[i+1]=='$') && !(i>0 && tmp[i-1]=='$')) {
+				//find the end
+				for (unsigned int j=i+1; j<strlen(tmp); j++) {
+					if (!(isalnum((tmp)[j]) || (tmp)[j]=='_')) { //find the end
+						if ((j-i) <= 1) {
+							mesg->WriteNextLine(LOG_ERROR, "Something wrong in [%s]", tmp);
+						}
+						tmp[i] = '\0';
+						char end = (tmp)[j];
+						tmp[j] = '\0';
+						char *val= (char*)GetValue(tmp + i + 1);
+						//sprintf_s(linenew, UTILS_MAX_LINE2, "%s", linex);
+						
+						if (val) {
+							//sprintf_s(linenew, UTILS_MAX_LINE2-strlen(linex), "%s%s", tmp, val);
+							if (end != '$') {
+								unsigned int len = strlen(tmp) + strlen(val) + 2 + strlen(tmp+j+1);
+								linenew = new char[len];
+								sprintf_s(linenew, len, "%s%s%c%s", tmp, val, end, tmp+j+1);
+							} else {
+								unsigned int len = strlen(tmp) + strlen(val) + 1 + strlen(tmp+j+1);
+								linenew = new char[len];
+								sprintf_s(linenew, len, "%s%s%s", tmp, val, tmp+j+1);
+							}
+						} else {
+							if (end != '$') {
+								unsigned int len = strlen(tmp) + 7 + 2 + strlen(tmp+j+1);
+								linenew = new char[len];
+								sprintf_s(linenew, len, "%s<error>%c%s", tmp, end, tmp+j+1);
+							} else {
+								unsigned int len = strlen(tmp) + 7 + 1 + strlen(tmp+j+1);
+								linenew = new char[len];
+								sprintf_s(linenew, len, "%s<error>%s", tmp, tmp+j+1);
+							}
+						}
+						delete tmp;
+						tmp = linenew;
+						goto check_again;
+					}
+				}
+				tmp[i] = '\0';
+				char *val= (char*)GetValue(tmp + i + 1);
+				//sprintf_s(linenew, UTILS_MAX_LINE2, "%s", linex);
+
+				if (val) {
+					//sprintf_s(linenew, UTILS_MAX_LINE2-strlen(linex), "%s%s", tmp, val);
+					unsigned int len = strlen(tmp) + strlen(val) + 1;
+					linenew = new char[len];
+					sprintf_s(linenew, len, "%s%s", tmp, val);
+				} else {
+					unsigned int len = strlen(tmp) + 7 + 1;
+					linenew = new char[len];
+					sprintf_s(linenew, len, "%s<error>", tmp);
+				}
+				delete tmp;
+				tmp = linenew;
+				goto check_again;
+			}
+		}
+	}
+
+	for (unsigned int i=0; i<strlen(tmp); i++) {
+		if (i>0 && tmp[i]=='$' && tmp[i-1]=='$') {
+			for (unsigned int j=i; j<strlen(tmp); j++) {
+				tmp[j]=tmp[j+1];
+			}
+			i--;
+		}
+	}
+
+	return tmp;
+}
+
 int llUtils::SeekNextSpace(char *_tmp) {
 	bool is_in_quot = false;
 	for (unsigned int i=0; i<strlen(_tmp); i++) {
@@ -406,18 +491,20 @@ int llUtils::IsEnabled(const char *_name) {
 		if (_name[i] == '=') 
 			pos = i;
 	}
-	for (unsigned int i=0;i<num_flags;i++) {
+	for (unsigned int i=0; i<num_flags; i++) {
 		if (_strnicmp(_name,flag_list[i],pos)==0 && pos==strlen(flag_list[i])) {
 			if (pos == strlen(_name)) {
 				return flag_enable[i];
 			} else {
-				char *val = (char *)GetValue(flag_list[i]);
-				char * newname = new char[strlen(_name+pos+1)+1];
+				char *val     = (char *)GetValue(flag_list[i]);
+				char *newname = new char[strlen(_name+pos+1)+1];
 				strcpy_s(newname, strlen(_name+pos+1)+1, _name+pos+1);
 				StripQuot(&newname);
-				if (_stricmp(newname, val) == 0) {					
+				if (_stricmp(newname, val) == 0) {		
+					delete newname;
 					return flag_enable[i];
 				}
+				delete newname;
 			}
 		}
 	}

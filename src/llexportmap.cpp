@@ -24,8 +24,8 @@ int llExportMap::RegisterOptions(void) {
 	return 1;
 }
 
-int llExportMap::Init(void) {
-	if (!llMapWorker::Init()) return 0;
+int llExportMap::Exec(void) {
+	if (!llMapWorker::Exec()) return 0;
 
 	if (!Used("-filename"))
 		filename = "map.bmp";

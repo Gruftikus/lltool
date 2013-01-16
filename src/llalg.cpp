@@ -28,8 +28,8 @@ int llAlg::RegisterOptions(void) {
 	return 1;
 }
 
-int llAlg::Init(void) {
-	llWorker::Init();
+int llAlg::Exec(void) {
+	llWorker::Exec();
 
 	//get the corresponding map from the global map container
 	if (mapname) {

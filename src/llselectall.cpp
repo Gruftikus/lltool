@@ -11,8 +11,8 @@ int llSelectAll::RegisterOptions(void) {
 	return 1;
 }
 
-int llSelectAll::Init(void) {
-	llMapWorker::Init();
+int llSelectAll::Exec(void) {
+	llMapWorker::Exec();
 
 	_llUtils()->x00 = map->GetX1();
 	_llUtils()->x11 = map->GetX2();

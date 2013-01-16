@@ -29,7 +29,7 @@ public:
 
 	int Prepare(void);
 	int RegisterOptions(void);
-	int Init(void);
+	int Exec(void);
 };
 
 #endif

@@ -30,8 +30,8 @@ int llFilter::RegisterOptions(void) {
 	return 1;
 }
 
-int llFilter::Init(void) {
-	if (!llMapWorker::Init()) return 0;
+int llFilter::Exec(void) {
+	if (!llMapWorker::Exec()) return 0;
 
 	if (!Used("-target")) {
 		targetname = new char[strlen(mapname)+10];
@@ -104,7 +104,7 @@ int llFilter::Init(void) {
 		llMakeDerivatives *der = new llMakeDerivatives();
 		if (!der->RegisterOptions()) return 0;
 		
-		if (!der->Init()) {
+		if (!der->Exec()) {
 			delete der;
 			return 0;
 		}

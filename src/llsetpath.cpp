@@ -15,8 +15,8 @@ int llSetPath::RegisterOptions(void) {
 	return 1;
 }
 
-int llSetPath::Init(void) {
-	llWorker::Init();
+int llSetPath::Exec(void) {
+	llWorker::Exec();
 
 	_llLogger()->WriteNextLine(LOG_COMMAND,"%s: change directory path to %s", command_name, path);
 	_chdir(path);

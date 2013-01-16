@@ -22,8 +22,8 @@ int llMakeDerivatives::RegisterOptions(void) {
 	return 1;
 }
 
-int llMakeDerivatives::Init(void) {
-	if (!llMapWorker::Init()) return 0;
+int llMakeDerivatives::Exec(void) {
+	if (!llMapWorker::Exec()) return 0;
 
 	unsigned int widthx = map->GetWidthX();
 	unsigned int widthy = map->GetWidthY();

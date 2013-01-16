@@ -23,8 +23,8 @@ int llActivateVisibleVertices::Prepare(void) {
 	return 1;
 }
 
-int llActivateVisibleVertices::Init(void) {
-	if (!llTriMod::Init()) return 0;
+int llActivateVisibleVertices::Exec(void) {
+	if (!llTriMod::Exec()) return 0;
 
 	int n_rounds = 1;
 	if (!Used("-radius")) {

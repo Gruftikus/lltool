@@ -25,8 +25,8 @@ int llTriMod::RegisterOptions(void) {
 	return 1;
 }
 
-int llTriMod::Init(void) {
-	llWorker::Init();
+int llTriMod::Exec(void) {
+	llWorker::Exec();
 
 	if (!Used("-map"))
 		mapname = "_heightmap";

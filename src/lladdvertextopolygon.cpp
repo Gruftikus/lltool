@@ -21,8 +21,8 @@ int llAddVertexToPolygon::RegisterOptions(void) {
 }
 
 
-int llAddVertexToPolygon::Init(void) {
-	if (!llSet::Init()) return 0;
+int llAddVertexToPolygon::Exec(void) {
+	if (!llSet::Exec()) return 0;
 
 	llPolygonList *polygons = _llMapList()->GetPolygonList(mapname);
 	if (!polygons) {

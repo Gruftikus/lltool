@@ -81,7 +81,7 @@ class llWorker {
 
 	virtual int RegisterOptions(void);
 	virtual int Prepare(void);
-	virtual int Init(void);
+	virtual int Exec(void);
 
 	void SetCommandIndex(int _com) {
 		command_index = _com;

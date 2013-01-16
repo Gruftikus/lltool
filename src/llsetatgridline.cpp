@@ -16,8 +16,8 @@ int llSetAtGridLine::RegisterOptions(void) {
 }
 
 
-int llSetAtGridLine::Init(void) {
-	if (!llSet::Init()) return 0;
+int llSetAtGridLine::Exec(void) {
+	if (!llSet::Exec()) return 0;
 	float minab=256;
 
 	int zused = 0;

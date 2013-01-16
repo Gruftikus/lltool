@@ -14,8 +14,8 @@ int llSetVertex::RegisterOptions(void) {
 }
 
 
-int llSetVertex::Init(void) {
-	if (!llSet::Init()) return 0;
+int llSetVertex::Exec(void) {
+	if (!llSet::Exec()) return 0;
 
 	if (!map->IsInMap(x, y)) {
 		_llLogger()->WriteNextLine(LOG_ERROR,"Point (%f, %f) not in map", x, y);

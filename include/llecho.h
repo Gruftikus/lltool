@@ -1,22 +1,21 @@
-#ifndef _PLLSETFLAG_H_
-#define _PLLSETFLAG_H_
+#ifndef _PLLECHO_H_
+#define _PLLECHO_H_
 
 #include "../include/llmapworker.h"
 #include "../include/llutils.h"
 
-class llSetFlag : public llWorker {
+class llEcho : public llWorker {
 
 protected:
 
-	int hidden, unselect;
-	char *name, *value;
+	char *text;
 	
 public:
 
-	llSetFlag();
+	llEcho();
 
 	virtual llWorker * Clone() {
-		return new llSetFlag(*this);
+		return new llEcho(*this);
 	}
 
 	int Prepare(void);

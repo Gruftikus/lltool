@@ -15,8 +15,8 @@ int llSetGridBorder::RegisterOptions(void) {
 }
 
 
-int llSetGridBorder::Init(void) {
-	if (!llSet::Init()) return 0;
+int llSetGridBorder::Exec(void) {
+	if (!llSet::Exec()) return 0;
 	float minab=256;
 
 	int zused = 0;

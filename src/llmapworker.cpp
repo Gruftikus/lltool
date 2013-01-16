@@ -24,8 +24,8 @@ int llMapWorker::RegisterOptions(void) {
 	return 1;
 }
 
-int llMapWorker::Init(void) {
-	llWorker::Init();
+int llMapWorker::Exec(void) {
+	llWorker::Exec();
 
 	if (!Used("-map"))
 		mapname = "_heightmap";

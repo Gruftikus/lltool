@@ -22,8 +22,8 @@ int llReadPolygonDataFile::RegisterOptions(void) {
 }
 
 
-int llReadPolygonDataFile::Init(void) {
-	if (!llSet::Init()) return 0;
+int llReadPolygonDataFile::Exec(void) {
+	if (!llSet::Exec()) return 0;
 
 	llPolygonList *polygons = _llMapList()->GetPolygonList(mapname);
 	if (!polygons) {

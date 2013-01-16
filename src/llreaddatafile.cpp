@@ -14,8 +14,8 @@ int llReadDataFile::RegisterOptions(void) {
 }
 
 
-int llReadDataFile::Init(void) {
-	if (!llSet::Init()) return 0;
+int llReadDataFile::Exec(void) {
+	if (!llSet::Exec()) return 0;
 
 	FILE *fptr_data;
 

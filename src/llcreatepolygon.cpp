@@ -17,8 +17,8 @@ int llCreatePolygon::RegisterOptions(void) {
 }
 
 
-int llCreatePolygon::Init(void) {
-	if (!llSet::Init()) return 0;
+int llCreatePolygon::Exec(void) {
+	if (!llSet::Exec()) return 0;
 
 	llPolygonList *polygons = _llMapList()->GetPolygonList(mapname);
 	if (!polygons) {

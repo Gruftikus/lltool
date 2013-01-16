@@ -58,8 +58,8 @@ int llCreateAlgCollection::RegisterOptions(void) {
 	return 1;
 }
 
-int llCreateAlgCollection::Init(void) {
-	if (!llWorker::Init()) return 0;
+int llCreateAlgCollection::Exec(void) {
+	if (!llWorker::Exec()) return 0;
 
 	_llAlgList()->AddAlgCollection(name, new llAlgCollection());
 

@@ -21,8 +21,8 @@ int llSplitAtPolygonBorder::RegisterOptions(void) {
 }
 
 
-int llSplitAtPolygonBorder::Init(void) {
-	if (!llTriMod::Init()) return 0;
+int llSplitAtPolygonBorder::Exec(void) {
+	if (!llTriMod::Exec()) return 0;
 
 	llPolygonList *polygons = _llMapList()->GetPolygonList(mapname);
 	if (!polygons) {

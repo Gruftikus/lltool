@@ -11,8 +11,8 @@ int llRemoveInactiveTriangles::RegisterOptions(void) {
 }
 
 
-int llRemoveInactiveTriangles::Init(void) {
-	if (!llTriMod::Init()) return 0;
+int llRemoveInactiveTriangles::Exec(void) {
+	if (!llTriMod::Exec()) return 0;
 
 	int v = triangles->GetN();
 	int num=0;

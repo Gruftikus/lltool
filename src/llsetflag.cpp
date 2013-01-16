@@ -24,8 +24,8 @@ int llSetFlag::RegisterOptions(void) {
 	return 1;
 }
 
-int llSetFlag::Init(void) {
-	llWorker::Init();
+int llSetFlag::Exec(void) {
+	llWorker::Exec();
 
 	if (value) {
 		_llUtils()->SetValue(name, value);

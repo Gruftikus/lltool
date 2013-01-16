@@ -96,27 +96,39 @@ int llWorker::CheckValue(char *_value) {
 int llWorker::AddValue(char *_value) {
 	if (checked_value == 1) {
 		char *dummy = new char[strlen(_value)+1];
+		char *odummy = dummy;
 		strcpy_s(dummy, strlen(_value)+1, _value);
 		_llUtils()->StripQuot(&dummy);
-		sscanf_s(dummy, "%i", i_value[checked_pos]);
-		delete dummy;
+		char *dummy2 = _llUtils()->ReplaceFlags(dummy);
+		sscanf_s(dummy2, "%i", i_value[checked_pos]);
+		delete dummy2;
+		delete odummy;
 	} else if (checked_value == 2) {
 		char *dummy = new char[strlen(_value)+1];
+		char *odummy = dummy;
 		strcpy_s(dummy, strlen(_value)+1, _value);
 		_llUtils()->StripQuot(&dummy);
-		sscanf_s(dummy, "%f", f_value[checked_pos]);
-		delete dummy;
+		char *dummy2 = _llUtils()->ReplaceFlags(dummy);
+		sscanf_s(dummy2, "%f", f_value[checked_pos]);
+		delete dummy2;
+		delete odummy;
 	} else if (checked_value == 3) {
 		char *dummy = new char[strlen(_value)+1];
+		char *odummy = dummy;
 		strcpy_s(dummy, strlen(_value)+1, _value);
 		_llUtils()->StripQuot(&dummy);
-		sscanf_s(dummy, "%lf", d_value[checked_pos]);
-		delete dummy;
+		char *dummy2 = _llUtils()->ReplaceFlags(dummy);
+		sscanf_s(dummy2, "%lf", d_value[checked_pos]);
+		delete dummy2;
+		delete odummy;
 	} else if (checked_value == 4) {
 		char *dummy = new char[strlen(_value)+1];
+		char *odummy = dummy;
 		strcpy_s(dummy, strlen(_value)+1, _value);
 		_llUtils()->StripQuot(&dummy);
-		*(s_value[checked_pos]) = dummy;
+		char *dummy2 = _llUtils()->ReplaceFlags(dummy);
+		delete odummy;
+		*(s_value[checked_pos]) = dummy2;
 	} 
 	return checked_value;
 }
@@ -141,7 +153,7 @@ int llWorker::Prepare(void) {
 	return 1;
 }
 
-int llWorker::Init(void) {
+int llWorker::Exec(void) {
 	for (unsigned int i=0; i<name.size(); i++) {
 		if ((opt[i] & LLWORKER_OBL_OPTION) && used[i] == 0) {
 			_llLogger()->WriteNextLine(-LOG_WARNING, "%s: obligatory option [%s] missing", command_name, name[i]);

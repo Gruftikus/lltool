@@ -14,8 +14,8 @@ int llSetGrid::RegisterOptions(void) {
 }
 
 
-int llSetGrid::Init(void) {
-	if (!llSet::Init()) return 0;
+int llSetGrid::Exec(void) {
+	if (!llSet::Exec()) return 0;
 
 	for (float x=floor(_llUtils()->x00/gridx)*gridx; x<=(_llUtils()->x11+1); x+=gridx) {
 		for (float y=floor(_llUtils()->y00/gridy)*gridy; y<=(_llUtils()->y11+1); y+=gridy) {

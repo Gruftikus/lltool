@@ -22,8 +22,8 @@ int llSplitAt::RegisterOptions(void) {
 }
 
 
-int llSplitAt::Init(void) {
-	if (!llTriMod::Init()) return 0;
+int llSplitAt::Exec(void) {
+	if (!llTriMod::Exec()) return 0;
 
 	if (!Used("-x") && !Used("-y")) {
 		_llLogger()->WriteNextLine(-LOG_ERROR,"%s: either -x or -y has to be defined", command_name);

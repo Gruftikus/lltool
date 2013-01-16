@@ -32,8 +32,8 @@ int llCreateMap::RegisterOptions(void) {
 	return 1;
 }
 
-int llCreateMap::Init(void) {
-	if (!llWorker::Init()) return 0;
+int llCreateMap::Exec(void) {
+	if (!llWorker::Exec()) return 0;
 
 	llMap * heightmap = new llMap(widthx, widthy);
 	if (even) heightmap->SetEven();

@@ -29,6 +29,7 @@
     <ClInclude Include="include\llcreatepolygon.h" />
     <ClInclude Include="include\llcreateworkers.h" />
     <ClInclude Include="include\lldiamondsquare.h" />
+    <ClInclude Include="include\llecho.h" />
     <ClInclude Include="include\llexit.h" />
     <ClInclude Include="include\llexportmap.h" />
     <ClInclude Include="include\llexportmaptoobj.h" />
@@ -86,6 +87,7 @@
     <ClCompile Include="src\llcreatemap.cpp" />
     <ClCompile Include="src\llcreatepolygon.cpp" />
     <ClCompile Include="src\lldiamondsquare.cpp" />
+    <ClCompile Include="src\llecho.cpp" />
     <ClCompile Include="src\llexit.cpp" />
     <ClCompile Include="src\llexportmap.cpp" />
     <ClCompile Include="src\llexportmaptoobj.cpp" />

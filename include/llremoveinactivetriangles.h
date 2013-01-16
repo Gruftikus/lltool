@@ -17,7 +17,7 @@ public:
 	}
 
 	int RegisterOptions(void);
-	int Init(void);
+	int Exec(void);
 
 };
 

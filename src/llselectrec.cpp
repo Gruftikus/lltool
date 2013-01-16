@@ -15,8 +15,8 @@ int llSelectRec::RegisterOptions(void) {
 	return 1;
 }
 
-int llSelectRec::Init(void) {
-	llWorker::Init();
+int llSelectRec::Exec(void) {
+	llWorker::Exec();
 
 	_llUtils()->x00 = x1;
 	_llUtils()->x11 = x2;

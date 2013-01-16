@@ -34,8 +34,8 @@ int llAlgPeakFinder::RegisterOptions(void) {
 	return 1;
 }
 
-int llAlgPeakFinder::Init(void) {
-	if (!llAlg::Init()) return 0;
+int llAlgPeakFinder::Exec(void) {
+	if (!llAlg::Exec()) return 0;
 
 	if (alg_list) {
 		llAlgCollection *algs = _llAlgList()->GetAlgCollection(alg_list);

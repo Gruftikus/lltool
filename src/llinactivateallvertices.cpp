@@ -11,8 +11,8 @@ int llInactivateAllVertices::RegisterOptions(void) {
 	return 1;
 }
 
-int llInactivateAllVertices::Init(void) {
-	if (!llMapWorker::Init()) return 0;
+int llInactivateAllVertices::Exec(void) {
+	if (!llMapWorker::Exec()) return 0;
 
 	if (!points) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map [%s] has no point list", command_name, mapname);

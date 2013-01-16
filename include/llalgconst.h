@@ -21,7 +21,7 @@ public:
 	}
 
 	int    Prepare(void);
-	int    Init(void);
+	int    Exec(void);
 };
 
 #endif

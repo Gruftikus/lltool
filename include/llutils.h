@@ -82,6 +82,8 @@ class llUtils {
 	void StripQuot(char **_tmp);
 	void StripSpaces(char **_tmp);
 	void StripComment(char *_tmp);
+	char *ReplaceFlags(char *_in);
+
 	int  SeekNextSpace(char *_tmp);
 
 

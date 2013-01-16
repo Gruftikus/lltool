@@ -16,8 +16,8 @@ int llSplitBetween::RegisterOptions(void) {
 }
 
 
-int llSplitBetween::Init(void) {
-	if (!llTriMod::Init()) return 0;
+int llSplitBetween::Exec(void) {
+	if (!llTriMod::Exec()) return 0;
 
 	triangles->DivideBetween(x1, y1, x2, y2, map);  
 

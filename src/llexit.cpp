@@ -13,8 +13,8 @@ int llExit::RegisterOptions(void) {
 	return 1;
 }
 
-int llExit::Init(void) {
-	llWorker::Init();
+int llExit::Exec(void) {
+	llWorker::Exec();
 
 	_llLogger()->Dump();
 	_llLogger()->WriteNextLine(-LOG_COMMAND,"%s: Bye...", command_name);

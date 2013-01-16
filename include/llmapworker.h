@@ -30,7 +30,7 @@ public:
 
 	virtual int Prepare(void);
 	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	virtual int Exec(void);
 
 };
 

@@ -87,7 +87,7 @@ public:
 	}
 
 	virtual int RegisterOptions(void);
-	virtual int Init(void);
+	virtual int Exec(void);
 
 };
 

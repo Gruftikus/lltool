@@ -21,8 +21,8 @@ int llStencilPolygon::RegisterOptions(void) {
 }
 
 
-int llStencilPolygon::Init(void) {
-	if (!llTriMod::Init()) return 0;
+int llStencilPolygon::Exec(void) {
+	if (!llTriMod::Exec()) return 0;
 
 	llPolygonList *polygons = _llMapList()->GetPolygonList(mapname);
 	if (!polygons) {

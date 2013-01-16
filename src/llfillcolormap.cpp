@@ -29,8 +29,8 @@ int llFillColorMap::RegisterOptions(void) {
 	return 1;
 }
 
-int llFillColorMap::Init(void) {
-	if (!llMapWorker::Init()) return 0;
+int llFillColorMap::Exec(void) {
+	if (!llMapWorker::Exec()) return 0;
 
 	llAlgCollection *algs_blue = NULL;
 	if (Used("-algblue")) {

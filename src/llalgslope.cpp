@@ -70,8 +70,8 @@ double llAlgSlope::GetValue(float _x, float _y, double *_value) {
 	}
 }
 
-int llAlgSlope::Init(void) {
-	if (!llAlg::Init()) return 0;
+int llAlgSlope::Exec(void) {
+	if (!llAlg::Exec()) return 0;
 
 	if (alg_list) {
 		llAlgCollection *algs = _llAlgList()->GetAlgCollection(alg_list);

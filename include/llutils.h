@@ -74,36 +74,36 @@ class llUtils {
     //constructor
 	llUtils();
 
-	int   CrunchStart(char *_s);
-	int   CrunchNext(void);
-	char *CrunchCurrent(void) {return crunch_current;};
+	int    CrunchStart(char *_s);
+	int    CrunchNext(void);
+	char  *CrunchCurrent(void) {return crunch_current;};
 
 	//tool functions used everywhere:
-	void StripQuot(char **_tmp);
-	void StripSpaces(char **_tmp);
-	void StripComment(char *_tmp);
-	char *ReplaceFlags(char *_in);
-	char *NewString(char *_in) {
+	void   StripQuot(char **_tmp);
+	void   StripSpaces(char **_tmp);
+	void   StripComment(char *_tmp);
+	char  *ReplaceFlags(char *_in);
+	char  *ReplaceProtectedKomma(char *_in);
+	char  *GetPart(char *_in, int _num, int *_numleft);
+	char  *NewString(char *_in) {
 		char * delme = new char[strlen(_in) + 1];
 		strcpy_s(delme, strlen(_in)+1, _in);
 		return delme;
 	};
 
-	int  SeekNextSpace(char *_tmp);
+	int   SeekNextSpace(char *_tmp);
 
+	int   AddFlag(const char *_name);
 
+	int   EnableFlag(const char *_name);
+	int   DisableFlag(const char *_name);
+	int   IsEnabled(const char *_name);
 
-	int AddFlag(const char *_name);
-
-	int EnableFlag(const char *_name);
-	int DisableFlag(const char *_name);
-	int IsEnabled(const char *_name);
-
-	int SetValue(const char *_name, const char *_value);
+	int   SetValue(const char *_name, const char *_value);
 	const char* GetValue(const char *_name);
 	double GetValueF(const char *_name);
 	
-	int SetHidden(const char *_name);
+	int   SetHidden(const char *_name);
 
 	int   SetDescription(const char *_name, char *_value);
 	char *GetDescription(const char *_name);

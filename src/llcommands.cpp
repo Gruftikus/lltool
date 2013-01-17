@@ -14,7 +14,7 @@ void llCommands::SetDefaults() {
 	mesg     = _llLogger();
 	utils    = _llUtils();
 	logfile  = NULL;
-	skip_next_command = false;
+	skip_next_block = 0;
 	lines.resize(0);
 	worker_cache.resize(0);
 	worker_flags.resize(0);
@@ -81,7 +81,6 @@ int llCommands::ReadCache(void) {
 	}
 
 	while (fgets(dummyline, LLCOM_MAX_LINE, file)) {
-		//std::cout << ":" << dummyline << std::endl;
 		int num = lines.size();
 		lines.resize(num+1);
 		lines[num] = new char[strlen(dummyline)+1];
@@ -194,7 +193,6 @@ repeat:
 
 					linex[i] = '\0';
 					char *delme = _llUtils()->NewString(linex);
-					//std::cout << delme << std::endl;
 					(worker_flags.back()).push_back(delme);
 
 					linex = linex + i + 1;
@@ -204,14 +202,16 @@ repeat:
 
 				_llUtils()->StripSpaces(&linex);
 				if (linex[0] == '{') {
+					ExtendWorkerCache();
 					bracket_cache[bracket_cache.size()-1] = LLCOM_OPEN_BLOCK;
 					linex++;
 					_llUtils()->StripSpaces(&linex);
 					ExtendWorkerCache();
 				} else if (linex[0] == '}') {
+					ExtendWorkerCache();
 					bracket_cache[bracket_cache.size()-1] = LLCOM_CLOSE_BLOCK;
 					linex++;
-					_llUtils()->StripSpaces(&linex);
+					_llUtils()->StripSpaces(&linex);	
 					ExtendWorkerCache();
 				} 
 
@@ -219,9 +219,28 @@ repeat:
 				char *ptr, *ptr2;
 				char *saveptr1 = NULL, 
 					*saveptr2 = NULL;
-				//std::cout << linex << std::endl;
 				ptr = strtok_int(linex, ' ', &saveptr1);
 				if (ptr && strlen(ptr)>0) {
+
+					if (_stricmp(ptr, "{") == 0) {
+						ExtendWorkerCache();
+						bracket_cache[bracket_cache.size()-1] = LLCOM_OPEN_BLOCK;
+						if (saveptr1) linex = saveptr1;
+						else linex = "";
+						_llUtils()->StripSpaces(&linex);
+						ExtendWorkerCache();
+						goto repeat;
+					}
+					if (_stricmp(ptr, "}") == 0) {
+						ExtendWorkerCache();
+						bracket_cache[bracket_cache.size()-1] = LLCOM_CLOSE_BLOCK;
+						if (saveptr1) linex = saveptr1;
+						else linex = "";
+						_llUtils()->StripSpaces(&linex);	
+						ExtendWorkerCache();
+						goto repeat;
+					}
+
 					llWorker *worker = NULL;
 
 					for (unsigned int i=0; i<worker_list.size(); i++) {
@@ -232,9 +251,30 @@ repeat:
 							worker                         ->SetCommandIndex(com);
 							worker                         ->RegisterOptions();
 							worker                         ->Prepare();
+							worker_cache[worker_cache.size()-1] = worker;
 
 							ptr = strtok_int(NULL,' ', &saveptr1);
 							while(ptr != NULL) {
+
+								if (_stricmp(ptr, "{") == 0) {
+									ExtendWorkerCache();
+									bracket_cache[bracket_cache.size()-1] = LLCOM_OPEN_BLOCK;
+									if (saveptr1) linex = saveptr1;
+									else linex = "";
+									_llUtils()->StripSpaces(&linex);
+									ExtendWorkerCache();
+									goto repeat;
+								}
+								if (_stricmp(ptr, "}") == 0) {
+									ExtendWorkerCache();
+									bracket_cache[bracket_cache.size()-1] = LLCOM_CLOSE_BLOCK;
+									if (saveptr1) linex = saveptr1;
+									else linex = "";
+									_llUtils()->StripSpaces(&linex);	
+									ExtendWorkerCache();
+									goto repeat;
+								}
+
 								if (!worker->CheckFlag(ptr)) {
 									ptr2 = strtok_int(ptr, '=', &saveptr2);
 									if (ptr2!=NULL && strlen(ptr2)>0) {
@@ -243,11 +283,12 @@ repeat:
 											if (ptr2)
 												worker->AddValue(ptr2);
 											else {
-												mesg->WriteNextLine(LOG_ERROR, LLCOM_SYNTAX_ERROR, ptr, CurrentCommand);
-												return com;
+												mesg->WriteNextLine(-LOG_ERROR, "Compile error in line %i", l+1);
+												mesg->WriteNextLine(-LOG_ERROR, LLCOM_SYNTAX_ERROR, ptr, CurrentCommand);
 											}
 										} else {
-											mesg->WriteNextLine(LOG_ERROR, LLCOM_UNKNOWN_OPTION, ptr, CurrentCommand);
+											mesg->WriteNextLine(-LOG_ERROR, "Compile error in line %i", l+1);
+											mesg->WriteNextLine(-LOG_ERROR, LLCOM_UNKNOWN_OPTION, ptr, CurrentCommand);
 										}
 									}
 								}
@@ -261,14 +302,10 @@ exit:
 						mesg->WriteNextLine(-LOG_ERROR, "Compile error in line %i", l+1);
 						mesg->WriteNextLine(-LOG_ERROR, "--> Unknown command [%s]", ptr);
 					}
-					worker_cache[worker_cache.size()-1] = worker;
 				} //strlen ptr
 			} //not section
 		} //if (strlen(linex) > 0) 
 	}
-
-	//std::cout << ":" << worker_cache.size() << std::endl;
-	//std::cout << ":" << worker_flags.size() << std::endl;
 
 	return 1;
 }
@@ -292,35 +329,34 @@ int llCommands::GetCommand(void) {
 			return 0;
 	}
 
-
 	//loop over flags
 	unsigned int flagsize = (worker_flags[worker_pointer-1]).size();
-	//std::cout << flagsize << std::endl;
 	for (unsigned int i=0; i<flagsize; i++) {
 		int negative = 0;
 		char *flagline = (worker_flags[worker_pointer-1])[i];
-		//std::cout << flagline << std::endl;
+
 		if (strlen(flagline) > 1 && flagline[1] == '!') 
 			negative = 1;
 
 		int found = (utils->IsEnabled(flagline+1+negative) == 1 ? 1: 0);
 
 		if (!found && negative==0) {
-			skip_next_command = true;
+			skip_next_block = LLCOM_SKIP_BLOCK;
 		}
 		if (found && negative==1) {
-			skip_next_command = true;
+			skip_next_block = LLCOM_SKIP_BLOCK;
 		}
 	}
 
 	//check for block
 	if (bracket_cache[worker_pointer-1] == LLCOM_OPEN_BLOCK) {
-		std::cout << "open:" << skip_next_command << std::endl;
 		if (block_level == LLCOM_MAX_NESTED_BLOCKS) {
-			mesg->WriteNextLine(-LOG_FATAL, "Too many nested block (max=%i)", LLCOM_MAX_NESTED_BLOCKS);
+			mesg->WriteNextLine(-LOG_FATAL, "Too many nested blocks (max=%i)", LLCOM_MAX_NESTED_BLOCKS);
 		}
-		block_skip[block_level] = skip_next_command;
-		skip_next_command = false;
+		block_skip[block_level] = skip_next_block;
+		bracket_reference[block_level] = worker_pointer - 2;
+		if (block_level) block_skip[block_level] |= (block_skip[block_level-1] & LLCOM_SKIP_BLOCK);
+		skip_next_block = 0;
 		block_level++;
 		return 0;
 	}
@@ -328,19 +364,25 @@ int llCommands::GetCommand(void) {
 		if (block_level == 0) {
 			mesg->WriteNextLine(-LOG_FATAL, "Too many '}': nothing to close here...");
 		}
+		skip_next_block = 0;
 		block_level--;
+		if (block_skip[block_level] & LLCOM_ITERATE_BLOCK) {
+			if (bracket_reference[block_level] < 0) {
+				mesg->WriteNextLine(-LOG_FATAL, "No reference found for closing '}'");
+			}
+			worker_pointer = bracket_reference[block_level];
+		}
 		return 0;
 	}
 
 
 	llWorker *worker = worker_cache[worker_pointer - 1];
-	//std::cout << "skip:" << skip_next_command << std::endl;
-	if (skip_next_command || (block_level && block_skip[block_level-1])) {
+	if (skip_next_block == LLCOM_SKIP_BLOCK || (block_level && block_skip[block_level-1]==LLCOM_SKIP_BLOCK)) {
 		if (worker) {
-			skip_next_command = false;
-			std::cout << "skipped:" << std::endl;
-			worker->ReplaceFlags();
-			worker->Print();
+			skip_next_block = 0;
+			//std::cout << "skipped:" << std::endl;
+			//worker->ReplaceFlags();
+			//worker->Print();
 		}	
 		return 0;
 	}
@@ -348,7 +390,8 @@ int llCommands::GetCommand(void) {
 	int com = -1;
 
 	if (worker) {
-		skip_next_command = false;
+		if (skip_next_block & LLCOM_ITERATE_BLOCK) worker_pointer -= 2;
+		skip_next_block = 0;
 		com = worker->GetCommandIndex();
 		worker->Prepare();
 	} else return 0;
@@ -357,6 +400,9 @@ int llCommands::GetCommand(void) {
 	worker->ReplaceFlags();
 	worker->Print();
 	worker->Exec();
+	if (worker->IsRepeatWorker()) {
+		skip_next_block |= LLCOM_ITERATE_BLOCK;
+	}
 	return com;
 
 }

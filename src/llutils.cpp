@@ -321,6 +321,53 @@ void llUtils::StripComment(char *_tmp) {
 	}
 }
 
+char *llUtils::ReplaceProtectedKomma(char *_in) {
+	for (unsigned int i=0; i<strlen(_in); i++) {
+		if (_in[i]=='\\' && _in[i+1]==',') {
+			for (unsigned int j=i; j<strlen(_in); j++) {
+				_in[j] = _in[j+1];
+			}
+		}
+	}
+	return _in;
+}
+
+char *llUtils::GetPart(char *_in, int _num, int *_numleft) {
+	int start=-1, end=-1;
+	if (!_num) start=0;
+	for (unsigned int i=0; i<strlen(_in); i++) {
+		if (_in[i]==',' && !(i && _in[i-1]=='\\')) {
+			//found valid komma
+			if (_num) 
+				_num--;
+			if (!_num) {
+				if (start < 0) {
+					start = i+1;
+				} else if (end < 0) {
+					end = i-1;
+				} else {
+					(*_numleft)++;
+				}
+			}
+		}
+	}
+	if (end < 0) {
+		//no final ,
+		end = strlen(_in)-1;
+	} else {
+		(*_numleft)++;
+	}
+	if (end<0 || start<0) {
+		return ReplaceProtectedKomma(NewString(_in));
+	}
+	char *delme = new char[end-start+2];
+	for (unsigned int i=start; i<=end; i++) {
+		delme[i-start] = _in[i];
+	}
+	delme[end-start+1] = '\0';
+	return ReplaceProtectedKomma(delme);
+}
+
 char *llUtils::ReplaceFlags(char *_in) {
 	//replaces $flag with its value
 

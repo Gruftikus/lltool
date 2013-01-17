@@ -12,6 +12,7 @@ class llWorker {
 	 char *command_name;
 	 int   command_index;
 	 int checked_value, checked_pos;
+	 bool repeat_worker;
 
 	 std::vector<char*>   name;
 	 std::vector<int*>    flag;
@@ -23,6 +24,10 @@ class llWorker {
 	 std::vector<char*>   f_value_cache;
 	 std::vector<char*>   d_value_cache;
 	 std::vector<char*>   s_value_cache;
+	 std::vector<int>     i_value_num;
+	 std::vector<int>     f_value_num;
+	 std::vector<int>     d_value_num;
+	 std::vector<int>     s_value_num;
 	 std::vector<int>     opt;
 	 std::vector<int>     used;
 
@@ -48,6 +53,14 @@ class llWorker {
 		 d_value_cache[size] = NULL;
 		 s_value_cache.resize(size + 1);
 		 s_value_cache[size] = NULL;
+		 i_value_num.resize(size + 1);
+		 i_value_num[size]   = 0;
+		 f_value_num.resize(size + 1);
+		 f_value_num[size]   = 0;
+		 d_value_num.resize(size + 1);
+		 d_value_num[size]   = 0;
+		 s_value_num.resize(size + 1);
+		 s_value_num[size]   = 0;
 		 opt.resize(size + 1);
 		 opt[size] = 0;
 		 used.resize(size + 1);
@@ -102,6 +115,10 @@ class llWorker {
 
 	int GetCommandIndex() {
 		return command_index;
+	}
+
+	int IsRepeatWorker() {
+		return repeat_worker;
 	}
 
 	virtual void Print(void);

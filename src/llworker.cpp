@@ -112,34 +112,71 @@ int llWorker::AddValue(char *_value) {
 }
 
 int llWorker::ReplaceFlags(void) {
+	repeat_worker = false;
+	int left = 0;
 	for (unsigned int i=0; i<name.size(); i++) {
-		if (i_value_cache[i]) {			
-			char *dummy = _llUtils()->ReplaceFlags(i_value_cache[i]);
+		if (i_value_cache[i]) {		
+			char *dummy = _llUtils()->GetPart(i_value_cache[i], i_value_num[i], &left);
+			if (left) {
+				i_value_num[i]++;
+				repeat_worker = true;
+			}
+			_llUtils()->StripSpaces(&dummy);
 			if (dummy) {
-				used[i] = 1;
-				sscanf_s(dummy, "%i", i_value[i]);
+				char *dummy2 = _llUtils()->ReplaceFlags(dummy);
 				delete dummy;
+				if (dummy2) {
+					used[i] = 1;
+					sscanf_s(dummy2, "%i", i_value[i]);
+					delete dummy2;
+				}
 			}
 		} else if (f_value_cache[i]) {
-			char *dummy = _llUtils()->ReplaceFlags(f_value_cache[i]);
+			char *dummy = _llUtils()->GetPart(f_value_cache[i], f_value_num[i], &left);
+			if (left) {
+				f_value_num[i]++;
+				repeat_worker = true;
+			}
+			_llUtils()->StripSpaces(&dummy);
 			if (dummy) {
-				used[i] = 1;
-				sscanf_s(dummy, "%f", f_value[i]);
+				char *dummy2 = _llUtils()->ReplaceFlags(dummy);
 				delete dummy;
+				if (dummy2) {
+					used[i] = 1;
+					sscanf_s(dummy2, "%f", f_value[i]);
+					delete dummy2;
+				}
 			}
 		} else if (d_value_cache[i]) {
-			char *dummy = _llUtils()->ReplaceFlags(d_value_cache[i]);
+			char *dummy = _llUtils()->GetPart(d_value_cache[i], d_value_num[i], &left);
+			if (left) {
+				d_value_num[i]++;
+				repeat_worker = true;
+			}
+			_llUtils()->StripSpaces(&dummy);
 			if (dummy) {
-				used[i] = 1;
-				sscanf_s(dummy, "%lf", d_value[i]);
+				char *dummy2 = _llUtils()->ReplaceFlags(dummy);
 				delete dummy;
+				if (dummy2) {
+					used[i] = 1;
+					sscanf_s(dummy2, "%lf", d_value[i]);
+					delete dummy2;
+				}
 			}
 		} else if (s_value_cache[i]) {
-			char *dummy = _llUtils()->ReplaceFlags(s_value_cache[i]);
-			//std::cout << dummy << std::endl;
+			char *dummy = _llUtils()->GetPart(s_value_cache[i], s_value_num[i], &left);
+			if (left) {
+				s_value_num[i]++;
+				repeat_worker = true;
+			}
+			_llUtils()->StripSpaces(&dummy);
 			if (dummy) {
-				used[i] = 1;
-				*(s_value[i]) = dummy; //BUGBUG
+				char *dummy2 = _llUtils()->ReplaceFlags(dummy);
+				delete dummy;
+				if (dummy2) {
+					used[i] = 1;
+					*(s_value[i]) = dummy2; //BUGBUG
+				}
 			}
 		}  
 	}

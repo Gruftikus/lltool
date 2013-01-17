@@ -11,10 +11,12 @@
 #define LLCOM_MAX_NESTED_BLOCKS 10
 #define LLCOM_OPEN_BLOCK        1
 #define LLCOM_CLOSE_BLOCK       2
+#define LLCOM_SKIP_BLOCK        1
+#define LLCOM_ITERATE_BLOCK     2
 
 
-#define LLCOM_SYNTAX_ERROR			"Syntax error in [%s] in [%s]"
-#define LLCOM_UNKNOWN_OPTION		"Unknown option [%s] in [%s]"
+#define LLCOM_SYNTAX_ERROR			"--> Syntax error in [%s] in [%s]"
+#define LLCOM_UNKNOWN_OPTION		"--> Unknown option [%s] in [%s]"
 
 #define LLCOM_GAMEMODE_CMD "GameMode"
 
@@ -46,12 +48,14 @@ class llCommands {
 	std::vector<int>       section_cache;
 	std::vector<std::vector<char*>> worker_flags;
 	std::vector<int>       bracket_cache;
+	std::vector<int>       bracket_reference;
 
 	void ExtendWorkerCache(void) {
 		section_cache.push_back(sections.size()-1);
 		worker_flags.push_back(std::vector<char*>());
 		worker_cache.push_back(NULL);
 		bracket_cache.push_back(0);
+		bracket_reference.push_back(-1);
 	}
 
 	char dummyline[LLCOM_MAX_LINE];
@@ -64,7 +68,7 @@ class llCommands {
 	int   section_is_good;
 	unsigned int current_dump_line;
 
-	int gamemode, noskipinfo, skip_next_command;
+	int gamemode, noskipinfo, skip_next_block;
 
 	const char *game[LLCOM_MAX_GAMES];
 	const char *plugin[LLCOM_MAX_GAMES];

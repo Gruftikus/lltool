@@ -8,6 +8,11 @@
 
 #define LLCOM_MAX_WORKERS	2000
 
+#define LLCOM_MAX_NESTED_BLOCKS 10
+#define LLCOM_OPEN_BLOCK        1
+#define LLCOM_CLOSE_BLOCK       2
+
+
 #define LLCOM_SYNTAX_ERROR			"Syntax error in [%s] in [%s]"
 #define LLCOM_UNKNOWN_OPTION		"Unknown option [%s] in [%s]"
 
@@ -30,6 +35,9 @@ class llCommands {
 	llLogger *mesg;
 	llUtils  *utils;
 
+	int block_skip[LLCOM_MAX_NESTED_BLOCKS];
+	unsigned int block_level;
+
 	std::vector<char*>     lines;
 	unsigned int           line_pointer;
 	std::vector<char*>     sections;
@@ -37,7 +45,14 @@ class llCommands {
 	unsigned int           worker_pointer;
 	std::vector<int>       section_cache;
 	std::vector<std::vector<char*>> worker_flags;
-	
+	std::vector<int>       bracket_cache;
+
+	void ExtendWorkerCache(void) {
+		section_cache.push_back(sections.size()-1);
+		worker_flags.push_back(std::vector<char*>());
+		worker_cache.push_back(NULL);
+		bracket_cache.push_back(0);
+	}
 
 	char dummyline[LLCOM_MAX_LINE];
 	char linenew[LLCOM_MAX_LINE2];

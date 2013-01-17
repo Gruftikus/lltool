@@ -22,6 +22,7 @@ void llCommands::SetDefaults() {
 	CurrentCommand = "";
 	worker_pointer = 0;
 	line_pointer   = 0;
+	block_level    = 0;
 }
 
 //constructor
@@ -183,12 +184,8 @@ int llCommands::CompileScript(void) {
 				char *sec = _llUtils()->NewString(linex);
 				sections.push_back(sec);
 			} else {
-				section_cache.push_back(sections.size()-1);
-				worker_flags.push_back(std::vector<char*>());
-				worker_cache.push_back(NULL);
-
-				//current_section = sections.size() - 1;
-
+				ExtendWorkerCache();
+				
 				//check for flags
 repeat:				
 				if (linex[0] == '@') {
@@ -204,6 +201,19 @@ repeat:
 					_llUtils()->StripSpaces(&linex);
 					goto repeat;
 				}
+
+				_llUtils()->StripSpaces(&linex);
+				if (linex[0] == '{') {
+					bracket_cache[bracket_cache.size()-1] = LLCOM_OPEN_BLOCK;
+					linex++;
+					_llUtils()->StripSpaces(&linex);
+					ExtendWorkerCache();
+				} else if (linex[0] == '}') {
+					bracket_cache[bracket_cache.size()-1] = LLCOM_CLOSE_BLOCK;
+					linex++;
+					_llUtils()->StripSpaces(&linex);
+					ExtendWorkerCache();
+				} 
 
 				int com = -1;
 				char *ptr, *ptr2;
@@ -282,6 +292,7 @@ int llCommands::GetCommand(void) {
 			return 0;
 	}
 
+
 	//loop over flags
 	unsigned int flagsize = (worker_flags[worker_pointer-1]).size();
 	//std::cout << flagsize << std::endl;
@@ -302,12 +313,33 @@ int llCommands::GetCommand(void) {
 		}
 	}
 
+	//check for block
+	if (bracket_cache[worker_pointer-1] == LLCOM_OPEN_BLOCK) {
+		std::cout << "open:" << skip_next_command << std::endl;
+		if (block_level == LLCOM_MAX_NESTED_BLOCKS) {
+			mesg->WriteNextLine(-LOG_FATAL, "Too many nested block (max=%i)", LLCOM_MAX_NESTED_BLOCKS);
+		}
+		block_skip[block_level] = skip_next_command;
+		skip_next_command = false;
+		block_level++;
+		return 0;
+	}
+	if (bracket_cache[worker_pointer-1] == LLCOM_CLOSE_BLOCK) {
+		if (block_level == 0) {
+			mesg->WriteNextLine(-LOG_FATAL, "Too many '}': nothing to close here...");
+		}
+		block_level--;
+		return 0;
+	}
+
+
 	llWorker *worker = worker_cache[worker_pointer - 1];
 	//std::cout << "skip:" << skip_next_command << std::endl;
-	if (skip_next_command) {
+	if (skip_next_command || (block_level && block_skip[block_level-1])) {
 		if (worker) {
 			skip_next_command = false;
 			std::cout << "skipped:" << std::endl;
+			worker->ReplaceFlags();
 			worker->Print();
 		}	
 		return 0;

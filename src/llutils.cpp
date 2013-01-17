@@ -395,7 +395,7 @@ check_again:
 						
 						if (val) {
 							//sprintf_s(linenew, UTILS_MAX_LINE2-strlen(linex), "%s%s", tmp, val);
-							if (end != '$') {
+							if (end != '&') {
 								unsigned int len = strlen(tmp) + strlen(val) + 2 + strlen(tmp+j+1);
 								linenew = new char[len];
 								sprintf_s(linenew, len, "%s%s%c%s", tmp, val, end, tmp+j+1);
@@ -405,7 +405,7 @@ check_again:
 								sprintf_s(linenew, len, "%s%s%s", tmp, val, tmp+j+1);
 							}
 						} else {
-							if (end != '$') {
+							if (end != '&') {
 								unsigned int len = strlen(tmp) + 7 + 2 + strlen(tmp+j+1);
 								linenew = new char[len];
 								sprintf_s(linenew, len, "%s<error>%c%s", tmp, end, tmp+j+1);

@@ -119,6 +119,7 @@ llQuadList *llMap::GenerateQuadList(void) {
 	llQuadList *last   = NULL;
 
 	while (levels) {
+
 		int quadx1 = int(floor(x1 / quadsize_x));
 		int quady1 = int(floor(y1 / quadsize_y));
 		int quadx2 = int(floor(x2 / quadsize_x));
@@ -147,7 +148,7 @@ llQuadList *llMap::GenerateQuadList(void) {
 		levels--;
 		quadsize_x /= 2.0f;
 		quadsize_y /= 2.0f;
-		if (last) quads->SetSubQuads(last);
+		if (last) last->SetSubQuads(quads);
 		last = quads;
 	}
 

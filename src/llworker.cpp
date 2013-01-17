@@ -123,6 +123,7 @@ int llWorker::ReplaceFlags(void) {
 			} else 
 				i_value_num[i] = 0;
 			_llUtils()->StripSpaces(&dummy);
+			_llUtils()->StripQuot(&dummy);
 			if (dummy) {
 				char *dummy2 = _llUtils()->ReplaceFlags(dummy);
 				delete dummy;
@@ -140,6 +141,7 @@ int llWorker::ReplaceFlags(void) {
 			} else 
 				f_value_num[i] = 0;
 			_llUtils()->StripSpaces(&dummy);
+			_llUtils()->StripQuot(&dummy);
 			if (dummy) {
 				char *dummy2 = _llUtils()->ReplaceFlags(dummy);
 				delete dummy;
@@ -157,6 +159,7 @@ int llWorker::ReplaceFlags(void) {
 			} else 
 				d_value_num[i] = 0;
 			_llUtils()->StripSpaces(&dummy);
+			_llUtils()->StripQuot(&dummy);
 			if (dummy) {
 				char *dummy2 = _llUtils()->ReplaceFlags(dummy);
 				delete dummy;
@@ -174,6 +177,7 @@ int llWorker::ReplaceFlags(void) {
 			} else 
 				s_value_num[i] = 0;
 			_llUtils()->StripSpaces(&dummy);
+			_llUtils()->StripQuot(&dummy);
 			if (dummy) {
 				char *dummy2 = _llUtils()->ReplaceFlags(dummy);
 				delete dummy;

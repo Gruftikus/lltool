@@ -68,6 +68,10 @@ public:
 	int  GetPoint(float _x, float _y, float _z);
 	int  GetClosestPoint(float _x, float _y);
 
+	llQuadList *GetQuadList() {
+		return quads;
+	};
+
 	void Translation(float _x, float _y, float _z) {
 		for (unsigned int i=0; i<counter;i++) {
 			v[i].x += _x;

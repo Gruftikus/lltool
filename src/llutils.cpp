@@ -333,8 +333,12 @@ char *llUtils::ReplaceProtectedKomma(char *_in) {
 }
 
 char *llUtils::GetPart(char *_in, int _num, int *_numleft) {
+	if (!strlen(_in)) return NewString(_in);
+	if (_in[0] != '{' || _in[strlen(_in)-1] != '}') {
+		return NewString(_in);
+	}
 	int start=-1, end=-1;
-	if (!_num) start=0;
+	if (!_num) start=1;
 	for (unsigned int i=0; i<strlen(_in); i++) {
 		if (_in[i]==',' && !(i && _in[i-1]=='\\')) {
 			//found valid komma
@@ -353,12 +357,13 @@ char *llUtils::GetPart(char *_in, int _num, int *_numleft) {
 	}
 	if (end < 0) {
 		//no final ,
-		end = strlen(_in)-1;
+		end = strlen(_in)-2;
 	} else {
 		(*_numleft)++;
 	}
 	if (end<0 || start<0) {
-		return ReplaceProtectedKomma(NewString(_in));
+		start = 1;
+		end   = strlen(_in)-2;
 	}
 	char *delme = new char[end-start+2];
 	for (unsigned int i=start; i<=end; i++) {

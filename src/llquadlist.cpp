@@ -123,12 +123,12 @@ llQuad *llQuadList::GetQuad(int _x, int _y) {
 #if 0
 void llQuadList::SubQuadLevels(int _levels) {
 	if (!_levels) return;
-	subtree = new llQuadList(mesg, v.size()*4);
+	if (!subtree)
+		subtree = new (std::nothrow) llQuadList(mesg, v.size()*4);
 	if (subtree) {
 		subtree->SubQuadLevels(_levels - 1);
 	} else {
-		mesg->WriteNextLine(LOG_FATAL, "Allocation of subtree failed (out of memory?)");
-		exit(-1);
+		mesg->WriteNextLine(-LOG_FATAL, "Allocation of subtree failed (out of memory?)");
 	}
 }
 #endif

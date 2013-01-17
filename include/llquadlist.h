@@ -129,8 +129,12 @@ public:
 	void SetSubQuads(llQuadList *_sub) {
 		subtree = _sub;
 	}
+
+	llQuadList *GetSubQuads() {
+		return subtree;
+	}
 	
-	//void SubQuadLevels(int _levels);
+	// void SubQuadLevels(int _levels);
 
 	int GetCurrentX(void) {
 		return v[pointer].x;

@@ -31,8 +31,13 @@ class llCommands {
 	llUtils  *utils;
 
 	std::vector<char*>     lines;
-	std::vector<llWorker*> worker_cache;
 	unsigned int           line_pointer;
+	std::vector<char*>     sections;
+	std::vector<llWorker*> worker_cache;
+	unsigned int           worker_pointer;
+	std::vector<int>       section_cache;
+	std::vector<std::vector<char*>> worker_flags;
+	
 
 	char dummyline[LLCOM_MAX_LINE];
 	char linenew[LLCOM_MAX_LINE2];
@@ -44,7 +49,7 @@ class llCommands {
 	int   section_is_good;
 	unsigned int current_dump_line;
 
-	int gamemode, noskipinfo;
+	int gamemode, noskipinfo, skip_next_command;
 
 	const char *game[LLCOM_MAX_GAMES];
 	const char *plugin[LLCOM_MAX_GAMES];
@@ -83,6 +88,7 @@ class llCommands {
 		return 1;
 	};
 
+	int CompileScript(void);
 	int GetCommand(void);
 	char *CurrentCommand;
 

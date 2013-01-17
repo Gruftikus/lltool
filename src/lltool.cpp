@@ -71,25 +71,24 @@ int main(int argc, char **argv) {
 		}
 	}
 
+	mesg->Dump();		
+	CreateWorkers(batch);
+	mesg->Dump();
+
 	//******************
     //open the batch
 	//******************
 	if (batchname) {
 		if (!batch->Open(batchname,"[lltool]")) DumpExit();
 		batch->ReadCache();
+		batch->CompileScript();
 	} else {
 		batch->ReadStdin("[lltool]");
 		batch->ReadCache();
+		batch->CompileScript();
 	}
 
-	mesg->Dump();		
-
-	CreateWorkers(batch);
-
-	mesg->Dump();
-
-
-	float minab=256;
+	//float minab=256;
 	_llUtils()->SetValue("_mindistance", "256");
 	_llUtils()->SetValue("_cellsize_x", "4096");
 	_llUtils()->SetValue("_cellsize_y", "4096");

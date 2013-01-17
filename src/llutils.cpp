@@ -300,11 +300,11 @@ void llUtils::StripQuot(char **_tmp) {
 }
 
 void llUtils::StripSpaces(char **_partc) {
-	while (**_partc==' ') (*_partc)++;
+	while (**_partc==' ' || **_partc=='\t') (*_partc)++;
 	if (strlen(*_partc)) {
 		int partend=strlen(*_partc)-1;
 
-		while ((*_partc)[partend]==' ' && partend>=0) {
+		while (((*_partc)[partend]==' ' || (*_partc)[partend]=='\t') && partend>=0) {
 			(*_partc)[partend]='\0';
 			partend--;
 		}
@@ -497,14 +497,17 @@ int llUtils::IsEnabled(const char *_name) {
 				return flag_enable[i];
 			} else {
 				char *val     = (char *)GetValue(flag_list[i]);
-				char *newname = new char[strlen(_name+pos+1)+1];
+				char *newname = new char[strlen(_name+pos+1)+1];			
 				strcpy_s(newname, strlen(_name+pos+1)+1, _name+pos+1);
 				StripQuot(&newname);
-				if (_stricmp(newname, val) == 0) {		
+				char *newname2 = ReplaceFlags(newname);
+				if (_stricmp(newname2, val) == 0) {	
 					delete newname;
+					delete newname2;
 					return flag_enable[i];
 				}
 				delete newname;
+				delete newname2;
 			}
 		}
 	}

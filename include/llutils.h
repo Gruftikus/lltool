@@ -83,8 +83,14 @@ class llUtils {
 	void StripSpaces(char **_tmp);
 	void StripComment(char *_tmp);
 	char *ReplaceFlags(char *_in);
+	char *NewString(char *_in) {
+		char * delme = new char[strlen(_in) + 1];
+		strcpy_s(delme, strlen(_in)+1, _in);
+		return delme;
+	};
 
 	int  SeekNextSpace(char *_tmp);
+
 
 
 	int AddFlag(const char *_name);

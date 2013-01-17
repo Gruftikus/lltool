@@ -113,22 +113,34 @@ int llWorker::AddValue(char *_value) {
 
 int llWorker::ReplaceFlags(void) {
 	for (unsigned int i=0; i<name.size(); i++) {
-		if (i_value_cache[i]) {
+		if (i_value_cache[i]) {			
 			char *dummy = _llUtils()->ReplaceFlags(i_value_cache[i]);
-			sscanf_s(dummy, "%i", i_value[i]);
-			delete dummy;
+			if (dummy) {
+				used[i] = 1;
+				sscanf_s(dummy, "%i", i_value[i]);
+				delete dummy;
+			}
 		} else if (f_value_cache[i]) {
 			char *dummy = _llUtils()->ReplaceFlags(f_value_cache[i]);
-			sscanf_s(dummy, "%f", f_value[i]);
-			delete dummy;
+			if (dummy) {
+				used[i] = 1;
+				sscanf_s(dummy, "%f", f_value[i]);
+				delete dummy;
+			}
 		} else if (d_value_cache[i]) {
 			char *dummy = _llUtils()->ReplaceFlags(d_value_cache[i]);
-			sscanf_s(dummy, "%lf", d_value[i]);
-			delete dummy;
+			if (dummy) {
+				used[i] = 1;
+				sscanf_s(dummy, "%lf", d_value[i]);
+				delete dummy;
+			}
 		} else if (s_value_cache[i]) {
 			char *dummy = _llUtils()->ReplaceFlags(s_value_cache[i]);
 			//std::cout << dummy << std::endl;
-			*(s_value[i]) = dummy; //BUGBUG
+			if (dummy) {
+				used[i] = 1;
+				*(s_value[i]) = dummy; //BUGBUG
+			}
 		}  
 	}
 	return 1;
@@ -166,33 +178,27 @@ int llWorker::Exec(void) {
 
 void llWorker::Print(void) {
 
-	_llLogger()->WriteNextLine(LOG_COMMAND, "%s ", GetCommandName());
+	_llLogger()->WriteNextLine(LOG_COMMAND, "%s", GetCommandName());
 
 	for (unsigned int i=0; i<name.size(); i++) {
 		if (used[i]) {
 			if (i_value_cache[i]) {
-				_llLogger()->AddToLine(' ');
-				_llLogger()->AddToLine(name[i]);
-				_llLogger()->AddToLine("=\"");
-				_llLogger()->AddToLine(i_value_cache[i]);
-				_llLogger()->AddToLine('\"');
+ 				_llLogger()->AddToLine(' ');
+ 				_llLogger()->AddToLine(name[i]);
+				_llLogger()->AddToLine("=", *(i_value[i]));
 			} else if (f_value_cache[i]) {
 				_llLogger()->AddToLine(' ');
-				_llLogger()->AddToLine(name[i]);
-				_llLogger()->AddToLine("=\"");
-				_llLogger()->AddToLine(f_value_cache[i]);
-				_llLogger()->AddToLine('\"');
+ 				_llLogger()->AddToLine(name[i]);
+				_llLogger()->AddToLine("=", *(f_value[i]));
 			} else if (d_value_cache[i]) {
 				_llLogger()->AddToLine(' ');
-				_llLogger()->AddToLine(name[i]);
-				_llLogger()->AddToLine("=\"");
-				_llLogger()->AddToLine(d_value_cache[i]);
-				_llLogger()->AddToLine('\"');
-			} else if (s_value_cache[i]) {
+ 				_llLogger()->AddToLine(name[i]);
+				_llLogger()->AddToLine("=", *(d_value[i]));
+			} else if (s_value_cache[i] && *(s_value[i])) {
 				_llLogger()->AddToLine(' ');
 				_llLogger()->AddToLine(name[i]);
 				_llLogger()->AddToLine("=\"");
-				_llLogger()->AddToLine(s_value_cache[i]);
+				_llLogger()->AddToLine(*(s_value[i]));
 				_llLogger()->AddToLine('\"');
 			} else if (flag[i]) {
 				_llLogger()->AddToLine(' ');

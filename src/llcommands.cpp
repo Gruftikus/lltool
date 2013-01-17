@@ -14,9 +14,14 @@ void llCommands::SetDefaults() {
 	mesg     = _llLogger();
 	utils    = _llUtils();
 	logfile  = NULL;
+	skip_next_command = false;
 	lines.resize(0);
 	worker_cache.resize(0);
+	worker_flags.resize(0);
+	sections.resize(0);
 	CurrentCommand = "";
+	worker_pointer = 0;
+	line_pointer   = 0;
 }
 
 //constructor
@@ -58,7 +63,7 @@ int llCommands::Open(const char *_file, char *_section) {
 		file = NULL;
 	}
 	
-	if (fopen_s(&file,filename,"r")) {
+	if (fopen_s(&file, filename, "r")) {
 		mesg->WriteNextLine(LOG_ERROR, "Unable to open %s", filename);
 		file = NULL;
 		return 0;
@@ -78,9 +83,7 @@ int llCommands::ReadCache(void) {
 		//std::cout << ":" << dummyline << std::endl;
 		int num = lines.size();
 		lines.resize(num+1);
-		worker_cache.resize(num+1);
 		lines[num] = new char[strlen(dummyline)+1];
-		worker_cache[num] = NULL;
 		strcpy_s(lines[num], strlen(dummyline)+1, dummyline);
 	}
 
@@ -91,14 +94,14 @@ int llCommands::ReadCache(void) {
 
 int llCommands::SaveFile(const char *_file) {
 	FILE * wfile;
-	if (fopen_s(&wfile,_file,"w")) {
+	if (fopen_s(&wfile, _file, "w")) {
 		mesg->WriteNextLine(LOG_ERROR, "Unable to open %s", _file);
 		return 0;
 	}
 
 	if (gamemode) {
-		fprintf(wfile,"[_gamemode]\n");
-		fprintf(wfile,"%s -name=\"%s\"\n", LLCOM_GAMEMODE_CMD, game[gamemode]);
+		fprintf(wfile, "[_gamemode]\n");
+		fprintf(wfile, "%s -name=\"%s\"\n", LLCOM_GAMEMODE_CMD, game[gamemode]);
 	}
 
 	int save=1;
@@ -113,7 +116,7 @@ int llCommands::SaveFile(const char *_file) {
 	}
 
 	//save all variables which are not hidden:
-	fprintf(wfile,"[_saved]\n");
+	fprintf(wfile, "[_saved]\n");
 	utils->WriteFlags(wfile);
 
 	fclose(wfile);
@@ -164,178 +167,163 @@ int llCommands::Reopen(char *_section) {
 	return 1;
 }
 
-int llCommands::GetCommand(void) {
-	//read the batch file and sets up the command list
+int llCommands::CompileScript(void) {
+	//int current_section = -1;
+	
+	for (unsigned int l=0; l<lines.size(); l++) {
+		strcpy_s(dummyline, LLCOM_MAX_LINE, lines[l]);
 
-	if (lines.size()) {
-		if (line_pointer == lines.size()) {
-			return -2; //EOF
-		}
-		strcpy_s(dummyline, LLCOM_MAX_LINE, lines[line_pointer]);
-		line_pointer++;
-	} else {
+		char *linex = dummyline;
+		_llUtils()->StripSpaces(&linex);
+		_llUtils()->StripComment(linex);
+		_llUtils()->StripSpaces(&linex);
+		
+		if (strlen(linex) > 0) {
+			if (linex[0] == '[') {
+				char *sec = _llUtils()->NewString(linex);
+				sections.push_back(sec);
+			} else {
+				section_cache.push_back(sections.size()-1);
+				worker_flags.push_back(std::vector<char*>());
+				worker_cache.push_back(NULL);
+
+				//current_section = sections.size() - 1;
+
+				//check for flags
+repeat:				
+				if (linex[0] == '@') {
+					unsigned int i = _llUtils()->SeekNextSpace(linex);
+					if (!i) i = strlen(linex);
+
+					linex[i] = '\0';
+					char *delme = _llUtils()->NewString(linex);
+					//std::cout << delme << std::endl;
+					(worker_flags.back()).push_back(delme);
+
+					linex = linex + i + 1;
+					_llUtils()->StripSpaces(&linex);
+					goto repeat;
+				}
+
+				int com = -1;
+				char *ptr, *ptr2;
+				char *saveptr1 = NULL, 
+					*saveptr2 = NULL;
+				//std::cout << linex << std::endl;
+				ptr = strtok_int(linex, ' ', &saveptr1);
+				if (ptr && strlen(ptr)>0) {
+					llWorker *worker = NULL;
+
+					for (unsigned int i=0; i<worker_list.size(); i++) {
+						if (_stricmp(ptr, worker_list[i]->GetCommandName() ) == 0) {
+							com            = i;
+							CurrentCommand = worker_list[i]->GetCommandName();
+							worker         = worker_list[i]->Clone();
+							worker                         ->SetCommandIndex(com);
+							worker                         ->RegisterOptions();
+							worker                         ->Prepare();
+
+							ptr = strtok_int(NULL,' ', &saveptr1);
+							while(ptr != NULL) {
+								if (!worker->CheckFlag(ptr)) {
+									ptr2 = strtok_int(ptr, '=', &saveptr2);
+									if (ptr2!=NULL && strlen(ptr2)>0) {
+										if (worker->CheckValue(ptr)) {
+											ptr2 = strtok_int(NULL, '=', &saveptr2);
+											if (ptr2)
+												worker->AddValue(ptr2);
+											else {
+												mesg->WriteNextLine(LOG_ERROR, LLCOM_SYNTAX_ERROR, ptr, CurrentCommand);
+												return com;
+											}
+										} else {
+											mesg->WriteNextLine(LOG_ERROR, LLCOM_UNKNOWN_OPTION, ptr, CurrentCommand);
+										}
+									}
+								}
+								ptr = strtok_int(NULL, ' ', &saveptr1);
+							}
+							goto exit;
+						} //if stricmp
+					}
+exit:
+					if (!worker) {
+						mesg->WriteNextLine(-LOG_ERROR, "Compile error in line %i", l+1);
+						mesg->WriteNextLine(-LOG_ERROR, "--> Unknown command [%s]", ptr);
+					}
+					worker_cache[worker_cache.size()-1] = worker;
+				} //strlen ptr
+			} //not section
+		} //if (strlen(linex) > 0) 
+	}
+
+	//std::cout << ":" << worker_cache.size() << std::endl;
+	//std::cout << ":" << worker_flags.size() << std::endl;
+
+	return 1;
+}
+
+int llCommands::GetCommand(void) {
+	
+	if (worker_pointer == worker_cache.size()) {
 		return -2; //EOF
 	}
-	
-	char *linex = dummyline;
-	_llUtils()->StripSpaces(&linex);
-	_llUtils()->StripComment(linex);
-	_llUtils()->StripSpaces(&linex);
 
-	if (strlen(linex)==0) return 0;
+	worker_pointer++;
 
 	if (section) {
-		//seeks for sections
-		if (linex[0] == '[') {
-			if (_stricmp(linex, section)==0) {
-				section_is_good = 1;
-			} else 
-				section_is_good = 0;
-			return 0;
-		}
+		if (section_cache[worker_pointer-1] < 0)
+			return 0; //no section stored
+		if (_stricmp(sections[section_cache[worker_pointer-1]], section)==0) {
+			section_is_good = 1;
+		} else 
+			section_is_good = 0;
 		if (!section_is_good) 
 			return 0;
 	}
 
-#if 0
-check_again:
-	//check for flag replacement
-	for (unsigned int i=0; i<strlen(linex); i++) {
-		if (linex[i]=='$') {
-			if (i==0 || linex[i+1]!='$' || (i>1 && linex[i-1]!='$')) {
-				//find the end
-				for (unsigned int j=i+1; j<strlen(linex); j++) {
-					if (!(isalnum(linex[j]) || linex[j]=='_')) {
-						if ((j-i) <= 1) {
-							mesg->WriteNextLine(LOG_ERROR, "Something wrong in [%s]", linex);
-						}
-						//find the end
-						linex[i] = '\0';
-						char tmp = linex[j];
-						linex[j] = '\0';
-						sprintf_s(linenew, LLCOM_MAX_LINE2, "%s", linex);
-						char *val= (char*)utils->GetValue(linex + i + 1);
-						if (val) {
-							if (strlen(val) > (LLCOM_MAX_LINE2 - LLCOM_MAX_LINE)) 
-								val="<String too long>";
-							sprintf_s(linenew, LLCOM_MAX_LINE2-strlen(linex), "%s%s", linenew, val);
-							if (tmp != '$') 
-								sprintf_s(linenew, LLCOM_MAX_LINE2-strlen(linex)-strlen(val), "%s%c%s", linenew, tmp, linex+j+1);
-							else 
-								sprintf_s(linenew, LLCOM_MAX_LINE2-strlen(linex)-strlen(val), "%s%s", linenew, linex+j+1);
-						}
-						//char *bla= new char[strlen(linenew) + 1];
-						strcpy_s(linex, LLCOM_MAX_LINE - (linex - dummyline), linenew);
-						//linex=bla;
-						goto check_again;
-					}
-				}
-				linex[i] = '\0';
-				sprintf_s(linenew, LLCOM_MAX_LINE2, "%s",linex);
-				char *val=(char *)utils->GetValue(linex + i + 1);
-				if (val) {
-					if (strlen(val)>(LLCOM_MAX_LINE2 - LLCOM_MAX_LINE)) 
-						val="<String too long>";
-					sprintf_s(linenew, LLCOM_MAX_LINE2-strlen(linex), "%s%s", linenew, val);
-				} 
-				//char *bla= new char[strlen(linenew)+i+1];
-				strcpy_s(linex, LLCOM_MAX_LINE - (linex - dummyline), linenew);
-				//linex=bla;
-				goto check_again;
-			}
-		}
-	}
-#endif
-
-repeat:
-	//check for flags
-	int negative = 0;
-	if (linex[0] == '@') {
-		unsigned int i = _llUtils()->SeekNextSpace(linex);
-		if (i == strlen(linex)) {
-			mesg->WriteNextLine(-LOG_ERROR, "No command after: %s", linex);
-			return 0;
-		}
-		linex[i] = '\0';
-		int found = 0;
-		if (linex[1] == '!') 
+	//loop over flags
+	unsigned int flagsize = (worker_flags[worker_pointer-1]).size();
+	//std::cout << flagsize << std::endl;
+	for (unsigned int i=0; i<flagsize; i++) {
+		int negative = 0;
+		char *flagline = (worker_flags[worker_pointer-1])[i];
+		//std::cout << flagline << std::endl;
+		if (strlen(flagline) > 1 && flagline[1] == '!') 
 			negative = 1;
 
-		found = (utils->IsEnabled(linex+1+negative) == 1 ? 1: 0);
+		int found = (utils->IsEnabled(flagline+1+negative) == 1 ? 1: 0);
 
 		if (!found && negative==0) {
-			while (*(linex+i+1) == ' ') i++;
-			if (!noskipinfo) mesg->WriteNextLine(LOG_INFO, "Flag %s not set, skipped [%s]", linex+1, linex+i+1);
-			return 0;
+			skip_next_command = true;
 		}
 		if (found && negative==1) {
-			while (*(linex+i+1) == ' ') i++;
-			if (!noskipinfo) mesg->WriteNextLine(LOG_INFO, "Flag %s set, skipped [%s]", linex+2, linex+i+1);
-			return 0;
+			skip_next_command = true;
 		}
-		linex = linex + i + 1;
-		goto repeat;
+	}
+
+	llWorker *worker = worker_cache[worker_pointer - 1];
+	//std::cout << "skip:" << skip_next_command << std::endl;
+	if (skip_next_command) {
+		if (worker) {
+			skip_next_command = false;
+			std::cout << "skipped:" << std::endl;
+			worker->Print();
+		}	
+		return 0;
 	}
 
 	int com = -1;
-	char *ptr, *ptr2;
-	char *saveptr1 = NULL, 
-		*saveptr2 = NULL;
-	
-	ptr = strtok_int(linex, ' ', &saveptr1);
 
-	if (!ptr) return 0;
-	if (strlen(ptr)==0) return 0;
-
-	llWorker *worker = worker_cache[line_pointer - 1];
-	if (!worker) {
-		for (unsigned int i=0; i<worker_list.size(); i++) {
-			if (_stricmp(ptr, worker_list[i]->GetCommandName() ) == 0) {
-				com            = i;
-				CurrentCommand = worker_list[i]->GetCommandName();
-				worker         = worker_list[i]->Clone();
-				worker                         ->SetCommandIndex(com);
-				worker                         ->RegisterOptions();
-				worker                         ->Prepare();
-
-				ptr = strtok_int(NULL,' ', &saveptr1);
-				while(ptr != NULL) {
-					if (!worker->CheckFlag(ptr)) {
-						ptr2 = strtok_int(ptr, '=', &saveptr2);
-						if (ptr2!=NULL && strlen(ptr2)>0) {
-							if (worker->CheckValue(ptr)) {
-								ptr2 = strtok_int(NULL, '=', &saveptr2);
-								if (ptr2)
-									worker->AddValue(ptr2);
-								else {
-									mesg->WriteNextLine(LOG_ERROR, LLCOM_SYNTAX_ERROR, ptr, CurrentCommand);
-									return com;
-								}
-							} else {
-								mesg->WriteNextLine(LOG_ERROR, LLCOM_UNKNOWN_OPTION, ptr, CurrentCommand);
-							}
-						}
-					}
-					ptr = strtok_int(NULL, ' ', &saveptr1);
-				}
-				goto exit;
-			} //if stricmp
-		}
-	} else {
+	if (worker) {
+		skip_next_command = false;
 		com = worker->GetCommandIndex();
 		worker->Prepare();
-	}
+	} else return 0;
 
-exit:
-
-	if (com==-1 || !worker) {
-		mesg->WriteNextLine(LOG_ERROR, "Unknown command [%s]", ptr);
-		return com;
-	}
-
-	//afterburner
-	worker->Print();
+	//afterburner	
 	worker->ReplaceFlags();
+	worker->Print();
 	worker->Exec();
 	return com;
 

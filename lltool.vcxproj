@@ -52,6 +52,7 @@
     <ClInclude Include="include\llselectall.h" />
     <ClInclude Include="include\llselectrec.h" />
     <ClInclude Include="include\llset.h" />
+    <ClInclude Include="include\llsetalgvertices.h" />
     <ClInclude Include="include\llsetatgridline.h" />
     <ClInclude Include="include\llsetcontour.h" />
     <ClInclude Include="include\llsetflag.h" />
@@ -111,6 +112,7 @@
     <ClCompile Include="src\llselectall.cpp" />
     <ClCompile Include="src\llselectrec.cpp" />
     <ClCompile Include="src\llset.cpp" />
+    <ClCompile Include="src\llsetalgvertices.cpp" />
     <ClCompile Include="src\llsetatgridline.cpp" />
     <ClCompile Include="src\llsetcontour.cpp" />
     <ClCompile Include="src\llsetflag.cpp" />

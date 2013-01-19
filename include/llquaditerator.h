@@ -8,7 +8,8 @@ class llQuadIterator : public llMapWorker {
 
 protected:
 
-	int   level, num_done;
+	int          level;
+	unsigned int num_done;
 
 	char myquadx[1000], myquady[1000];
 

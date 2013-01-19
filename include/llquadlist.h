@@ -10,7 +10,7 @@ class llQuad {
 
 private:
 
-	int npoints, maxpoints;
+	int npoints, maxpoints, has_sub_quads;
 	llQuad *subquads[2][2];
 
 	std::vector<int>   points;
@@ -29,6 +29,7 @@ public:
 	int SetSubQuad(unsigned int _x, unsigned int _y, llQuad *_quad) {
 		if (_x > 1 || _y > 1) return 0;
 		subquads[_x][_y] = _quad;
+		has_sub_quads = 1;
 		return 1;
 	}
 
@@ -82,21 +83,20 @@ class llQuadList {
 
 private:
 
-	std::vector<llQuad> v;
-	unsigned int counter;
+	std::vector<llQuad*> v;
+	std::vector<llQuadList*> subs;
 	unsigned int pointer;
-	llLogger   *mesg;
 	llQuadList *subtree;
 
 public:
 
 	//constructor
-	llQuadList(llLogger * _mesg, int _n);
-	llQuadList(llLogger * _mesg, int _pos_x, int _pos_y, int _x, int _y, float _x1, float _y1, float _x2, float _y2);
+	llQuadList();
+	llQuadList(int _pos_x, int _pos_y, int _x, int _y, float _x1, float _y1, float _x2, float _y2);
 
 	void SetMaxPoints(int _maxpoints) {
-		for (unsigned int i=0;i<counter;i++) {
-			v[i].SetMaxPoints(_maxpoints);
+		for (unsigned int i=0; i<v.size(); i++) {
+			v[i]->SetMaxPoints(_maxpoints);
 		}
 	};
 
@@ -104,15 +104,23 @@ public:
 
 	llQuad *AddQuad(int _p1, int _p2, float _x1, float _y1, float _x2, float _y2);
 
+	void AddQuad(llQuad *_quad) {
+		v.push_back(_quad);
+		subs.push_back(NULL);
+	}
+
+#if 0
 	void Reset(void) {
 		pointer=0;
 	};
 
+
 	int GetNextQuad(void) {
 		pointer++;
-		if (pointer>=counter) return 0;
+		if (pointer >= v.size()) return 0;
 		return 1;
 	};
+#endif
 
 	unsigned int GetNumQuads(void) {
 		return v.size();
@@ -120,11 +128,16 @@ public:
 
 	llQuad * GetQuad(float _x, float _y, int _num = -1);
 
+	int GetQuads(llQuadList **_quads, float _x1, float _y1, float _x2, float _y2);
+
 	llQuad * GetQuad(int _x, int _y);
 
 	llQuad * GetQuad(unsigned int _n) {
-		return &(v[_n]);
+		if (_n >= v.size()) return NULL;
+		return v[_n];
 	}
+
+	int GetQuadNum(int _x, int _y);
 
 	void SetSubQuads(llQuadList *_sub) {
 		subtree = _sub;
@@ -133,16 +146,26 @@ public:
 	llQuadList *GetSubQuads() {
 		return subtree;
 	}
+
+	int AddSubQuad(int _num, llQuad *_quad) {
+		if (_num < 0 || _num >= int(subs.size())) return 0;
+		if (!subs[_num]) {
+			subs[_num] = new llQuadList();
+		}
+		subs[_num]->AddQuad(_quad);
+		return 1;
+	}
 	
 	// void SubQuadLevels(int _levels);
-
+#if 0
 	int GetCurrentX(void) {
-		return v[pointer].x;
+		return v[pointer]->x;
 	}
 
 	int GetCurrentY(void) {
-		return v[pointer].y;
+		return v[pointer]->y;
 	}
+#endif
 };
 
 #endif

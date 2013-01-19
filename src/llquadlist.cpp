@@ -8,7 +8,7 @@ llQuad::llQuad(int _x, int _y, float _x1, float _y1, float _x2, float _y2) {
 	y1 = _y1;
 	x2 = _x2;
 	y2 = _y2;
-
+	
 	if (x1 > x2 || y1 > y2) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "llQuad: Order of coordinates not correct");
 	} 
@@ -20,6 +20,7 @@ llQuad::llQuad(int _x, int _y, float _x1, float _y1, float _x2, float _y2) {
 	subquads[1][0] = NULL;
 	subquads[0][1] = NULL;
 	subquads[1][1] = NULL;
+	has_sub_quads  = 0;
 }
 
 llQuad::llQuad() {
@@ -27,42 +28,38 @@ llQuad::llQuad() {
 	subquads[1][0] = NULL;
 	subquads[0][1] = NULL;
 	subquads[1][1] = NULL;
+	has_sub_quads  = 0;
 }
 
 int llQuad::GetMinDistance(float *_min, float _x, float _y, float _radius) {
-	int my_case = 1; //check quad (default)
-	if (_x+_radius < x1 && _x-_radius > x2 && _y+_radius < y1 && _y-_radius > y2) {
+	if (_radius > 0.f && _x+_radius < x1 && _x-_radius > x2 && _y+_radius < y1 && _y-_radius > y2) {
 		//no hope that the circle will ever touch this quad
-		my_case = 0;
-	} //TODO: subquads
-	if (my_case) {
-		for (unsigned int j=0; j < points.size(); j++) {
-			float my_x = _x - points_x[j];
-			float my_y = _y - points_y[j];
-			my_x *= my_x;
-			my_y *= my_y;
-			float minnew = my_x + my_y;
+		return 0;
+	} 
+	for (unsigned int j=0; j < points.size(); j++) {
+		float my_x = _x - points_x[j];
+		float my_y = _y - points_y[j];
+		my_x *= my_x;
+		my_y *= my_y;
+		float minnew = my_x + my_y;
 
-			if (minnew < *_min) *_min = minnew;
-		}
+		if (minnew < *_min) *_min = minnew;
 	}
 	return 1;
 }
 
 //constructor
-llQuadList::llQuadList(llLogger * _mesg, int _n) {
-    v.resize(_n);
-    counter = 0;
+llQuadList::llQuadList() {
+    v.resize(0);
+	subs.resize(0);
 	pointer = 0;
-	mesg    = _mesg;
 	subtree = NULL;
 } 
 
-llQuadList::llQuadList(llLogger * _mesg, int _pos_x, int _pos_y, int _x, int _y, float _x1, float _y1, float _x2, float _y2) {
-	v.resize(_x * _y);
-	counter = 0;
+llQuadList::llQuadList(int _pos_x, int _pos_y, int _x, int _y, float _x1, float _y1, float _x2, float _y2) {
+	v.resize(0);
+	subs.resize(0);
 	pointer = 0;
-	mesg    = _mesg;
 	subtree = NULL;
 
 	for (int ix=_pos_x; ix < _pos_x+_x; ix++) {
@@ -76,13 +73,10 @@ llQuadList::llQuadList(llLogger * _mesg, int _pos_x, int _pos_y, int _x, int _y,
 } 
 
 llQuad *llQuadList::AddQuad(int _p1, int _p2, float _x1, float _y1, float _x2, float _y2) {
-	if (counter >= v.size()) {
-		v.resize(v.size() + 1);
-	}
-
-	v[counter] = llQuad(_p1, _p2, _x1, _y1, _x2, _y2);
-	counter++;
-	return &(v[counter - 1]);
+	llQuad *newquad = new llQuad(_p1, _p2, _x1, _y1, _x2, _y2);
+	v.push_back(newquad);
+	subs.push_back(NULL);
+	return newquad;
 }
 
 llQuad *llQuadList::GetQuad(float _x, float _y, int _num) {
@@ -96,28 +90,54 @@ llQuad *llQuadList::GetQuad(float _x, float _y, int _num) {
 		//}
 		num = 0;
 	}
-	for (unsigned int i=0; i<counter; i++) {
-		if (v[i].x1-0.5f <= _x && v[i].x2+0.5f >= _x && v[i].y1-0.5f <= _y && v[i].y2+0.5f >= _y) {
+	for (unsigned int i=0; i<v.size(); i++) {
+		if (v[i]->x1-0.5f <= _x && v[i]->x2+0.5f >= _x && v[i]->y1-0.5f <= _y && v[i]->y2+0.5f >= _y) {
 			if (!num)
-				return &(v[i]);
+				return v[i];
 			else 
 				num--;
 		}
 	}
 	if (_num < 0) {
-		mesg->WriteNextLine(-LOG_ERROR,"Quad not found (x=%f ,y=%f)",_x,_y);
+		_llLogger()->WriteNextLine(-LOG_ERROR, "Quad not found (x=%f ,y=%f)", _x, _y);
 	}
 	return NULL;
 };
 
-llQuad *llQuadList::GetQuad(int _x, int _y) {
-	for (unsigned int i=0; i<counter; i++) {
-		if (v[i].x == _x && v[i].y == _y) {
-			return &(v[i]);
+int llQuadList::GetQuads(llQuadList **_quads, float _x1, float _y1, float _x2, float _y2) {
+	//generates a list of quads which have a cross section with a rectangle
+	for (unsigned int i=0; i<v.size(); i++) {
+		if (!(v[i]->x2 < _x1 || v[i]->x1 > _x2 || v[i]->y2 < _y1 || v[i]->y1 > _y2)) {  //not out of range
+			if (v[i]->x1 > _x1 && v[i]->x2 < _x2 && v[i]->y1 > _y1 && v[i]->y2 < _y2) {  //fully covered quad
+				(*_quads)->AddQuad(v[i]);
+			} else if (subs[i]) {
+				subs[i]->GetQuads(_quads, _x1, _y1, _x2, _y2);
+			} else {
+				(*_quads)->AddQuad(v[i]);
+			}
 		}
 	}
-	mesg->WriteNextLine(-LOG_ERROR,"Quad not found (x=%i ,y=%i)", _x, _y);
+	return 1;
+}
+
+llQuad *llQuadList::GetQuad(int _x, int _y) {
+	for (unsigned int i=0; i<v.size(); i++) {
+		if (v[i]->x == _x && v[i]->y == _y) {
+			return v[i];
+		}
+	}
+	_llLogger()->WriteNextLine(-LOG_ERROR, "Quad not found (x=%i ,y=%i)", _x, _y);
 	return NULL;
+}
+
+int llQuadList::GetQuadNum(int _x, int _y) {
+	for (unsigned int i=0; i<v.size(); i++) {
+		if (v[i]->x == _x && v[i]->y == _y) {
+			return i;
+		}
+	}
+	_llLogger()->WriteNextLine(-LOG_ERROR, "Quad not found (x=%i ,y=%i)", _x, _y);
+	return -1;
 }
 
 #if 0

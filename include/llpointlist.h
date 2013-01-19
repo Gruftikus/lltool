@@ -157,6 +157,8 @@ public:
 		return counter;
 	}
 
+	int GetN(float _x1, float _y1, float _x2, float _y2);
+
 	float GetX(int _n) {
 		return v[_n].x;
 	}
@@ -203,6 +205,7 @@ public:
 	int GetIntersection(int _p1, int _p2, int _p3, int _p4, float *_x, float *_y);
 
 	float GetMinDistance(float _x, float _y, float _radius = -1.0f, llQuad *_quad = NULL);
+	float GetMinDistance(float _x, float _y, float _radius, llQuadList *_quads);
 	float GetMinDistanceGrid(float _x, float _y, float _grid, int _flag = 0);
 
 	float CalculateAngle(float _v1x, float _v1y, float _v1z, float _v2x, float _v2y, float _v2z);

@@ -53,14 +53,15 @@ int llPointList::GetPoint(float _x, float _y, float _z) {
 
 
 float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuad *_quad) {
-	float min=1E10;
+	float min = 1E10;
 	if (_quad) {
 		_quad->GetMinDistance(&min, _x, _y, _radius);
 	} else if (!quads || _radius < 0.f) {
 		//slow method
-		for (unsigned int i=0; i<counter;i++) {
+		for (unsigned int i=0; i<counter; i++) {
 			float minnew = (_x - GetX(i))*(_x - GetX(i)) + (_y - GetY(i))*(_y - GetY(i));
-			if (minnew<min) min=minnew;
+			if (minnew < min) 
+				min = minnew;
 		}
 	} else {
 		//quadtree nearest neighbor search
@@ -71,7 +72,18 @@ float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuad *_qu
 			}
 		}
 	}
+	return sqrt(min);
+}
 
+float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuadList *_quads) {
+	float min = 1E10;
+	//quadtree nearest neighbor search
+	for (unsigned int i=0; i<_quads->GetNumQuads(); i++) {
+		llQuad *quad = _quads->GetQuad(i);
+		if (quad) {
+			quad->GetMinDistance(&min, _x, _y, _radius);
+		}
+	}
 	return sqrt(min);
 }
 
@@ -91,9 +103,9 @@ float llPointList::GetMinDistanceGrid(float _x, float _y, float _grid, int _flag
 	if (_grid < 0) return -_grid;  //Disabled, return a default value
 
 	float mingrid = float(floor(_x/_grid)*int(_grid));
-	float maxgrid = mingrid+_grid;
+	float maxgrid = mingrid + _grid;
 
-	float min = 4096.f;
+	float min = _grid;
 	if (_flag ==0 || _flag == 1) {
 		min = fabs(_x - mingrid);
 		if (fabs(maxgrid - _x) < min)  
@@ -110,6 +122,15 @@ float llPointList::GetMinDistanceGrid(float _x, float _y, float _grid, int _flag
 			min = fabs(maxgrid-_y);
 	}
 	return min;
+}
+
+int llPointList::GetN(float _x1, float _y1, float _x2, float _y2) {
+	int num = 0;
+	for (unsigned int i=0; i<counter; i++) {
+		if (GetX(i) >= _x1 && GetX(i) <= _x2  && GetY(i) >= _y1 && GetY(i) <= _y2)
+			num++;
+	}
+	return num;
 }
 
 int llPointList::GetOverlap(int _p1,int _p2, int _p3,int _p4) {

@@ -127,7 +127,7 @@ llQuadList *llMap::GenerateQuadList(void) {
 
 		int nquads = (quadx2-quadx1+1) * (quady2-quady1+1);
 	
-		llQuadList *quads= new llQuadList(mesg, nquads);
+		llQuadList *quads= new llQuadList();
 		if (!master) {
 			mesg->WriteNextLine(-LOG_INFO, "The map covers %i quads at %i level(s)", nquads, levels);
 			master = quads;
@@ -140,8 +140,11 @@ llQuadList *llMap::GenerateQuadList(void) {
 					float(ix+1) * quadsize_x,
 					float(iy+1) * quadsize_y);
 				if (last) {
+					//connect data structures:
 					llQuad *lastquad = last->GetQuad(ix/2, iy/2);
+					int lastquadnum = last->GetQuadNum(ix/2, iy/2);
 					lastquad->SetSubQuad(ix % 2, iy % 2, myquad);
+					last->AddSubQuad(lastquadnum, myquad);
 				}
 			}
 		}

@@ -21,6 +21,10 @@ public:
 		return new llQuadIterator(*this);
 	}
 
+	int IsRepeatWorker() {
+		return 1;
+	}
+
 	int Prepare(void);
 	int RegisterOptions(void);
 	int Exec(void);

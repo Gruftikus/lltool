@@ -10,6 +10,7 @@ int llExportMap::Prepare(void) {
 	if (!llMapWorker::Prepare()) return 0;
 
 	filename = NULL;
+	compress = 0;
 
 	return 1;
 }
@@ -92,7 +93,7 @@ int llExportMap::Exec(void) {
 
 	for (int y=y2; y>=y1; y--) {
 		int my_bytesPerLine = bytesPerLine;
-		for (int x=x2; x>=x1; x--) {
+		for (int x=x1; x<=x2; x++) {
 			
 			unsigned char byte1;
 			unsigned char byte2;

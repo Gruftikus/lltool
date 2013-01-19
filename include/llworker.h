@@ -117,8 +117,12 @@ class llWorker {
 		return command_index;
 	}
 
-	int IsRepeatWorker() {
+	int Repeat() {
 		return repeat_worker;
+	}
+
+	virtual int IsRepeatWorker() {
+		return 0;
 	}
 
 	virtual void Print(void);

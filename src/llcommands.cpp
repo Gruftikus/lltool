@@ -399,9 +399,11 @@ int llCommands::GetCommand(void) {
 	//afterburner	
 	worker->ReplaceFlags();
 	worker->Print();
-	worker->Exec();
-	if (worker->IsRepeatWorker()) {
+	int retval = worker->Exec();
+	if (worker->Repeat()) {
 		skip_next_block |= LLCOM_ITERATE_BLOCK;
+	} else if (worker->IsRepeatWorker() && !retval) {
+		skip_next_block |= LLCOM_SKIP_BLOCK;
 	}
 	return com;
 

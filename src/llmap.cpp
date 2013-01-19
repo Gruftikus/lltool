@@ -120,10 +120,10 @@ llQuadList *llMap::GenerateQuadList(void) {
 
 	while (levels) {
 
-		int quadx1 = int(floor(x1 / quadsize_x));
-		int quady1 = int(floor(y1 / quadsize_y));
-		int quadx2 = int(floor(x2 / quadsize_x));
-		int quady2 = int(floor(y2 / quadsize_y));
+		int quadx1 = int(floor((x1+.5f) / quadsize_x));
+		int quady1 = int(floor((y1+.5f) / quadsize_y));
+		int quadx2 = int(floor((x2-.5f) / quadsize_x));
+		int quady2 = int(floor((y2-.5f) / quadsize_y));
 
 		int nquads = (quadx2-quadx1+1) * (quady2-quady1+1);
 	

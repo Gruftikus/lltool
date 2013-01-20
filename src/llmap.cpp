@@ -86,14 +86,14 @@ unsigned int llMap::GetRndX() {
 loop:
 	unsigned int rnd = rand() & rndx; //BUGBUG: works only up to RAND_MAX
 	if (rnd > rnd_widthx) goto loop;
-	return rnd;
+	return rnd + rnd_x1;
 }
 
 unsigned int llMap::GetRndY() {
 loop:
 	unsigned int rnd = rand() & rndy;
 	if (rnd > rnd_widthy) goto loop;
-	return rnd;
+	return rnd + rnd_y1;
 }
 
 llQuadList *llMap::GenerateQuadList(void) {
@@ -141,10 +141,15 @@ llQuadList *llMap::GenerateQuadList(void) {
 					float(iy+1) * quadsize_y);
 				if (last) {
 					//connect data structures:
-					llQuad *lastquad = last->GetQuad(ix/2, iy/2);
-					int lastquadnum = last->GetQuadNum(ix/2, iy/2);
+					llQuad *lastquad = last->GetQuad   (int(floor(float(ix)/2.0)), int(floor(float(iy)/2.0)));
+					int lastquadnum  = last->GetQuadNum(int(floor(float(ix)/2.0)), int(floor(float(iy)/2.0)));
 					lastquad->SetSubQuad(ix % 2, iy % 2, myquad);
-					last->AddSubQuad(lastquadnum, myquad);
+					llQuadList *master;
+					int pos;
+					last->AddSubQuad(lastquadnum, myquad, &master, &pos);
+					quads->AddMaster(master);
+					quads->AddPos(pos);
+					//std::cout << "x:" << ix << " y:" << iy << " lastnum:" << lastquadnum << std::endl;
 				}
 			}
 		}

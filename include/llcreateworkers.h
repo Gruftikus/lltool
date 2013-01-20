@@ -36,6 +36,7 @@
 
 //Vertex-setters:
 #include "../include/llset.h"
+#include "../include/llsetalgvertices.h"
 #include "../include/lladdvertextopolygon.h"
 #include "../include/llcreatepolygon.h"
 #include "../include/llpanorama.h"
@@ -98,6 +99,7 @@ void CreateWorkers(llCommands *_batch) {
 
 
 	_batch->RegisterWorker(new llSetVertex());
+	_batch->RegisterWorker(new llSetAlgVertices());
 	_batch->RegisterWorker(new llReadDataFile());
 	_batch->RegisterWorker(new llReadPolygonDataFile());
 	_batch->RegisterWorker(new llSetGrid());

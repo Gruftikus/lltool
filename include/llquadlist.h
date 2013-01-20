@@ -19,6 +19,10 @@ private:
 
 public:
 
+	void Print(void) {
+		_llLogger()->WriteNextLine(-LOG_INFO, "x=%i y=%i x1=%f y1=%f x2=%f y2=%f", x, y, x1, y1, x2, y2);
+	}
+
 	float x1, y1, x2, y2; //corner coordinates
 	int x, y; //current position in the 2d-grid
 
@@ -46,15 +50,22 @@ public:
 	};
 
 	void AddPoint(float _x, float _y, int _point_num) {
+		if (_x < x1 || _x > x2 || _y < y1 || _y > y2) return;
 		if (npoints == points.size()) {
-			points.resize(npoints+1000);
-			points_x.resize(npoints+1000);
-			points_y.resize(npoints+1000);
+			points.resize  (npoints + 1000);
+			points_x.resize(npoints + 1000);
+			points_y.resize(npoints + 1000);
 		}
 		points[npoints]   = _point_num;
 		points_x[npoints] = _x;
 		points_y[npoints] = _y;
 		npoints++;
+		if (has_sub_quads) {
+			if (subquads[0][0]) subquads[0][0]->AddPoint(_x, _y, _point_num);
+			if (subquads[0][1]) subquads[0][1]->AddPoint(_x, _y, _point_num);
+			if (subquads[1][0]) subquads[1][0]->AddPoint(_x, _y, _point_num);
+			if (subquads[1][1]) subquads[1][1]->AddPoint(_x, _y, _point_num);
+		}
 	};
 
 	int GetPointNum(int _i) {
@@ -85,6 +96,8 @@ private:
 
 	std::vector<llQuad*> v;
 	std::vector<llQuadList*> subs;
+	std::vector<llQuadList*> masters;
+	std::vector<int>         pos;
 	unsigned int pointer;
 	llQuadList *subtree;
 
@@ -107,6 +120,16 @@ public:
 	void AddQuad(llQuad *_quad) {
 		v.push_back(_quad);
 		subs.push_back(NULL);
+		masters.push_back(NULL);
+		pos.push_back(0);
+	}
+
+	void AddMaster(llQuadList *_master) {
+		masters[masters.size() - 1] = _master;
+	}
+
+	void AddPos(int _pos) {
+		pos[pos.size() - 1] = _pos;
 	}
 
 #if 0
@@ -147,11 +170,25 @@ public:
 		return subtree;
 	}
 
-	int AddSubQuad(int _num, llQuad *_quad) {
-		if (_num < 0 || _num >= int(subs.size())) return 0;
+	int SetSubQuadList(llQuadList *_sub, int _num) {
+		if (_num < 0 || _num >= int(subs.size())) {
+			return 0;
+		}
+		subs[_num] = _sub;
+		return 1;
+	}
+
+	int AddSubQuad(int _num, llQuad *_quad, llQuadList **_ret = NULL, int *_pos = NULL) {
+		if (_num < 0 || _num >= int(subs.size())) {
+			//std::cout << "no quad" << std::endl;
+			return 0;
+		}
 		if (!subs[_num]) {
 			subs[_num] = new llQuadList();
+			if (masters[_num]) masters[_num]->SetSubQuadList(subs[_num], pos[_num]);
 		}
+		if (_ret) *_ret = subs[_num];
+		if (_pos) *_pos = subs[_num]->GetNumQuads();
 		subs[_num]->AddQuad(_quad);
 		return 1;
 	}

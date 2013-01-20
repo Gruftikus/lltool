@@ -35,6 +35,12 @@ int llSetAlgVertices::Exec(void) {
 		return 0;
 	}
 
+	if (alg->GetSize() == 0) {
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: no algorithm specified", command_name);
+		return 0;
+	}
+
+
 	float minab      = (float) _llUtils()->GetValueF("_mindistance");
 	float cellsize_x = (float) _llUtils()->GetValueF("_cellsize_x");
 	float cellsize_y = (float) _llUtils()->GetValueF("_cellsize_y");
@@ -47,10 +53,16 @@ int llSetAlgVertices::Exec(void) {
 	float y1 = _llUtils()->y00;
 	float y2 = _llUtils()->y11;
 
+#if 0
 	float seek_x1 = x1 - minab;
 	float seek_x2 = x2 + minab;
 	float seek_y1 = y1 - minab;
 	float seek_y2 = y2 + minab;
+#endif
+	float seek_x1 = x1;
+	float seek_x2 = x2;
+	float seek_y1 = y1;
+	float seek_y2 = y2;
 
 	llQuadList *seek = new llQuadList();
 
@@ -95,19 +107,17 @@ int llSetAlgVertices::Exec(void) {
 	} 
 
 	nmax = int (float(nmax) * fraction);
-
+	
 	if (max) {
 		//collect info about the existing points
 		points_done = points->GetN(x1, y1, x2, y2);
+		nmax -= points_done;
+		_llLogger()->WriteNextLine(-LOG_INFO, "Selection has already %i vertices, set %i vertices (fraction=%f)", points_done, nmax, fraction);
+	} else {
+		_llLogger()->WriteNextLine(-LOG_INFO, "Set %i vertices (fraction=%f)", nmax, fraction);
 	}
 
-	nmax -= points_done;
-
-	if (alg->GetSize() == 0) {
-		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: no algorithm specified", command_name);
-		return 0;
-	}
-
+	
 	map->InitRnd(map->GetRawX(x1), map->GetRawY(y1),
 		map->GetRawX(x2), map->GetRawY(y2));
 
@@ -162,9 +172,12 @@ loop:
 			mingrid_y = points->GetMinDistanceGrid(x, y, cellsize_y, 2);
 		float mingrid = mingrid_x > mingrid_y ? mingrid_y : mingrid_x;
 		float maxradius = cellsize_m;
+		if (maxradius <= (minab+1.0f)) maxradius = minab + 1.0f;
 
 		if (mingrid_x > minab && mingrid_y > minab) {
 			float mindist = points->GetMinDistance(x, y, maxradius, seek); //time consuming!!!
+			//std::cout << mindist << std::endl;
+
 			if (mindist > minab || mindist < 0) {
 				//if (mindist >= 0) {
 
@@ -183,6 +196,7 @@ loop:
 					goto loop;
 				} else {
 					_llLogger()->WriteNextLine(-LOG_WARNING, "Mesh is too dense:selection aborted after %i vertices", num_point);
+					delete seek;
 					return 1;
 				}
 			}
@@ -193,6 +207,7 @@ loop:
 				goto loop;
 			} else {
 				_llLogger()->WriteNextLine(-LOG_WARNING, "Mesh is too dense:selection aborted after %i vertices", num_point);
+				delete seek;
 				return 1;
 			}
 		}
@@ -207,5 +222,6 @@ end:
 	}
 #endif
 
+	delete seek;
 	return 1;
 }

@@ -58,8 +58,7 @@ int llWorker::CheckFlag (char *_flag) {
 	for (unsigned int i=0; i<name.size(); i++) {
 		if (_stricmp(_flag, name[i]) == 0) {
 			if (flag[i]) {
-				used[i] = 1;
-				*(flag[i]) = 1;
+				flag_cache[i] = 1;
 				return 1;
 			}
 		}
@@ -186,7 +185,10 @@ int llWorker::ReplaceFlags(void) {
 					*(s_value[i]) = dummy2; //BUGBUG
 				}
 			}
-		}  
+		} else if (flag_cache[i]) {
+			used[i]    = 1;
+			*(flag[i]) = 1;
+		}
 	}
 	return 1;
 }

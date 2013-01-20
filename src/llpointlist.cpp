@@ -76,7 +76,7 @@ float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuad *_qu
 }
 
 float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuadList *_quads) {
-	float min = 1E10;
+	float min = (_radius + 2.0f) * (_radius + 2.0f);
 	//quadtree nearest neighbor search
 	for (unsigned int i=0; i<_quads->GetNumQuads(); i++) {
 		llQuad *quad = _quads->GetQuad(i);

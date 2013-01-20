@@ -16,6 +16,7 @@ class llWorker {
 
 	 std::vector<char*>   name;
 	 std::vector<int*>    flag;
+	 std::vector<int>     flag_cache;
 	 std::vector<int*>    i_value;
 	 std::vector<float*>  f_value;
 	 std::vector<double*> d_value;
@@ -37,6 +38,8 @@ class llWorker {
 		 name[size] = NULL;
 		 flag.resize(size + 1);
 		 flag[size] = NULL;
+		 flag_cache.resize(size + 1);
+		 flag_cache[size] = 0;
 		 i_value.resize(size + 1);
 		 i_value[size] = NULL;
 		 f_value.resize(size + 1);

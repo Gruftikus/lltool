@@ -24,6 +24,7 @@
 
 //Map-based workers:
 #include "../include/llmapworker.h"
+#include "../include/llcreatenormalmap.h"
 #include "../include/lldiamondsquare.h"
 #include "../include/llfillcolormap.h"
 #include "../include/llfilter.h"
@@ -85,6 +86,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llCreateMap());
 
 	//Map worker:
+	_batch->RegisterWorker(new llCreateNormalMap());
 	_batch->RegisterWorker(new llExportMap());
 	_batch->RegisterWorker(new llQuadIterator());
 	_batch->RegisterWorker(new llSetHeight());

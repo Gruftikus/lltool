@@ -26,6 +26,7 @@
     <ClInclude Include="include\llalgstripe.h" />
     <ClInclude Include="include\llcommands.h" />
     <ClInclude Include="include\llcreatemap.h" />
+    <ClInclude Include="include\llcreatenormalmap.h" />
     <ClInclude Include="include\llcreatepolygon.h" />
     <ClInclude Include="include\llcreateworkers.h" />
     <ClInclude Include="include\lldiamondsquare.h" />
@@ -88,6 +89,7 @@
     <ClCompile Include="src\llalgstripe.cpp" />
     <ClCompile Include="src\llcommands.cpp" />
     <ClCompile Include="src\llcreatemap.cpp" />
+    <ClCompile Include="src\llcreatenormalmap.cpp" />
     <ClCompile Include="src\llcreatepolygon.cpp" />
     <ClCompile Include="src\lldiamondsquare.cpp" />
     <ClCompile Include="src\llecho.cpp" />

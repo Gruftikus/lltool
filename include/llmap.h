@@ -264,6 +264,11 @@ public:
 		return 1;
 	}
 
+	int IsInMap(unsigned int _x, unsigned int _y) {
+		if (x1>=widthx || y1>=widthy) return 0;
+		return 1;
+	}
+
 	int IsDefault(float _x, float _y) {
 		unsigned int x1 = GetRawX(_x);
 		unsigned int y1 = GetRawY(_y);

@@ -1,12 +1,12 @@
-#include "..\include\llExportMapToObj.h"
+#include "..\include\llExportMeshToObj.h"
 #include "..\include\llmaplist.h"
 
 //constructor
-llExportMapToObj::llExportMapToObj() : llTriMod() {
-	SetCommandName("ExportMapToObj");
+llExportMeshToObj::llExportMeshToObj() : llTriMod() {
+	SetCommandName("ExportMeshToObj");
 }
 
-int llExportMapToObj::Prepare(void) {
+int llExportMeshToObj::Prepare(void) {
 	if (!llTriMod::Prepare()) return 0;
 
 	filename        = NULL;
@@ -18,7 +18,7 @@ int llExportMapToObj::Prepare(void) {
 	return 1;
 }
 
-int llExportMapToObj::RegisterOptions(void) {
+int llExportMeshToObj::RegisterOptions(void) {
 	if (!llTriMod::RegisterOptions()) return 0;
 
 	RegisterValue("-filename",        &filename);
@@ -32,7 +32,7 @@ int llExportMapToObj::RegisterOptions(void) {
 	return 1;
 }
 
-int llExportMapToObj::Exec(void) {
+int llExportMeshToObj::Exec(void) {
 	if (!llTriMod::Exec()) return 0;
 
 	if (!Used("-filename"))

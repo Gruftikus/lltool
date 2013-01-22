@@ -32,7 +32,8 @@
     <ClInclude Include="include\llecho.h" />
     <ClInclude Include="include\llexit.h" />
     <ClInclude Include="include\llexportmap.h" />
-    <ClInclude Include="include\llexportmaptoobj.h" />
+    <ClInclude Include="include\llexportmeshtoobj.h" />
+    <ClInclude Include="include\llexportmeshtops.h" />
     <ClInclude Include="include\llfillcolormap.h" />
     <ClInclude Include="include\llfilter.h" />
     <ClInclude Include="include\llinactivateallvertices.h" />
@@ -92,7 +93,8 @@
     <ClCompile Include="src\llecho.cpp" />
     <ClCompile Include="src\llexit.cpp" />
     <ClCompile Include="src\llexportmap.cpp" />
-    <ClCompile Include="src\llexportmaptoobj.cpp" />
+    <ClCompile Include="src\llexportmeshtoobj.cpp" />
+    <ClCompile Include="src\llexportmeshtops.cpp" />
     <ClCompile Include="src\llfillcolormap.cpp" />
     <ClCompile Include="src\llfilter.cpp" />
     <ClCompile Include="src\llinactivateallvertices.cpp" />

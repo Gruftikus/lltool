@@ -39,6 +39,7 @@ public:
 	//constructor
 	llTriangle(int _n1, int _n2, int _n3, llPointList *_r);
 	llTriangle();
+	
 	int write_flag;
 	int touched_flag;
 	void SetCorrectParity(void);
@@ -162,8 +163,6 @@ public:
 	int Stripification(void);
 
 	void Print(void);
-	void WritePS(char *_name);
-	float ps_x00, ps_x11, ps_y00, ps_y11;
 
 	std::vector< unsigned short > GetVertices(void) {
 		return vertices;

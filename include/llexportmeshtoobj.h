@@ -1,10 +1,10 @@
-#ifndef _PLLEXPORTMAPTOOBJ_H_
-#define _PLLEXPORTMAPTOOBJ_H_
+#ifndef _PLLEXPORTMESHTOOBJ_H_
+#define _PLLEXPORTMESHTOOBJ_H_
 
 #include "../include/llworker.h"
 #include "../include/lltrimod.h"
 
-class llExportMapToObj : public llTriMod {
+class llExportMeshToObj : public llTriMod {
 
 protected:
 
@@ -16,10 +16,10 @@ protected:
 
 public:
 
-	llExportMapToObj();
+	llExportMeshToObj();
 
 	llWorker * Clone() {
-		return new llExportMapToObj(*this);
+		return new llExportMeshToObj(*this);
 	}
 
 	virtual int Prepare(void);

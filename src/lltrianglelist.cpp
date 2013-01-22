@@ -164,74 +164,6 @@ void llTriangleList::Print(void) {
 }
 
 
-void llTriangleList::WritePS(char *_name) {
-	fprintf(stderr,"Writing ps file \"%s\"\n",_name);
-	FILE *f;    
-	if (fopen_s(&f,_name,"w")) {
-		fprintf(stderr,"Unable to open ps file \"%s\"\n",_name);
-		exit(-1);
-	}
-
-	float scale = 500.f/(ps_x11 - ps_x00);
-	for (unsigned int j=0;j<counter;j++) {
-		llTriangle * tri = GetTriangle(j);
-
-		int c1=GetPoint1(j);
-		int c2=GetPoint2(j);
-		int c3=GetPoint3(j);
-		float x1 = (points->GetX(c1)-ps_x00)*scale+75;
-		float y1 = (points->GetY(c1)-ps_y00)*scale+200;
-		float z1 = points->GetZ(c1);
-		float x2 = (points->GetX(c2)-ps_x00)*scale+75;
-		float y2 = (points->GetY(c2)-ps_y00)*scale+200;
-		float z2 = points->GetZ(c2);
-		float x3 = (points->GetX(c3)-ps_x00)*scale+75;
-		float y3 = (points->GetY(c3)-ps_y00)*scale+200;
-		float z3 = points->GetZ(c3);
-
-#if 1
-		//if (tri->draw_flag) {
-		if (z1<=0 && z2<=0 && z3<=0) {
-			fprintf(f,"newpath %f %f moveto %f %f lineto %f %f lineto 0.9 setgray fill\n",x1,y1,x2,y2,x3,y3);
-		}
-#endif
-		fprintf(f," 0 setgray \n");
-
-
-		fprintf(f,"newpath %f %f moveto %f %f lineto 0.1 setlinewidth stroke\n",x1,y1,x2,y2);
-		fprintf(f,"newpath %f %f moveto %f %f lineto 0.1 setlinewidth stroke\n",x1,y1,x3,y3);
-		fprintf(f,"newpath %f %f moveto %f %f lineto 0.1 setlinewidth stroke\n",x3,y3,x2,y2);
-
-#if 0
-		fprintf(f,"/Times-Roman findfont 8 scalefont setfont \n");	
-		fprintf(f,"newpath %f %f moveto ",(x1+x2+x3)/3,(y1+y2+y3)/3);
-		int q1 = GetTriangleQuality(j,0);
-		fprintf(f,"(%i) show\n",q1);
-
-		for (int i=0;i<3;i++) {
-			int nei = tri->GetNeighbor(i);
-			int neiflag = tri->GetEdgeFlag(i);
-			if (nei>=0) {
-				c1=GetCommonPoints(j,nei,0);
-				c2=GetCommonPoints(j,nei,1);
-			} else {
-				c1=c2=-1;
-			}
-
-			if (c1 != -1 && c2 != -1 && neiflag == IS_OTHER_STRIP) {
-				x1 = (points->GetX(c1)-ps_x00)*scale+75;
-				y1 = (points->GetY(c1)-ps_y00)*scale+200;
-				x2 = (points->GetX(c2)-ps_x00)*scale+75;
-				y2 = (points->GetY(c2)-ps_y00)*scale+200;
-				fprintf(f,"newpath %f %f moveto %f %f lineto 1.0 setlinewidth stroke\n",x1,y1,x2,y2);
-			}
-
-		} 
-#endif	
-	}
-	fclose(f);
-}
-
 void llTriangleList::UpdateNeighbors(void) {
 	for (unsigned int i=0;i<counter;i++) {
 		llTriangle * v = GetTriangle(i);
@@ -816,13 +748,6 @@ getnext:
 			local_quality[listpos] -= GetTriangleQuality(llist[listpos-1],0);
 			if (debug) 	std::cout << "quality after flip:" <<   local_quality[listpos]  
 			<<  std::endl;
-
-			target->draw_flag=1;
-			if (debug) {
-				WritePS("bla");
-				system("sleep 0.1; okular obj.ps");
-			}
-			target->draw_flag=0;
 
 
 			if (flag==IS_SAME_STRIP) { //step one: glue the triangle, step 2: divide it

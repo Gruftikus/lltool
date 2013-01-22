@@ -59,7 +59,8 @@
 #include "../include/llstencilpolygon.h"
 
 //Triangle-Exporters:
-#include "../include/llexportmaptoobj.h"
+#include "../include/llexportmeshtoobj.h"
+#include "../include/llexportmeshtops.h"
 
 void CreateWorkers(llCommands *_batch) {
 
@@ -120,6 +121,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llRemoveInactiveTriangles());
 	_batch->RegisterWorker(new llActivateVisibleVertices());
 
-	_batch->RegisterWorker(new llExportMapToObj());
+	_batch->RegisterWorker(new llExportMeshToObj());
+	_batch->RegisterWorker(new llExportMeshToPs());
 
 }

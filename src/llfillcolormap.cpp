@@ -1,6 +1,6 @@
-#include "..\include\llfillcolormap.h"
-#include "..\include\llmaplist.h"
-#include "..\include\llalglist.h"
+#include "../include/llfillcolormap.h"
+#include "../include/llmaplist.h"
+#include "../include/llalglist.h"
 
 //constructor
 llFillColorMap::llFillColorMap() : llMapWorker() {

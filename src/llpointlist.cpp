@@ -1,4 +1,4 @@
-#include "..\include\llpointlist.h"
+#include "../include/llpointlist.h"
 #include <math.h>
 
 

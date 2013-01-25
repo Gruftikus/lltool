@@ -1,5 +1,4 @@
-#include "..\include\llremoveinactivetriangles.h"
-
+#include "../include/llremoveinactivetriangles.h"
 
 llRemoveInactiveTriangles::llRemoveInactiveTriangles() : llTriMod() {
 	SetCommandName("RemoveInactiveTriangles");

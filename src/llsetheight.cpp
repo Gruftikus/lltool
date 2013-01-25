@@ -1,5 +1,5 @@
-#include "..\include\llsetheight.h"
-#include "..\include\llmaplist.h"
+#include "../include/llsetheight.h"
+#include "../include/llmaplist.h"
 
 llSetHeight::llSetHeight() : llMapWorker() {
 	SetCommandName("SetHeight");

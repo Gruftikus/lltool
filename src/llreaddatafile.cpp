@@ -1,5 +1,4 @@
-#include "..\include\llreaddatafile.h"
-
+#include "../include/llreaddatafile.h"
 
 llReadDataFile::llReadDataFile() : llSet() {
 	SetCommandName("ReadDataFile");

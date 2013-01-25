@@ -1,4 +1,4 @@
-#include "..\include\llselectrec.h"
+#include "../include/llselectrec.h"
 
 llSelectRec::llSelectRec() : llWorker() {
 	SetCommandName("SelectRec");

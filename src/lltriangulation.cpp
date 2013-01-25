@@ -1,5 +1,5 @@
-#include "..\include\lltriangulation.h"
-#include "..\include\llmaplist.h"
+#include "../include/lltriangulation.h"
+#include "../include/llmaplist.h"
 
 #define REAL double
 #include "..\externals\triangle\triangle.h"

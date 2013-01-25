@@ -1,4 +1,4 @@
-#include "..\include\llreadpolygondatafile.h"
+#include "../include/llreadpolygondatafile.h"
 
 llReadPolygonDataFile::llReadPolygonDataFile() : llSet() {
 	SetCommandName("ReadPolygonDataFile");

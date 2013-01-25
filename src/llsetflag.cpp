@@ -1,4 +1,4 @@
-#include "..\include\llsetflag.h"
+#include "../include/llsetflag.h"
 
 llSetFlag::llSetFlag() : llWorker() {
 	SetCommandName("SetFlag");

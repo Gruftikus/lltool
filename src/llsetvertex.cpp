@@ -1,4 +1,4 @@
-#include "..\include\llsetvertex.h"
+#include "../include/llsetvertex.h"
 
 llSetVertex::llSetVertex() : llSet() {
 	SetCommandName("SetVertex");

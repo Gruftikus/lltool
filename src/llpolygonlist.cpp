@@ -1,4 +1,4 @@
-#include "..\include\llpolygonlist.h"
+#include "../include/llpolygonlist.h"
 
 llPolygon::llPolygon(int _n1, int _n2, char *_name, llPointList *_r) {
 	p.resize(2);

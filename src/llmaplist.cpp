@@ -1,6 +1,6 @@
 //a list of algorithms
 
-#include "..\include\llmaplist.h"
+#include "../include/llmaplist.h"
 #include <string.h>
 #include <stdio.h>
 

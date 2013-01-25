@@ -1,4 +1,4 @@
-#include "..\include\llsplitat.h"
+#include "../include/llsplitat.h"
 
 llSplitAt::llSplitAt() : llTriMod() {
 	SetCommandName("SplitAt");

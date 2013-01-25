@@ -1,7 +1,7 @@
 
 
-#include "..\include\llexit.h"
-#include "..\include\lllogger.h"
+#include "../include/llexit.h"
+#include "../include/lllogger.h"
 
 
 llExit::llExit() : llWorker() {

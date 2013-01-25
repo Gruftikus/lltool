@@ -1,6 +1,6 @@
-#include "..\include\lldiamondsquare.h"
-#include "..\include\llmaplist.h"
-#include "..\include\llalglist.h"
+#include "../include/lldiamondsquare.h"
+#include "../include/llmaplist.h"
+#include "../include/llalglist.h"
 
 //constructor
 llDiamondSquare::llDiamondSquare() : llMapWorker() {

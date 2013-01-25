@@ -1,7 +1,7 @@
 //base class for all workers which sets vertex points
 
-#include "..\include\llset.h"
-#include "..\include\llmaplist.h"
+#include "../include/llset.h"
+#include "../include/llmaplist.h"
 
 
 llSet::llSet() : llWorker() {

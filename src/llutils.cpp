@@ -2,7 +2,7 @@
 
 //#include "StdAfx.h"
 
-#include "..\include\llutils.h"
+#include "../include/llutils.h"
 //#include <string.h>
 #include <stdio.h>
 #include <time.h>

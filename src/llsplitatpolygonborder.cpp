@@ -1,4 +1,4 @@
-#include "..\include\llsplitatpolygonborder.h"
+#include "../include/llsplitatpolygonborder.h"
 
 llSplitAtPolygonBorder::llSplitAtPolygonBorder() : llTriMod() {
 	SetCommandName("SplitAtPolygonBorder");

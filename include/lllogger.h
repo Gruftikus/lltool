@@ -1,7 +1,7 @@
 #ifndef _PLLLOGGER_H_
 #define _PLLLOGGER_H_
 
-#ifndef MSC_VER
+#ifndef _MSC_VER
 #include "def.h"
 #endif
 #include <iostream>
@@ -47,35 +47,35 @@ public:
 		if (logfile) fprintf(logfile,"%s", _log);
 	};
 
-	void AddToLine(char *_add) {
+	void AddToLine(const char *_add) {
 		char *delme = lines[write_pointer-1];
 		unsigned int len = strlen(delme) + 1 + strlen(_add);
 		lines[write_pointer-1] = new char[len];
 		sprintf_s(lines[write_pointer-1], len, "%s%s", delme, _add);
 		delete delme;
 	}
-	void AddToLine(char _add) {
+	void AddToLine(const char _add) {
 		char *delme = lines[write_pointer-1];
 		unsigned int len = strlen(delme) + 2;
 		lines[write_pointer-1] = new char[len];
 		sprintf_s(lines[write_pointer-1], len, "%s%c", delme, _add);
 		delete delme;
 	}
-	void AddToLine(char * _add, double _f, int _width = 1) {
+	void AddToLine(const char * _add, double _f, int _width = 1) {
 		char *delme = lines[write_pointer-1];
 		unsigned int len = strlen(delme) + 100 + strlen(_add);
 		lines[write_pointer-1] = new char[len];
 		sprintf_s(lines[write_pointer-1], len, "%s%s%*f", delme, _add, _width, _f);
 		delete delme;
 	}
-	void AddToLine(char * _add, float _f, int _width = 1) {
+	void AddToLine(const char * _add, float _f, int _width = 1) {
 		char *delme = lines[write_pointer-1];
 		unsigned int len = strlen(delme) + 100 + strlen(_add);
 		lines[write_pointer-1] = new char[len];
 		sprintf_s(lines[write_pointer-1], len, "%s%s%*f", delme, _add, _width, _f);
 		delete delme;
 	}
-	void AddToLine(char * _add, int _f) {
+	void AddToLine(const char * _add, int _f) {
 		char *delme = lines[write_pointer-1];
 		unsigned int len = strlen(delme) + 100 + strlen(_add);
 		lines[write_pointer-1] = new char[len];

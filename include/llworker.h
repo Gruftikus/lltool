@@ -14,7 +14,7 @@ class llWorker {
 	 int  checked_value, checked_pos;
 	 bool repeat_worker;
 
-	 std::vector<char*>   name;
+	 std::vector<const char*> name;
 	 std::vector<int*>    flag;
 	 std::vector<int>     flag_cache;
 	 std::vector<int*>    i_value;

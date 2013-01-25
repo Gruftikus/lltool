@@ -47,7 +47,7 @@ char *llLogger::ReadNextLine(void) {
 	return s;
 }
 
-int llLogger::WriteNextLine(int _level, char *_format, ...) {
+int llLogger::WriteNextLine(int _level, const char *_format, ...) {
 	
 	if (_level == 0) return 0;
 	int writeout = 0;

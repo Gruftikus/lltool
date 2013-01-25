@@ -14,7 +14,7 @@ llWorker::llWorker() {
 	s_value.resize(0);
 }
 
-int llWorker::RegisterFlag(char *_name, int *_flag, int _opt) {
+int llWorker::RegisterFlag(const char *_name, int *_flag, int _opt) {
 	AddElement();
 	name[GetSize()-1] = _name;
 	flag[GetSize()-1] = _flag;
@@ -22,7 +22,7 @@ int llWorker::RegisterFlag(char *_name, int *_flag, int _opt) {
 	return 1;
 }
 
-int llWorker::RegisterValue(char *_name, int *_value, int _opt) {
+int llWorker::RegisterValue(const char *_name, int *_value, int _opt) {
 	AddElement();
 	name[GetSize()-1]    = _name;
 	i_value[GetSize()-1] = _value;
@@ -30,7 +30,7 @@ int llWorker::RegisterValue(char *_name, int *_value, int _opt) {
 	return 1;
 }
 
-int llWorker::RegisterValue(char *_name, float *_value, int _opt) {
+int llWorker::RegisterValue(const char *_name, float *_value, int _opt) {
 	AddElement();
 	name[GetSize()-1]    = _name;
 	f_value[GetSize()-1] = _value;
@@ -38,7 +38,7 @@ int llWorker::RegisterValue(char *_name, float *_value, int _opt) {
 	return 1;
 }
 
-int llWorker::RegisterValue(char *_name, double *_value, int _opt) {
+int llWorker::RegisterValue(const char *_name, double *_value, int _opt) {
 	AddElement();
 	name[GetSize()-1]    = _name;
 	d_value[GetSize()-1] = _value;
@@ -46,7 +46,7 @@ int llWorker::RegisterValue(char *_name, double *_value, int _opt) {
 	return 1;
 }
 
-int llWorker::RegisterValue(char *_name, char **_value, int _opt) {
+int llWorker::RegisterValue(const char *_name, char **_value, int _opt) {
 	AddElement();
 	name[GetSize()-1]    = _name;
 	s_value[GetSize()-1] = _value;
@@ -193,7 +193,7 @@ int llWorker::ReplaceFlags(void) {
 	return 1;
 }
 
-int llWorker::Used(char *_flag) {
+int llWorker::Used(const char *_flag) {
 	for (unsigned int i=0; i<name.size(); i++) {
 		if (_stricmp(_flag, name[i]) == 0) {
 			return used[i];

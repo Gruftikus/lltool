@@ -20,7 +20,7 @@ llMapList::llMapList() {
 }
 
 
-int llMapList::AddMap(char *_name, llMap *_map, llPointList *_points, llTriangleList *_triangles, llPolygonList *_polygons) {
+int llMapList::AddMap(const char *_name, llMap *_map, llPointList *_points, llTriangleList *_triangles, llPolygonList *_polygons) {
 	int size = GetSize();
 	for (int i=0; i<size; i++) {
 		if (_stricmp(_name, map_name[i]) == 0) {
@@ -41,7 +41,7 @@ int llMapList::AddMap(char *_name, llMap *_map, llPointList *_points, llTriangle
 	return 1;
 }
 
-int llMapList::AddMap(char *_name, llMap *_map, char *_oldmap) {
+int llMapList::AddMap(const char *_name, llMap *_map, const char *_oldmap) {
 	int size = GetSize();
 	for (int i=0; i<size; i++) {
 		if (_stricmp(_name, map_name[i]) == 0) {
@@ -81,7 +81,7 @@ void llMapList::ExchangeMap(char *_name, llMap *_map) {
 }
 
 
-llMap *llMapList::GetMap(char* _name) {
+llMap *llMapList::GetMap(const char* _name) {
 	//cout << "GetMap " << _name  << endl;
 	for (int i=0; i<GetSize(); i++) {
 		if (_stricmp(_name, map_name[i]) == 0)

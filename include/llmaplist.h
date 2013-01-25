@@ -28,14 +28,14 @@ public:
 	llMapList();
 
 	int AddMap(const char *_name, llMap *_map, llPointList *_points, llTriangleList *_triangles, llPolygonList *_polygons);
-	int AddMap(const char *_name, llMap *_map, char *_oldmap);
+	int AddMap(const char *_name, llMap *_map, const char *_oldmap);
 
 	int DeleteMap(char *_name);
 
 	void ExchangeMap(char *_name, llMap *_map);
 	llMap *GetMap(const char* _name);
 
-	int GetMapNum(char* _name) {
+	int GetMapNum(const char* _name) {
 		for (int i=0; i<GetSize(); i++) {
 			if (_stricmp(_name, map_name[i]) == 0)
 				return i;

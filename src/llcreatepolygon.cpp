@@ -1,4 +1,4 @@
-#include "..\include\llcreatepolygon.h"
+#include "../include/llcreatepolygon.h"
 
 llCreatePolygon::llCreatePolygon() : llSet() {
 	SetCommandName("CreatePolygon");

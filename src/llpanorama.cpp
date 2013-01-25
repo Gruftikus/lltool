@@ -1,4 +1,4 @@
-#include "..\include\llpanorama.h"
+#include "../include/llpanorama.h"
 
 
 llPanorama::llPanorama() : llSet() {

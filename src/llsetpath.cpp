@@ -1,7 +1,7 @@
 
 #include <direct.h>
 
-#include "..\include\llsetpath.h"
+#include "../include/llsetpath.h"
 
 llSetPath::llSetPath() : llWorker() {
 	SetCommandName("SetPath");

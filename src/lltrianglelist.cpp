@@ -1,4 +1,4 @@
-#include "..\include\lltrianglelist.h"
+#include "../include/lltrianglelist.h"
 
 
 llTriangle::llTriangle(int _n1, int _n2, int _n3, llPointList *_r) {

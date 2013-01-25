@@ -1,5 +1,5 @@
-#include "..\include\llmakederivatives.h"
-#include "..\include\llmaplist.h"
+#include "../include/llmakederivatives.h"
+#include "../include/llmaplist.h"
 
 
 llMakeDerivatives::llMakeDerivatives() : llMapWorker() {

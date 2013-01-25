@@ -1,7 +1,7 @@
 
-#include "..\include\llworker.h"
-#include "..\include\llutils.h"
-#include "..\include\lllogger.h"
+#include "../include/llworker.h"
+#include "../include/llutils.h"
+#include "../include/lllogger.h"
 
 llWorker::llWorker() {
 	command_name = NULL;

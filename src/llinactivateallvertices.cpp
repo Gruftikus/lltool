@@ -1,5 +1,5 @@
-#include "..\include\llinactivateallvertices.h"
-#include "..\include\llmaplist.h"
+#include "../include/llinactivateallvertices.h"
+#include "../include/llmaplist.h"
 
 
 llInactivateAllVertices::llInactivateAllVertices() : llMapWorker() {

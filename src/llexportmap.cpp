@@ -1,5 +1,5 @@
-#include "..\include\llexportmap.h"
-#include "..\include\llmaplist.h"
+#include "../include/llexportmap.h"
+#include "../include/llmaplist.h"
 
 //constructor
 llExportMap::llExportMap() : llMapWorker() {

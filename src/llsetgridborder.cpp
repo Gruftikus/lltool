@@ -1,4 +1,4 @@
-#include "..\include\llsetgridborder.h"
+#include "../include/llsetgridborder.h"
 
 llSetGridBorder::llSetGridBorder() : llSet() {
 	SetCommandName("SetGridBorder");

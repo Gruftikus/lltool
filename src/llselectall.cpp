@@ -1,4 +1,4 @@
-#include "..\include\llselectall.h"
+#include "../include/llselectall.h"
 
 
 llSelectAll::llSelectAll() : llMapWorker() {

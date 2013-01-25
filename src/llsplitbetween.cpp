@@ -1,4 +1,4 @@
-#include "..\include\llsplitbetween.h"
+#include "../include/llsplitbetween.h"
 
 llSplitBetween::llSplitBetween() : llTriMod() {
 	SetCommandName("SplitBetween");

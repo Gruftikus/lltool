@@ -1,5 +1,5 @@
-#include "..\include\llcreatemap.h"
-#include "..\include\llmaplist.h"
+#include "../include/llcreatemap.h"
+#include "../include/llmaplist.h"
 
 llCreateMap::llCreateMap() : llWorker() {
 	SetCommandName("CreateMap");

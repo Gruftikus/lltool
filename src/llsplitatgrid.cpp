@@ -1,4 +1,4 @@
-#include "..\include\llsplitatgrid.h"
+#include "../include/llsplitatgrid.h"
 
 llSplitAtGrid::llSplitAtGrid() : llTriMod() {
 	SetCommandName("SplitAtGrid");

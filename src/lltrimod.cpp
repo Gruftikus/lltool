@@ -1,7 +1,7 @@
 //base class for all workers which sets vertex points
 
-#include "..\include\lltrimod.h"
-#include "..\include\llmaplist.h"
+#include "../include/lltrimod.h"
+#include "../include/llmaplist.h"
 
 
 llTriMod::llTriMod() : llWorker() {	

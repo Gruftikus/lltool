@@ -1,6 +1,6 @@
-#include "..\include\llfilter.h"
-#include "..\include\llmaplist.h"
-#include "..\include\llmakederivatives.h"
+#include "../include/llfilter.h"
+#include "../include/llmaplist.h"
+#include "../include/llmakederivatives.h"
 
 
 llFilter::llFilter() : llMapWorker() {

@@ -1,5 +1,5 @@
-#include "..\include\llExportMeshToObj.h"
-#include "..\include\llmaplist.h"
+#include "../include/llExportMeshToObj.h"
+#include "../include/llmaplist.h"
 
 //constructor
 llExportMeshToObj::llExportMeshToObj() : llTriMod() {

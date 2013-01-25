@@ -1,4 +1,4 @@
-#include "..\include\llsetcontour.h"
+#include "../include/llsetcontour.h"
 
 llSetContour::llSetContour() : llSet() {
 	SetCommandName("ContourLine");

@@ -1,5 +1,5 @@
-#include "..\include\llExportMeshToPs.h"
-#include "..\include\llmaplist.h"
+#include "../include/llExportMeshToPs.h"
+#include "../include/llmaplist.h"
 
 //constructor
 llExportMeshToPs::llExportMeshToPs() : llTriMod() {

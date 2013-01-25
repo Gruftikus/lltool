@@ -1,4 +1,4 @@
-#include "..\include\llecho.h"
+#include "../include/llecho.h"
 
 llEcho::llEcho() : llWorker() {
 	SetCommandName("Echo");

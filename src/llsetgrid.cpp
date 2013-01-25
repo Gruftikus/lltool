@@ -1,4 +1,4 @@
-#include "..\include\llsetgrid.h"
+#include "../include/llsetgrid.h"
 
 llSetGrid::llSetGrid() : llSet() {
 	SetCommandName("SetGrid");

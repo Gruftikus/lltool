@@ -1,5 +1,5 @@
-#include "..\include\llquaditerator.h"
-#include "..\include\llmaplist.h"
+#include "../include/llquaditerator.h"
+#include "../include/llmaplist.h"
 
 llQuadIterator::llQuadIterator() : llMapWorker() {
 	SetCommandName("QuadIterator");

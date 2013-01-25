@@ -2,7 +2,7 @@
 
 //#include "StdAfx.h"
 
-#include "..\include\lllogger.h"
+#include "../include/lllogger.h"
 //#include <string.h>
 #include <stdio.h>
 #include <iostream>

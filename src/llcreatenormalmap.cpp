@@ -1,6 +1,6 @@
-#include "..\include\llcreatenormalmap.h"
-#include "..\include\llmaplist.h"
-#include "..\include\llmakederivatives.h"
+#include "../include/llcreatenormalmap.h"
+#include "../include/llmaplist.h"
+#include "../include/llmakederivatives.h"
 
 
 llCreateNormalMap::llCreateNormalMap() : llMapWorker() {

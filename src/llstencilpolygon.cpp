@@ -1,4 +1,4 @@
-#include "..\include\llstencilpolygon.h"
+#include "../include/llstencilpolygon.h"
 
 llStencilPolygon::llStencilPolygon() : llTriMod() {
 	SetCommandName("SplitAtPolygonBorder");

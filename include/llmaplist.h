@@ -16,7 +16,7 @@ class llMapList {
 protected:
 
 	std::vector<llMap*>          map_list;
-	std::vector<char*>           map_name;
+	std::vector<const char*>     map_name;
 	std::vector<llPointList*>    point_list;
 	std::vector<llPolygonList*>  polygon_list;
 	std::vector<llTriangleList*> triangle_list;
@@ -27,8 +27,8 @@ public:
 	//constructor
 	llMapList();
 
-	int AddMap(char *_name, llMap *_map, llPointList *_points, llTriangleList *_triangles, llPolygonList *_polygons);
-	int AddMap(char *_name, llMap *_map, char *_oldmap);
+	int AddMap(const char *_name, llMap *_map, llPointList *_points, llTriangleList *_triangles, llPolygonList *_polygons);
+	int AddMap(const char *_name, llMap *_map, char *_oldmap);
 
 	int DeleteMap(char *_name);
 

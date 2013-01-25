@@ -15,6 +15,9 @@ OBJS =  llactivatevisiblevertices.o \
 	llalgslope.o \
 	llalgstripe.o \
 	llcommands.o \
+	llcreatemap.o \
+	llcreatenormalmap.o \
+	llcreatepolygon.o \
 	llmap.o
 
 $(OBJS): %.o : src/%.cpp include/%.h

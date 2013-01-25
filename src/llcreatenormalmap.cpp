@@ -78,8 +78,8 @@ int llCreateNormalMap::Exec(void) {
 						directy = -1;
 					}
 					int resolution = 1; //BUGBUG
-					unsigned int cur_x = unsigned int (x + directx * resolution);  
-					unsigned int cur_y = unsigned int (y + directy * resolution);
+					unsigned int cur_x = (unsigned int)(x + directx * resolution);  
+					unsigned int cur_y = (unsigned int)(y + directy * resolution);
 					float slope = 0.f;
 
 					while( (directx*(cur_x-x) + directy*(cur_y-y)) < 1024  && map->IsInMap(cur_x,cur_y) ) {
@@ -134,9 +134,9 @@ int llCreateNormalMap::Exec(void) {
 
 			float angle=0.;
 
-			unsigned char n_x1 = unsigned char(n_x1a);
-			unsigned char n_y1 = unsigned char(n_y1a*cos(angle) + n_z1a*sin(angle));
-			unsigned char n_z1 = unsigned char(-sin(angle)*n_y1a + n_z1a*cos(angle));
+			unsigned char n_x1 = (unsigned char)(n_x1a);
+			unsigned char n_y1 = (unsigned char)(n_y1a*cos(angle) + n_z1a*sin(angle));
+			unsigned char n_z1 = (unsigned char)(-sin(angle)*n_y1a + n_z1a*cos(angle));
 
 			newmap->SetBlue (x, y, n_z1);
 			newmap->SetGreen(x, y, n_y1);

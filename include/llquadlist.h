@@ -10,7 +10,8 @@ class llQuad {
 
 private:
 
-	int npoints, maxpoints, has_sub_quads;
+    	unsigned int npoints, maxpoints;
+    	int          has_sub_quads;
 	llQuad *subquads[2][2];
 
 	std::vector<int>   points;

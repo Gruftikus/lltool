@@ -1,4 +1,4 @@
-#include "..\include\llalgradial.h"
+#include "../include/llalgradial.h"
 
 llAlgRadial::llAlgRadial(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	loc_ceiling = 0;

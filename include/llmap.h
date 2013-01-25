@@ -5,6 +5,8 @@
 #include <math.h>
 #include <iostream>
 
+#include <cstdlib> 
+
 #include "../include/lllogger.h"
 #include "../include/llcommands.h"
 #include "../include/llquadlist.h"
@@ -176,7 +178,7 @@ public:
 	void ChangeElementRaw(unsigned int _x, unsigned int _y, float _val) {
 		if (_x >= widthx || _y >= widthy) return;
 		if (sdata) sdata->SetElement(_x + _y*widthx, (*sdata)[_x+_y*widthx] + _val);
-		else       idata[_x + _y*widthx] = unsigned int(float(idata[_x+_y*widthx]) + _val);
+		else       idata[_x + _y*widthx] = (unsigned int)(float(idata[_x+_y*widthx]) + _val);
 	};
 	
 	void SetEven() {uneven=0;};
@@ -214,12 +216,12 @@ public:
 	//Transformation:
 	unsigned int GetRawX(float _x) {
 		if (_x < x1) return 0;
-		unsigned int xx = unsigned int((_x - x1 + widthx_per_raw2) / widthx_per_raw);
+		unsigned int xx = (unsigned int)((_x - x1 + widthx_per_raw2) / widthx_per_raw);
 		return xx;
 	}
 	unsigned int GetRawY(float _y) {
 		if (_y < y1) return 0;
-		unsigned int yy = unsigned int((_y - y1 + widthy_per_raw2) / widthy_per_raw);
+		unsigned int yy = (unsigned int)((_y - y1 + widthy_per_raw2) / widthy_per_raw);
 		return yy;
 	}
 	float GetCoordX(unsigned int _x) {

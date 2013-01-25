@@ -1,4 +1,4 @@
-#include "..\include\llactivatevisiblevertices.h"
+#include "../include/llactivatevisiblevertices.h"
 
 llActivateVisibleVertices::llActivateVisibleVertices() : llTriMod() {
 	SetCommandName("ActivateVisibleVertices");

@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include "..\include\llmap.h"
-#include "..\include\llpolygonlist.h"
-#include "..\include\lltrianglelist.h"
+#include "../include/llmap.h"
+#include "../include/llpolygonlist.h"
+#include "../include/lltrianglelist.h"
 
 class       llMapList;
 llMapList* _llMapList();
@@ -33,7 +33,7 @@ public:
 	int DeleteMap(char *_name);
 
 	void ExchangeMap(char *_name, llMap *_map);
-	llMap *GetMap(char* _name);
+	llMap *GetMap(const char* _name);
 
 	int GetMapNum(char* _name) {
 		for (int i=0; i<GetSize(); i++) {

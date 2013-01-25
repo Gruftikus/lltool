@@ -1,6 +1,6 @@
 
-#include "..\include\llalgfirst.h"
-#include "..\include\llmaplist.h"
+#include "../include/llalgfirst.h"
+#include "../include/llmaplist.h"
 
 llAlgFirst::llAlgFirst(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 

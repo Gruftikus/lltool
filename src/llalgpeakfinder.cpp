@@ -1,4 +1,4 @@
-#include "..\include\llalgpeakfinder.h"
+#include "../include/llalgpeakfinder.h"
 
 llAlgPeakFinder::llAlgPeakFinder(char *_alg_list, char *_map) : llAlg(alg_list, _map) {
 	loc_ceiling = 0;

@@ -1,4 +1,4 @@
-#include "..\include\lladdvertextopolygon.h"
+#include "../include/lladdvertextopolygon.h"
 
 
 llAddVertexToPolygon::llAddVertexToPolygon() : llSet() {

@@ -1,12 +1,10 @@
-
-
 //#include "StdAfx.h"
 
 #include "../include/llcommands.h"
 #include "../include/llmaplist.h"
 
 #ifndef _MSC_VER
-#include "def.h"
+#include "../include/def.h"
 #endif
 
 
@@ -226,7 +224,7 @@ repeat:
 						ExtendWorkerCache();
 						bracket_cache[bracket_cache.size()-1] = LLCOM_OPEN_BLOCK;
 						if (saveptr1) linex = saveptr1;
-						else linex = "";
+						else linex = (char *)"";
 						_llUtils()->StripSpaces(&linex);
 						ExtendWorkerCache();
 						goto repeat;
@@ -235,7 +233,7 @@ repeat:
 						ExtendWorkerCache();
 						bracket_cache[bracket_cache.size()-1] = LLCOM_CLOSE_BLOCK;
 						if (saveptr1) linex = saveptr1;
-						else linex = "";
+						else linex = (char *)"";
 						_llUtils()->StripSpaces(&linex);	
 						ExtendWorkerCache();
 						goto repeat;
@@ -260,7 +258,7 @@ repeat:
 									ExtendWorkerCache();
 									bracket_cache[bracket_cache.size()-1] = LLCOM_OPEN_BLOCK;
 									if (saveptr1) linex = saveptr1;
-									else linex = "";
+									else linex = (char *)"";
 									_llUtils()->StripSpaces(&linex);
 									ExtendWorkerCache();
 									goto repeat;
@@ -269,7 +267,7 @@ repeat:
 									ExtendWorkerCache();
 									bracket_cache[bracket_cache.size()-1] = LLCOM_CLOSE_BLOCK;
 									if (saveptr1) linex = saveptr1;
-									else linex = "";
+									else linex = (char *)"";
 									_llUtils()->StripSpaces(&linex);	
 									ExtendWorkerCache();
 									goto repeat;

@@ -9,9 +9,9 @@ class llWorker {
 
  protected:
 
-	 char *command_name;
-	 int   command_index;
-	 int checked_value, checked_pos;
+	 const char *command_name;
+	 int  command_index;
+	 int  checked_value, checked_pos;
 	 bool repeat_worker;
 
 	 std::vector<char*>   name;
@@ -73,19 +73,19 @@ class llWorker {
 
     llWorker();
 
-	void SetCommandName(char *_name) {
+	void SetCommandName(const char *_name) {
 		command_name = _name;
 	};
 
-	char *GetCommandName(void) {
+	const char *GetCommandName(void) {
 		return command_name;
 	}
 
-    int RegisterFlag( char *_name, int    *_flag,  int _opt = 0);
-	int RegisterValue(char *_name, int    *_value, int _opt = 0);
-	int RegisterValue(char *_name, float  *_value, int _opt = 0);
-	int RegisterValue(char *_name, double *_value, int _opt = 0);
-	int RegisterValue(char *_name, char   **_value, int _opt = 0);
+    	int RegisterFlag (const char *_name, int    *_flag,   int _opt = 0);
+	int RegisterValue(const char *_name, int    *_value,  int _opt = 0);
+	int RegisterValue(const char *_name, float  *_value,  int _opt = 0);
+	int RegisterValue(const char *_name, double *_value,  int _opt = 0);
+	int RegisterValue(const char *_name, char   **_value, int _opt = 0);
 
 	int GetSize(void) {
 		return name.size();
@@ -106,7 +106,7 @@ class llWorker {
 		return 1;
 	};
 
-	int Used(char *_flag);
+	int Used(const char *_flag);
 
 	virtual int RegisterOptions(void);
 	virtual int Prepare(void);

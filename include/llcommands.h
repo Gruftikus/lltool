@@ -31,7 +31,7 @@ class llCommands {
 
  private:
 
-    FILE     *file;
+	FILE     *file;
 	FILE     *logfile;
 	char     *filename;
 	llLogger *mesg;
@@ -46,7 +46,7 @@ class llCommands {
 	std::vector<llWorker*> worker_cache;
 	unsigned int           worker_pointer;
 	std::vector<int>       section_cache;
-	std::vector<std::vector<char*>> worker_flags;
+	std::vector<std::vector<char*> > worker_flags;
 	std::vector<int>       bracket_cache;
 	std::vector<int>       bracket_reference;
 
@@ -64,8 +64,8 @@ class llCommands {
 	std::vector<llWorker*> worker_list;
 	
 
-	char *section;
-	int   section_is_good;
+	const char  *section;
+	int          section_is_good;
 	unsigned int current_dump_line;
 
 	int gamemode, noskipinfo, skip_next_block;
@@ -77,8 +77,7 @@ class llCommands {
 
  public:
 
-    //constructors
-    llCommands(FILE *_file, char *_section = NULL);
+	llCommands(FILE *_file, char *_section = NULL);
 	llCommands(const char *_file, char *_section = NULL);
 	llCommands();
 
@@ -109,7 +108,7 @@ class llCommands {
 
 	int CompileScript(void);
 	int GetCommand(void);
-	char *CurrentCommand;
+	const char *CurrentCommand;
 
 	void CloseLogfile(void) {
 		if (logfile)

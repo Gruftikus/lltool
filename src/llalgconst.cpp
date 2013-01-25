@@ -1,4 +1,4 @@
-#include "..\include\llalgconst.h"
+#include "../include/llalgconst.h"
 
 llAlgConst::llAlgConst(char*_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	SetCommandName("AlgConst");

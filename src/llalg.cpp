@@ -1,7 +1,7 @@
 //base class for all algorithms
 
-#include "..\include\llalg.h"
-#include "..\include\llmaplist.h"
+#include "../include/llalg.h"
+#include "../include/llmaplist.h"
 
 llAlg::llAlg(char *_alg_list, char *_map) : llWorker() {
 	std_mapname  = _map;

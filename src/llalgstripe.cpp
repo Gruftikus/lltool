@@ -1,4 +1,4 @@
-#include "..\include\llalgstripe.h"
+#include "../include/llalgstripe.h"
 
 llAlgStripe::llAlgStripe(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	loc_ceiling = 0;

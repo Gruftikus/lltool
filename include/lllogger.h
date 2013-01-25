@@ -1,6 +1,9 @@
 #ifndef _PLLLOGGER_H_
 #define _PLLLOGGER_H_
 
+#ifndef MSC_VER
+#include "def.h"
+#endif
 #include <iostream>
 #include <stdarg.h>
 
@@ -34,7 +37,7 @@ public:
 
 	llLogger();
 	char *ReadNextLine(void);
-	int   WriteNextLine(int _level, char *_format, ...);
+	int   WriteNextLine(int _level, const char *_format, ...);
 
 	void SetLogFile(FILE *_file) {
 		logfile = _file;

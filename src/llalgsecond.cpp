@@ -1,6 +1,6 @@
 
-#include "..\include\llalgsecond.h"
-#include "..\include\llmaplist.h"
+#include "../include/llalgsecond.h"
+#include "../include/llmaplist.h"
 
 llAlgSecond::llAlgSecond(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	loc_ceiling = 0;

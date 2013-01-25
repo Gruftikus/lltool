@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "..\include\llalg.h"
+#include "../include/llalg.h"
 
 
 class llAlgCollection {

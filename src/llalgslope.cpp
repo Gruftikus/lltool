@@ -1,4 +1,4 @@
-#include "..\include\llalgslope.h"
+#include "../include/llalgslope.h"
 
 llAlgSlope::llAlgSlope(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	loc_ceiling = 0;

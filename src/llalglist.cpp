@@ -1,6 +1,6 @@
 //a list of algorithms
 
-#include "..\include\llalglist.h"
+#include "../include/llalglist.h"
 
 
 llAlgCollection::llAlgCollection() {

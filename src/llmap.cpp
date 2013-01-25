@@ -1,4 +1,4 @@
-#include "..\include\llmap.h"
+#include "../include/llmap.h"
 
 //constructor
 llMap::llMap(unsigned int _x, unsigned int _y, int _makeshort, float _default) {

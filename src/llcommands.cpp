@@ -79,6 +79,9 @@ int llCommands::ReadCache(void) {
 	}
 
 	while (fgets(dummyline, LLCOM_MAX_LINE, file)) {
+		for (unsigned int i=0; i<strlen(dummyline); i++) { //covert DOS files
+			if (dummyline[i]=='\r' || dummyline[i]=='\n') dummyline[i]='\0';
+		}
 		int num = lines.size();
 		lines.resize(num+1);
 		lines[num] = new char[strlen(dummyline)+1];
@@ -170,6 +173,7 @@ int llCommands::CompileScript(void) {
 	
 	for (unsigned int l=0; l<lines.size(); l++) {
 		strcpy_s(dummyline, LLCOM_MAX_LINE, lines[l]);
+		std::cout << "{" << lines[l] << "}" << std::endl;
 
 		char *linex = dummyline;
 		_llUtils()->StripSpaces(&linex);

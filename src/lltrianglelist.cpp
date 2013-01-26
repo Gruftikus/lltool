@@ -174,17 +174,17 @@ void llTriangleList::UpdateNeighbors(void) {
 		int nei1 = GetTriangle(p1, p2);
 		int nei2 = GetTriangle(p2, p3);
 		int nei3 = GetTriangle(p1, p3);
-		if (nei1>-1 && nei1!=i) {
+		if (nei1>-1 && nei1!=(int)i) {
 			v->SetNeighbor(nei1);
 			GetTriangle(nei1)->SetNeighbor(i);
 			UpdateEdgeFlags(nei1);
 		}
-		if (nei2>-1 && nei2!=i) {
+		if (nei2>-1 && nei2!=(int)i) {
 			v->SetNeighbor(nei2);
 			GetTriangle(nei2)->SetNeighbor(i);
 			UpdateEdgeFlags(nei2);
 		}
-		if (nei3>-1 && nei3!=i) {
+		if (nei3>-1 && nei3!=(int)i) {
 			v->SetNeighbor(nei3);
 			GetTriangle(nei3)->SetNeighbor(i);
 			UpdateEdgeFlags(nei3);
@@ -251,7 +251,7 @@ int llTriangleList::GetTriangleQuality(int _trinum, int _flag) {
 	// int nei1 = GetTriangle(p1, p2);
 	// int nei2 = GetTriangle(p1, p3);
 	// int nei3 = GetTriangle(p3, p2);
-	int neiflag1 = -1, neiflag2 = -1, neiflag3 = -1;
+	//int neiflag1 = -1, neiflag2 = -1, neiflag3 = -1;
 
 	int c1=-1, c2, c3, c4, snei1, snei2;
 
@@ -444,7 +444,9 @@ int llTriangleList::Stripification(void) {
 	//Tunneling algorithm of Steward, Porku, etc...
 
 	UpdateNeighbors();
-	int make_stripification=1, triangle=0, last_found_triangle=counter-1;
+	unsigned int make_stripification = 1, 
+	  triangle = 0, 
+	  last_found_triangle = counter-1;
 	int terminal=0;
 	lastflag=-1;
 
@@ -468,13 +470,13 @@ int llTriangleList::Stripification(void) {
 			}
 		}
 		triangle++;
-		if (triangle==counter) {
+		if (triangle == counter) {
 			mesg->WriteNextLine(LOG_INFO,"Terminals processed: %i",terminal);
 			mesg->Dump();
 			terminal=0;
 			triangle=0;
 		}
-		if (triangle==last_found_triangle) { 
+		if (triangle == last_found_triangle) { 
 			//1 cycle, failed
 			make_stripification=0;
 		}
@@ -803,7 +805,7 @@ getnext:
 			if ((lalt[0]==0) && (listpos==1)) {
 				//we are back at the beginning, without success
 				current = GetTriangle(llist[listpos-1]);
-				llTriangle * target=GetTriangle(llist[listpos]);
+				//llTriangle * target=GetTriangle(llist[listpos]);
 				current->Reset();
 
 				//let us try a step deeper
@@ -1143,7 +1145,7 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 
 		//we have to see if not all points are either
 		//on the right or left side
-		int myloop=0;
+		//int myloop=0;
 		float x1 =  points->GetX(GetPoint1(i));
 		float x2 =  points->GetX(GetPoint2(i));
 		float x3 =  points->GetX(GetPoint3(i));
@@ -1153,8 +1155,8 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 
 		int left=0;
 		int right =0;
-		int nearpoint =0;
-		float mindist=150;
+		//int nearpoint =0;
+		//float mindist=150;
 
 		if (_atx) {
 			if (x1<(_n-1.f)) left++; else if (x1>(_n+1.f)) right++;

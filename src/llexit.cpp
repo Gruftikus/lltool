@@ -1,4 +1,4 @@
-
+#include <stdlib.h>
 
 #include "../include/llexit.h"
 #include "../include/lllogger.h"

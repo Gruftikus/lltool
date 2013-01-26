@@ -2,10 +2,12 @@
 
 //#include "StdAfx.h"
 
-#include "../include/lllogger.h"
-//#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+
+#include "../include/lllogger.h"
+
 
 llLogger& _fllLogger() {
     static llLogger* ans = new llLogger();
@@ -26,7 +28,7 @@ llLogger::llLogger() {
 	logfile = NULL;
 }
 
-char *llLogger::ReadNextLine(void) {
+const char *llLogger::ReadNextLine(void) {
 
 	if (tot_lines == 0) return NULL;
 
@@ -39,7 +41,7 @@ char *llLogger::ReadNextLine(void) {
 	if (read_pointer == LOG_NUM_LINES)  read_pointer = 0;
 	tot_lines--;
 
-	char *s = ":";
+	const char *s = ":";
 	if (lines[read_pointer]) {
 		s = lines[read_pointer];
 	} 
@@ -84,7 +86,7 @@ int llLogger::WriteNextLine(int _level, const char *_format, ...) {
 		sprintf_s(tmp2,LOG_MAX_LENGTH,"%i [Fatal] %s",counter,tmp); 
 	else if (_level == LOG_ECHO)
 		sprintf_s(tmp2,LOG_MAX_LENGTH,"%i [Echo] %s",counter,tmp); 
-    else if (_level == LOG_COMMAND)
+	else if (_level == LOG_COMMAND)
 		sprintf_s(tmp2,LOG_MAX_LENGTH,"%i [Command] %s",counter,tmp);
 	else if (_level == LOG_ALGORITHM)
 		sprintf_s(tmp2,LOG_MAX_LENGTH,"%i [Algorithm] %s",counter,tmp);

@@ -28,7 +28,7 @@ int llMapWorker::Exec(void) {
 	llWorker::Exec();
 
 	if (!Used("-map"))
-		mapname = "_heightmap";
+		mapname = (char *)"_heightmap";
 
 	//get the corresponding map from the global map container
 	map = _llMapList()->GetMap(mapname);

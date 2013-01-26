@@ -36,8 +36,8 @@ private:
 public:
 
 	llLogger();
-	char *ReadNextLine(void);
-	int   WriteNextLine(int _level, const char *_format, ...);
+	const char *ReadNextLine(void);
+	int         WriteNextLine(int _level, const char *_format, ...);
 
 	void SetLogFile(FILE *_file) {
 		logfile = _file;
@@ -85,7 +85,7 @@ public:
 
 
 	void Dump(void) {		
-		char *x = ReadNextLine();
+		const char *x = ReadNextLine();
 		while (x) {
 			std::cout << x << std::endl;
 			x = ReadNextLine();

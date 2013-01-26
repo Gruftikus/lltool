@@ -1,5 +1,6 @@
-
+#ifdef _MSC_VER
 #include <direct.h>
+#endif
 
 #include "../include/llsetpath.h"
 

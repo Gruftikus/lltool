@@ -2,7 +2,7 @@
 #include "../include/llmaplist.h"
 
 #define REAL double
-#include "..\externals\triangle\triangle.h"
+#include "../externals/triangle/triangle.h"
 
 llTriangulation::llTriangulation() : llMapWorker() {
 	SetCommandName("MakeTriangulation");
@@ -88,7 +88,7 @@ int llTriangulation::Exec(void) {
 	_llLogger()->WriteNextLine(-LOG_INFO,"(written by by J. R. Shewchuk, see README)");
 
 	//triangulate("pczAevn", &in, &mid, &vorout);
-	triangulate("-YY -D -z -A -v -S0", &in, &mid, &vorout);
+	triangulate((char *)"-YY -D -z -A -v -S0", &in, &mid, &vorout);
 
 	int ntri = mid.numberoftriangles;
 

@@ -1,6 +1,8 @@
 #ifndef _PLLPOINTLIST_H_
 #define _PLLPOINTLIST_H_
 
+#include <math.h>
+
 #include "../include/llquadlist.h"
 
 class llCoord {

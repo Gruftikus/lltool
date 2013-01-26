@@ -29,13 +29,13 @@ int llExportMap::Exec(void) {
 	if (!llMapWorker::Exec()) return 0;
 
 	if (!Used("-filename"))
-		filename = "map.bmp";
+	    filename = (char *)"map.bmp";
 	if (!Used("-depth"))
 		bits = 24;
 
 	FILE *fptr;
 
-	if (fopen_s(&fptr, filename,"wb")) {
+	if (fopen_s(&fptr, filename, "wb")) {
 		_llLogger()->WriteNextLine(-LOG_ERROR,"Unable to open BMP file '%s'\n", filename);
 		return 0;
 	}
@@ -72,7 +72,7 @@ int llExportMap::Exec(void) {
 	infoheader.xresolution=100;
 	infoheader.yresolution=100;     /* Pixels per meter          */
 	infoheader.ncolours=0;          /* Number of colours         */
-	infoheader.importantcolours;    /* Important colours         */
+	//infoheader.importantcolours;    /* Important colours         */
 
 	HEADER header;
 	header.type='M'*256+'B';
@@ -144,10 +144,10 @@ int llExportMap::Exec(void) {
 		sprintf_s(command,1000,"%s %s \n", _llUtils()->GetValue("_dds_tool"), filename);
 		_llLogger()->WriteNextLine(LOG_INFO,"Executing '%s %s'", _llUtils()->GetValue("_dds_tool"), filename);
 		_llLogger()->Dump();
-		FILE *tes = _popen(command,"rt");
+		FILE *tes = _popen(command, "rt");
 		char c; 
 		if (tes==NULL) {
-			_llLogger()->WriteNextLine(LOG_ERROR,"Error calling '%s'", _llUtils()->GetValue("_dds_tool"));
+			_llLogger()->WriteNextLine(LOG_ERROR, "Error calling '%s'", _llUtils()->GetValue("_dds_tool"));
 		} else {
 			int nn=0;
 			do {

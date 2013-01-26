@@ -2,8 +2,12 @@
 #include <iostream>
 #include <math.h>
 
+#ifdef _MSC_VER
 #include <windows.h>
 #include <direct.h>
+#else
+#include "../include/def.h"
+#endif
 
 #include "../include/llutils.h"
 #include "../include/llcreateworkers.h"
@@ -77,7 +81,7 @@ int main(int argc, char **argv) {
     //open the batch
 	//******************
 	if (batchname) {
-		if (!batch->Open(batchname,"[lltool]")) DumpExit();
+		if (!batch->Open(batchname, "[lltool]")) DumpExit();
 		batch->ReadCache();
 		batch->CompileScript();
 	} else {
@@ -99,12 +103,13 @@ int main(int argc, char **argv) {
 	_llUtils()->SetValue("_dds_tool", "s3tc.exe");
 
 
-
+#ifdef _MSC_VER
 	__int64 time_statistics[LLCOM_MAX_WORKERS];
 	int time_statistics_cmd[LLCOM_MAX_WORKERS];
 	char *time_statistics_cmdname[LLCOM_MAX_WORKERS];
 	unsigned int time_statistics_pointer = 0;
-	
+#endif
+
 	//******************
 	//batch loop
 	//******************
@@ -116,10 +121,12 @@ int main(int argc, char **argv) {
 
 	while ((com = batch->GetCommand())>-2) {
 		//cout << com << endl;
+#ifdef _MSC_VER
 		FILETIME idleTime;
 		FILETIME kernelTime;
 		FILETIME userTime;
 		BOOL res = GetSystemTimes( &idleTime, &kernelTime, &userTime );
+#endif
 
 		mesg->Dump();
 
@@ -321,7 +328,7 @@ end:
 #endif
 
 		mesg->Dump();
-
+#ifdef _MSC_VER
 		FILETIME userTime_old = userTime;
 
 		res = GetSystemTimes( &idleTime, &kernelTime, &userTime );
@@ -344,10 +351,11 @@ end:
 			strcpy_s(time_statistics_cmdname[time_statistics_pointer],strlen(batch->CurrentCommand)+1,batch->CurrentCommand);
 			time_statistics_pointer++;
 		}
+#endif
 	}
 
 	std::cout << "****** Batch loop done ******" << std::endl;
-
+#ifdef _MSC_VER
 	for (unsigned int ii=0; ii < time_statistics_pointer;ii++) {
 		for (unsigned int jj=0; jj < time_statistics_pointer - 1;jj++) {
 			if (time_statistics[jj] < time_statistics[jj+1]) {
@@ -366,7 +374,7 @@ end:
 		if (time_statistics[ii] > 1000000)
 			std::cout << time_statistics_cmdname[ii] << ": " << (((double)time_statistics[ii]) /10000000.)<< " s" << std::endl;
 	}
-
+#endif
 	return 0;
 
 }

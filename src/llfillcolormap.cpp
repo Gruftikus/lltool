@@ -71,19 +71,19 @@ int llFillColorMap::Exec(void) {
 	for (unsigned int x=0; x<widthx; x++) {
 		for (unsigned int y=0; y<widthy; y++) {
 			if (algs_blue) {
-				unsigned char blue = unsigned char(255*algs_blue->GetValue(map->GetCoordX(x), map->GetCoordX(y)));
+			    	unsigned char blue = (unsigned char)(255*algs_blue->GetValue(map->GetCoordX(x), map->GetCoordX(y)));
 				map->SetBlue(x, y, blue);
 			}
 			if (algs_red) {
-				unsigned char red = unsigned char(255*algs_red->GetValue(map->GetCoordX(x), map->GetCoordX(y)));
+				unsigned char red = (unsigned char)(255*algs_red->GetValue(map->GetCoordX(x), map->GetCoordX(y)));
 				map->SetRed(x, y, red);
 			}
 			if (algs_green) {
-				unsigned char green = unsigned char(255*algs_green->GetValue(map->GetCoordX(x), map->GetCoordX(y)));
+				unsigned char green = (unsigned char)(255*algs_green->GetValue(map->GetCoordX(x), map->GetCoordX(y)));
 				map->SetGreen(x, y, green);
 			}
 			if (algs_alpha) {
-				unsigned char alpha = unsigned char(255*algs_alpha->GetValue(map->GetCoordX(x), map->GetCoordX(y)));
+				unsigned char alpha = (unsigned char)(255*algs_alpha->GetValue(map->GetCoordX(x), map->GetCoordX(y)));
 				map->SetAlpha(x, y, alpha);
 			}
 		}

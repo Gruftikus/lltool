@@ -24,7 +24,7 @@ void llCommands::SetDefaults() {
 }
 
 //constructor
-llCommands::llCommands(FILE *_file, char *_section) {
+llCommands::llCommands(FILE *_file, const char *_section) {
 	SetDefaults();
 	section  = _section;
 	file     = _file;
@@ -32,7 +32,7 @@ llCommands::llCommands(FILE *_file, char *_section) {
 }
 
 //constructor
-llCommands::llCommands(const char *_file, char *_section) {
+llCommands::llCommands(const char *_file, const char *_section) {
 	SetDefaults();
 	section  = _section;
 	filename = new char[strlen(_file)];
@@ -49,7 +49,7 @@ llCommands::llCommands() {
 	file     = NULL;
 }
 
-int llCommands::Open(const char *_file, char *_section) {
+int llCommands::Open(const char *_file, const char *_section) {
 	section = _section;
 
 	if (filename) delete filename;
@@ -91,7 +91,7 @@ int llCommands::ReadCache(void) {
 };
 
 int llCommands::SaveFile(const char *_file) {
-	FILE * wfile;
+	FILE * wfile = NULL;
 	if (fopen_s(&wfile, _file, "w")) {
 		mesg->WriteNextLine(LOG_ERROR, "Unable to open %s", _file);
 		return 0;
@@ -143,7 +143,7 @@ char *llCommands::GetNextLine(int _cmd) {
 	return lines[current_dump_line - 1];
 };
 
-int llCommands::Reopen(char *_section) {
+int llCommands::Reopen(const char *_section) {
 	section = _section;
 
 	if (lines.size()) {

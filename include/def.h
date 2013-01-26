@@ -3,38 +3,25 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <cstdio>
 
 #define sprintf_s(buffer, sizeOfBuffer, format, ...) sprintf(buffer, format, __VA_ARGS__)
+#define vsprintf_s(buffer, sizeOfBuffer, format, ...) vsprintf(buffer, format, __VA_ARGS__)
 
 #define _stricmp(a, b) strcasecmp(a, b)
 #define _strnicmp(n, a, b) strncasecmp(n, a, b)
 
 #define gets_s(a, b) gets(a)
 
-void sscanf_s(const char* x, const char* fmt, int * i) {
-    sscanf(x, fmt , i);
-}
+#define _popen(a, b) popen(a, b)
 
-void sscanf_s(const char* x, const char* fmt, float * i) {
-    sscanf(x, fmt , i);
-}
+#define sscanf_s(buffer, format, ...) sscanf(buffer, format, __VA_ARGS__)
 
-int fopen_s(FILE** pFile,
-            const char *filename,
-            const char *mode) {
-    *pFile = fopen (filename, mode );
-    if (!pFile) return 1;
-    return 0;
-}
+#define _chdir(a) chdir(a)
 
+#define fopen_s(pFile, filename, mode) ((*(pFile)=fopen(filename, mode))==NULL) ? 1 : 0
 
-
-int strcpy_s(char *strDestination,
-	     size_t sizeInBytes,
-	     const char *strSource) {
-    strcpy(strDestination,strSource);
-    return 0;
-}
+#define strcpy_s(strDestination, sizeInBytes, strSource) strcpy(strDestination,strSource)
 
 
 #endif

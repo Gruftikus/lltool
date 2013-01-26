@@ -1,4 +1,4 @@
-#include "../include/llExportMeshToPs.h"
+#include "../include/llexportmeshtops.h"
 #include "../include/llmaplist.h"
 
 //constructor
@@ -26,12 +26,12 @@ int llExportMeshToPs::Exec(void) {
 	if (!llTriMod::Exec()) return 0;
 
 	if (!Used("-filename"))
-		filename = "map.ps";
+	    filename = (char *)"map.ps";
 
 	float x00 = _llUtils()->x00;
 	float x11 = _llUtils()->x11;
 	float y00 = _llUtils()->y00;
-	float y11 = _llUtils()->y11;
+	//float y11 = _llUtils()->y11;
 
 
 	FILE *f;    
@@ -42,7 +42,7 @@ int llExportMeshToPs::Exec(void) {
 
 	float scale = 500.f / (x11 - x00);
 	for (unsigned int j=0; j<(unsigned int)triangles->GetN(); j++) {
-		llTriangle * tri = triangles->GetTriangle(j);
+	    	//llTriangle * tri = triangles->GetTriangle(j);
 
 		int c1   = triangles->GetPoint1(j);
 		int c2   = triangles->GetPoint2(j);

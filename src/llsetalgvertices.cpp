@@ -10,7 +10,7 @@ int llSetAlgVertices::Prepare(void) {
 	if (!llSet::Prepare()) return 0;
 
 	max = 0;
-	alg_list = "_heightmap_alg";
+	alg_list = (char *)"_heightmap_alg";
 
 	return 1;
 }

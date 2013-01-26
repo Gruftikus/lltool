@@ -24,13 +24,13 @@ int llReadDataFile::Exec(void) {
 
 	char line[1000];
 	char *linex = line;
-	size_t size = 1000;
+	//size_t size = 1000;
 	int lp = 0;
 	while (fgets(line, 1000, fptr_data)) {
 		_llUtils()->StripSpaces(&linex);
 		float x, y;
 		if ((strlen(linex)>2) && (linex[0]!=';') && (linex[0]!='#') && (linex[0]!='[')) {
-			if (sscanf_s(line,"%f %f",&x,&y) == 2) {
+			if (sscanf_s((const char*) line, "%f %f", &x, &y) == 2) {
 				if (!map->IsInMap(x,y)) {
 					_llLogger()->WriteNextLine(LOG_ERROR, "Point (%.0f,%.0f) not in map", x, y);
 				} else {

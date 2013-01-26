@@ -9,7 +9,7 @@
 
 
 #ifndef _MSC_VER
-#include "def.h"
+#include "../include/def.h"
 #else
 
 #include <iostream>
@@ -366,7 +366,7 @@ char *llUtils::GetPart(char *_in, int _num, int *_numleft) {
 		end   = strlen(_in)-2;
 	}
 	char *delme = new char[end-start+2];
-	for (unsigned int i=start; i<=end; i++) {
+	for (int i=start; i<=end; i++) {
 		delme[i-start] = _in[i];
 	}
 	delme[end-start+1] = '\0';
@@ -593,10 +593,10 @@ const char* llUtils::GetValue(const char *_name) {
 	int p = 0;
 	if (_stricmp(_name, "_flaglist") == 0) {
 		char tmp[LOG_MAX_LENGTH];
-		sprintf_s(tmp, LOG_MAX_LENGTH, "\0");
+		sprintf_s(tmp, LOG_MAX_LENGTH, "%s", "\0");
 		for (unsigned int i=0; i<num_flags; i++) {
 			if (flag_enable[i] && (_stricmp(flag_list[i],"_modlist")!=0) && !flag_hidden[i]) {
-				int g = strlen(tmp);
+				//int g = strlen(tmp);
 				if (flag_value[i]) {
 					if (p > 0) 
 						sprintf_s(tmp, LOG_MAX_LENGTH-g, "%s,%s=%s", tmp, flag_list[i], flag_value[i]); 
@@ -635,7 +635,7 @@ double llUtils::GetValueF(const char *_name) {
 			return 0.0;
 		}
 	}
-	return NULL;
+	return 0.0;
 }
 
 int llUtils::SetDescription(const char *_name, char *_value) {

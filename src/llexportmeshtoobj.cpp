@@ -1,4 +1,4 @@
-#include "../include/llExportMeshToObj.h"
+#include "../include/llexportmeshtoobj.h"
 #include "../include/llmaplist.h"
 
 //constructor
@@ -36,9 +36,9 @@ int llExportMeshToObj::Exec(void) {
 	if (!llTriMod::Exec()) return 0;
 
 	if (!Used("-filename"))
-		filename = "map.obj";
+	    filename = (char *)"map.obj";
 	if (!Used("-mtlfilename"))
-		mtlname = "map.mtl";
+		mtlname = (char *)"map.mtl";
 
 	float lowestz = 0; //required for pedestals
 

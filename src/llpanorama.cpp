@@ -47,7 +47,7 @@ int llPanorama::Exec(void) {
 		float minab_x   = minab*cos(deg);
 		float keepout_x = keepout*cos(deg);
 		float minab_y   = minab*sin(deg);
-		float keepout_y = keepout*sin(deg);
+		//float keepout_y = keepout*sin(deg);
 		float y1        = y;
 		float minx=0, miny=0, minz=myz-1;
 		used_minz = 0;
@@ -78,7 +78,7 @@ int llPanorama::Exec(void) {
 		float minab_x   = minab*cos(deg);
 		float keepout_x = keepout*cos(deg);
 		float minab_y   = minab*sin(deg);
-		float keepout_y = keepout*sin(deg);
+		//float keepout_y = keepout*sin(deg);
 		float y1        = y;
 		float minx=0, miny=0, minz=myz-1;
 		used_minz = 0;
@@ -109,7 +109,7 @@ int llPanorama::Exec(void) {
 		float minab_y   = minab*cos(deg);
 		float keepout_y = keepout*cos(deg);
 		float minab_x   = minab*sin(deg);
-		float keepout_x = keepout*sin(deg);
+		//float keepout_x = keepout*sin(deg);
 		float x1        = x;
 		float minx=0, miny=0, minz=myz-1;
 		used_minz = 0;
@@ -140,7 +140,7 @@ int llPanorama::Exec(void) {
 		float minab_y   = minab*cos(deg);
 		float keepout_y = keepout*cos(deg);
 		float minab_x   = minab*sin(deg);
-		float keepout_x = keepout*sin(deg);
+		//float keepout_x = keepout*sin(deg);
 		float x1        = x;
 		float minx=0, miny=0, minz=myz-1;
 		used_minz = 0;

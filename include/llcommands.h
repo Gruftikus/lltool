@@ -77,17 +77,17 @@ class llCommands {
 
  public:
 
-	llCommands(FILE *_file, char *_section = NULL);
-	llCommands(const char *_file, char *_section = NULL);
+	llCommands(FILE *_file, const char *_section = NULL);
+	llCommands(const char *_file, const char *_section = NULL);
 	llCommands();
 
 	void SetDefaults(void);
 
-	int Reopen(char *_section);
-	int Open(const char *_file, char *_section = NULL);
+	int Reopen(const char *_section);
+	int Open(const char *_file, const char *_section = NULL);
 	int ReadCache(void);
 	int ReadStdin(void);
-	void ReadStdin(char *_section) {
+	void ReadStdin(const char *_section) {
 		section = _section;
 	};
 	char *GetNextLine(int _cmd);

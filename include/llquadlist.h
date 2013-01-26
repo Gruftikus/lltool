@@ -1,6 +1,7 @@
 #ifndef _PLLQUADLIST_H_
 #define _PLLQUADLIST_H_
 
+#include <math.h>
 #include <vector>
 
 #include "../include/lllogger.h"

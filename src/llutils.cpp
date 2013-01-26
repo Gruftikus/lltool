@@ -596,7 +596,9 @@ const char* llUtils::GetValue(const char *_name) {
 		sprintf_s(tmp, LOG_MAX_LENGTH, "%s", "\0");
 		for (unsigned int i=0; i<num_flags; i++) {
 			if (flag_enable[i] && (_stricmp(flag_list[i],"_modlist")!=0) && !flag_hidden[i]) {
-				//int g = strlen(tmp);
+#ifdef _MSC_VER
+				int g = strlen(tmp);
+#endif
 				if (flag_value[i]) {
 					if (p > 0) 
 						sprintf_s(tmp, LOG_MAX_LENGTH-g, "%s,%s=%s", tmp, flag_list[i], flag_value[i]); 

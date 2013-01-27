@@ -41,9 +41,15 @@ int llSetAlgVertices::Exec(void) {
 	}
 
 
-	float minab      = (float) _llUtils()->GetValueF("_mindistance");
-	float cellsize_x = (float) _llUtils()->GetValueF("_cellsize_x");
-	float cellsize_y = (float) _llUtils()->GetValueF("_cellsize_y");
+	float minab = 0;
+	if (_llUtils()->GetValueF("_mindistance"))
+		minab = (float)(*_llUtils()->GetValueF("_mindistance"));
+	float cellsize_x = 0;
+	if (_llUtils()->GetValueF("_cellsize_x"))
+		cellsize_x = (float)(*_llUtils()->GetValueF("_cellsize_x"));
+	float cellsize_y = 0;
+	if (_llUtils()->GetValueF("_cellsize_y"))
+		cellsize_y = (float)(*_llUtils()->GetValueF("_cellsize_y"));
 	float cellsize_m = cellsize_x > cellsize_y ? cellsize_x : cellsize_y;
 
 	int points_done = 0;

@@ -64,6 +64,7 @@ class llUtils {
 	int         flag_enable[MAX_FLAGS];
 	int         flag_hidden[MAX_FLAGS];
 	unsigned int num_flags;
+	double      zero, one;
 
 	char *crunch_string, *crunch_saveptr, *crunch_current;
 
@@ -101,7 +102,7 @@ class llUtils {
 
 	int   SetValue(const char *_name, const char *_value);
 	const char* GetValue(const char *_name);
-	double GetValueF(const char *_name);
+	double *GetValueF(const char *_name);
 	
 	int   SetHidden(const char *_name);
 

@@ -173,8 +173,7 @@ int llCommands::CompileScript(void) {
 	
 	for (unsigned int l=0; l<lines.size(); l++) {
 		strcpy_s(dummyline, LLCOM_MAX_LINE, lines[l]);
-		std::cout << "{" << lines[l] << "}" << std::endl;
-
+		
 		char *linex = dummyline;
 		_llUtils()->StripSpaces(&linex);
 		_llUtils()->StripComment(linex);

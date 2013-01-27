@@ -19,7 +19,9 @@ int llSetAtGridLine::RegisterOptions(void) {
 int llSetAtGridLine::Exec(void) {
 	if (!llSet::Exec()) return 0;
 
-	float minab = (float) _llUtils()->GetValueF("_mindistance");
+	float minab = 0;
+	if (_llUtils()->GetValueF("_mindistance"))
+		minab = (float)(*_llUtils()->GetValueF("_mindistance"));
 
 	int zused = 0;
 	if (!Used("-zmin")) zused = 1;

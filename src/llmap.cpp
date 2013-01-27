@@ -98,9 +98,15 @@ loop:
 
 llQuadList *llMap::GenerateQuadList(void) {
 
-	float quadsize_x = (float) _llUtils()->GetValueF("_quadsize_x");
-	float quadsize_y = (float) _llUtils()->GetValueF("_quadsize_y");
-	int   levels     = (int)   _llUtils()->GetValueF("_quad_levels");
+	float quadsize_x = 0;
+	if (_llUtils()->GetValueF("_quadsize_x"))
+		quadsize_x = (float)(*_llUtils()->GetValueF("_quadsize_x"));
+	float quadsize_y = 0;
+	if (_llUtils()->GetValueF("_quadsize_y"))
+		quadsize_y = (float)(*_llUtils()->GetValueF("_quadsize_y"));
+	int levels = 0;
+	if (_llUtils()->GetValueF("_quad_levels"))
+		levels = (int)(*_llUtils()->GetValueF("_quad_levels"));
 
 	if (!quadsize_x) {
 		mesg->WriteNextLine(-LOG_ERROR, "'_quadsize_x' not defined, cannot generate the quads ");

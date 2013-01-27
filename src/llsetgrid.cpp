@@ -17,7 +17,9 @@ int llSetGrid::RegisterOptions(void) {
 int llSetGrid::Exec(void) {
 	if (!llSet::Exec()) return 0;
 
-	float minab = (float) _llUtils()->GetValueF("_mindistance");
+	float minab = 0;
+	if (_llUtils()->GetValueF("_mindistance"))
+		minab = (float)(*_llUtils()->GetValueF("_mindistance"));
 
 	for (float x=floor(_llUtils()->x00/gridx)*gridx; x<=(_llUtils()->x11+1); x+=gridx) {
 		for (float y=floor(_llUtils()->y00/gridy)*gridy; y<=(_llUtils()->y11+1); y+=gridy) {

@@ -35,9 +35,15 @@ int llSetContour::RegisterOptions(void) {
 int llSetContour::Exec(void) {
 	if (!llSet::Exec()) return 0;
 
-	float minab = (float) _llUtils()->GetValueF("_mindistance");
-	float cellsize_x = (float) _llUtils()->GetValueF("_cellsize_x");
-	float cellsize_y = (float) _llUtils()->GetValueF("_cellsize_y");
+	float minab = 0;
+	if (_llUtils()->GetValueF("_mindistance"))
+		minab = (float)(*_llUtils()->GetValueF("_mindistance"));
+	float cellsize_x = 0;
+	if (_llUtils()->GetValueF("_cellsize_x"))
+		cellsize_x = (float)(*_llUtils()->GetValueF("_cellsize_x"));
+	float cellsize_y = 0;
+	if (_llUtils()->GetValueF("_cellsize_y"))
+		cellsize_y = (float)(*_llUtils()->GetValueF("_cellsize_y"));
 
 	if (onlyintracell) {
 		if (!cellsize_x) {

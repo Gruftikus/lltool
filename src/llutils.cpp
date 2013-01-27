@@ -281,6 +281,8 @@ llUtils * _llUtils() {
 //constructor
 llUtils::llUtils() {
 	num_flags = 0;
+	zero      = 0.0;
+	one       = 1.0;
 	mod_list.resize(0);
 }
 
@@ -628,16 +630,16 @@ const char* llUtils::GetValue(const char *_name) {
 	return NULL;
 }
 
-double llUtils::GetValueF(const char *_name) {
+double *llUtils::GetValueF(const char *_name) {
 //	int p=0;	
 	for (unsigned int i=0; i<num_flags; i++) {
 		if (_stricmp(_name,flag_list[i]) == 0) {
-			if (flag_value[i])  return flag_value_f[i];
-			if (flag_enable[i]) return 1.0;
-			return 0.0;
+			if (flag_value[i])  return &(flag_value_f[i]);
+			if (flag_enable[i]) return &one;
+			return &zero;
 		}
 	}
-	return 0.0;
+	return NULL;
 }
 
 int llUtils::SetDescription(const char *_name, char *_value) {

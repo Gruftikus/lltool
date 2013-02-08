@@ -5,6 +5,7 @@
 
 #include "../include/llquadlist.h"
 
+//Never change something in the basic types, because of the cast in tes4ll::llexportmeshtonif
 class llCoord {
 
 public:

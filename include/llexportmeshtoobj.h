@@ -14,11 +14,15 @@ protected:
 	int   createpedestals;
 	float trans_x, trans_y, trans_z;
 
+	llPointList    *newpoints;
+	llTriangleList *newtriangles;
+	int MakeSelection();
+
 public:
 
 	llExportMeshToObj();
 
-	llWorker * Clone() {
+	llWorker *Clone() {
 		return new llExportMeshToObj(*this);
 	}
 

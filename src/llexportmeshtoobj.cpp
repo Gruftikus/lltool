@@ -4,6 +4,9 @@
 //constructor
 llExportMeshToObj::llExportMeshToObj() : llTriMod() {
 	SetCommandName("ExportMeshToObj");
+
+	newpoints    = NULL;
+	newtriangles = NULL;
 }
 
 int llExportMeshToObj::Prepare(void) {
@@ -32,14 +35,7 @@ int llExportMeshToObj::RegisterOptions(void) {
 	return 1;
 }
 
-int llExportMeshToObj::Exec(void) {
-	if (!llTriMod::Exec()) return 0;
-
-	if (!Used("-filename"))
-	    filename = (char *)"map.obj";
-	if (!Used("-mtlfilename"))
-		mtlname = (char *)"map.mtl";
-
+int llExportMeshToObj::MakeSelection() {
 	float lowestz = 0; //required for pedestals
 
 	float x00 = _llUtils()->x00;
@@ -56,7 +52,8 @@ int llExportMeshToObj::Exec(void) {
 	points->ClearSecondaryList();
 
 	//copy pointlist, make the matching old->new:
-	llPointList *newpoints = new llPointList(points->GetN(), NULL);
+	if (newpoints) delete newpoints;
+	newpoints = new llPointList(points->GetN(), NULL);
 	
 	newpoints->SetTexAnchor(x00, y00, x11, y11);
 	newpoints->ClearSecondaryList();
@@ -80,7 +77,8 @@ int llExportMeshToObj::Exec(void) {
 	}
 
 	//Make temporary triangle list
-	llTriangleList * newtriangles = new llTriangleList(newpoints->GetN(), newpoints);
+	if (newtriangles) delete newtriangles;
+	newtriangles = new llTriangleList(newpoints->GetN(), newpoints);
 
 	if (lowestz > 0) 
 		lowestz = 0;
@@ -176,6 +174,19 @@ int llExportMeshToObj::Exec(void) {
 
 	newpoints->Resize();
 	newpoints->Translation(trans_x, trans_y, trans_z);
+
+	return 1;
+}
+
+int llExportMeshToObj::Exec(void) {
+	if (!llTriMod::Exec()) return 0;
+
+	if (!Used("-filename"))
+	    filename = (char *)"map.obj";
+	if (!Used("-mtlfilename"))
+		mtlname = (char *)"map.mtl";
+
+	if (!MakeSelection()) return 0;
 
 	//Now the obj-specific part:
 	FILE *fptr;

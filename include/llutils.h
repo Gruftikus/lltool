@@ -121,6 +121,10 @@ class llUtils {
 		return 0;
 	}
 
+	int MyIsUpper(int ch) {
+		return ((ch >= 'A' && ch <= 'Z') || (ch >= 0xC0 && ch <= 0xDD));
+	}
+
 	//********************
 	//Global variables
 	//********************

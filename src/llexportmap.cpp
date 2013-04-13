@@ -142,7 +142,7 @@ int llExportMap::Exec(void) {
 	if (strlen(_llUtils()->GetValue("_dds_tool")) > 1 && compress) {
 		char command[1000];
 		sprintf_s(command,1000,"%s %s \n", _llUtils()->GetValue("_dds_tool"), filename);
-		_llLogger()->WriteNextLine(LOG_INFO,"Executing '%s %s'", _llUtils()->GetValue("_dds_tool"), filename);
+		_llLogger()->WriteNextLine(LOG_INFO, "Executing '%s %s'", _llUtils()->GetValue("_dds_tool"), filename);
 		_llLogger()->Dump();
 		FILE *tes = _popen(command, "rt");
 		char c; 

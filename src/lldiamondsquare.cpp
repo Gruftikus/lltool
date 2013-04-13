@@ -19,7 +19,6 @@ int llDiamondSquare::Prepare(void) {
 int llDiamondSquare::RegisterOptions(void) {
 	if (!llMapWorker::RegisterOptions()) return 0;
 
-	RegisterValue("-mapname", &mapname);
 	RegisterValue("-alg",     &alg_list);
 	RegisterValue("-offset",  &offset);
 	RegisterValue("-range",   &range, LLWORKER_OBL_OPTION);

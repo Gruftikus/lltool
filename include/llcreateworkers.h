@@ -21,6 +21,9 @@
 #include "../include/llalgsecond.h"
 #include "../include/llalgslope.h"
 #include "../include/llalgstripe.h"
+#ifdef _MSC_VER
+#include "../include/llalgequation.h"
+#endif
 
 //Map-based workers:
 #include "../include/llmapworker.h"
@@ -82,6 +85,9 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llAlgSlope     ("_heightmap_alg", "_heightmap"));
 	_batch->RegisterWorker(new llAlgStripe    ("_heightmap_alg", "_heightmap"));
 	_batch->RegisterWorker(new llAlgPeakFinder("_heightmap_alg", "_heightmap"));
+#ifdef _MSC_VER
+	_batch->RegisterWorker(new llAlgEquation  ("_heightmap_alg", NULL));
+#endif
 
 	_batch->RegisterWorker(new llCreateMap());
 

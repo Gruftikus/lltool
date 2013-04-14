@@ -21,8 +21,8 @@ int llFilter::Prepare(void) {
 int llFilter::RegisterOptions(void) {
 	if (!llMapWorker::RegisterOptions()) return 0;
 
-	RegisterValue("-target",          &targetname);
-	RegisterValue("-n",               &dist);
+	RegisterValue("-name",            &targetname);
+	RegisterValue("-n",               &dist, LLWORKER_OBL_OPTION);
 	RegisterFlag ("-use16bit",        &makeshort);
 	RegisterFlag ("-overwrite",       &overwrite);
 	RegisterFlag ("-MakeDerivatives", &makederivatives);
@@ -33,7 +33,7 @@ int llFilter::RegisterOptions(void) {
 int llFilter::Exec(void) {
 	if (!llMapWorker::Exec()) return 0;
 
-	if (!Used("-target")) {
+	if (!Used("-name")) {
 		targetname = new char[strlen(mapname)+10];
 		sprintf_s(targetname, strlen(mapname)+10, "%s_filtered", mapname);
 	}

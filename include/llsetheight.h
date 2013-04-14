@@ -11,6 +11,7 @@ protected:
 
 	int   usegameunits;
 	float zmin;
+	char *alg_list;
 
 public:
 

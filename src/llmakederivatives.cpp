@@ -144,6 +144,7 @@ repeat:
 		for (unsigned int x=1; x<widthx-1; x++) {
 			if ((map->GetElementRaw(x-1,y) > minheight && map->GetElementRaw(x+1,y) > minheight)) {
 				data2x->SetElement(x+y*widthx, (mapx1->GetElementRaw(x-1,y) - mapx1->GetElementRaw(x+1,y)) / 2.0f);
+				//std::cout << (mapx1->GetElementRaw(x-1,y) - mapx1->GetElementRaw(x+1,y)) / 2.0f << std::endl;
 				if (fabs(((*data2x)[x+y*widthx])) > x2max) 
 					x1max = fabs(((*data2x)[x+y*widthx]));
 			}

@@ -1,5 +1,6 @@
 #include "../include/llsetheight.h"
 #include "../include/llmaplist.h"
+#include "../include/llalglist.h"
 
 llSetHeight::llSetHeight() : llMapWorker() {
 	SetCommandName("SetHeight");
@@ -9,6 +10,7 @@ int llSetHeight::Prepare(void) {
 	if (!llMapWorker::Prepare()) return 0;
 
 	usegameunits = 0;
+	alg_list     = NULL;
 
 	return 1;
 }
@@ -17,6 +19,7 @@ int llSetHeight::RegisterOptions(void) {
 	if (!llMapWorker::RegisterOptions()) return 0;
 
 	RegisterValue("-z",            &zmin, LLWORKER_OBL_OPTION);
+	RegisterValue("-alg",          &alg_list);
 	RegisterFlag ("-usegameunits", &usegameunits);
 
 	return 1;
@@ -24,6 +27,15 @@ int llSetHeight::RegisterOptions(void) {
 
 int llSetHeight::Exec(void) {
 	if (!llMapWorker::Exec()) return 0;
+
+	llAlgCollection *algs = NULL;
+	if (Used("-alg")) {
+		algs = _llAlgList()->GetAlgCollection(alg_list);
+		if (!algs) {
+			_llLogger()->WriteNextLine(-LOG_FATAL, "%s: alg collection '%s' not found", command_name, alg_list);
+			return 0;
+		}
+	}
 
 	if (usegameunits) zmin /= map->GetZScale(); //convert to heightmap units
 	
@@ -34,7 +46,11 @@ int llSetHeight::Exec(void) {
 
 	for (int x=x1; x<=x2; x+=1) {
 		for (int y=y1; y<=y2; y+=1) {
-			map->SetElementRaw(x, y, zmin);
+			double alg = 0.0;
+			if (algs) {
+				alg = algs->GetValue(map->GetCoordX(x), map->GetCoordY(y));
+			}
+			map->SetElementRaw(x, y, zmin + alg);
 		}
 	}
 

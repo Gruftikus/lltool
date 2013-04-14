@@ -25,7 +25,7 @@ int llSetGridBorder::Exec(void) {
 	int zused = 0;
 	if (!Used("-zmin")) zused = 1;
 
-	for (float x=floor(_llUtils()->x00/gridx)*gridx; x<=(_llUtils()->x11); x+=gridx) {
+	for (float x=floor(_llUtils()->x00/gridy)*gridy; x<=(_llUtils()->x11); x+=gridy) {
 		float x1=x;
 		if (x >= _llUtils()->x11) x1 = _llUtils()->x11;
 		if (points->GetMinDistance(x1, _llUtils()->y00) > minab && (map->GetZ(x1,_llUtils()->y00) > zmin || zused)) {
@@ -37,7 +37,7 @@ int llSetGridBorder::Exec(void) {
 			//gen_npoints++;
 		}
 	}
-	for (float y=floor(_llUtils()->y00/gridy)*gridy; y<=(_llUtils()->y11); y+=gridy) {
+	for (float y=floor(_llUtils()->y00/gridx)*gridx; y<=(_llUtils()->y11); y+=gridx) {
 		float y1=y;
 		if (y >= _llUtils()->y11) y1 = _llUtils()->y11;
 		if (points->GetMinDistance(_llUtils()->x00,y1) > minab && (map->GetZ(_llUtils()->x00,y1) > zmin || zused)) {

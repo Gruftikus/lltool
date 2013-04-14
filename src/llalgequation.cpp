@@ -1,15 +1,29 @@
-#include "../include/llalgconst.h"
+#include "../include/llalgequation.h"
 
-llAlgConst::llAlgConst(char*_alg_list, char *_map) : llAlg(_alg_list, _map) {
-	SetCommandName("AlgConst");
+llAlgEquation::llAlgEquation(char*_alg_list, char *_map) : llAlg(_alg_list, _map) {
+	SetCommandName("AlgEquation");
 }
 
-int llAlgConst::Prepare(void) {
+int llAlgEquation::Prepare(void) {
 	if (!llAlg::Prepare()) return 0;
+
+	parser = new MTParser();
+
+	parser->defineVar(_T("x"), &x);
+	parser->defineVar(_T("y"), &y);
+
 	return 1;
 }
 
-double llAlgConst::GetCeiling(double *_ceiling) {
+int llAlgEquation::RegisterOptions(void) {
+	if (!llAlg::RegisterOptions()) return 0;
+
+	RegisterValue("-equation", &parser_string, LLWORKER_OBL_OPTION);
+
+	return 1;
+}
+
+double llAlgEquation::GetCeiling(double *_ceiling) {
 
 	double loc_ceiling=1.;
 
@@ -24,9 +38,12 @@ double llAlgConst::GetCeiling(double *_ceiling) {
 	}
 }
 
-double llAlgConst::GetValue(float _x, float _y, double *_value) {
+double llAlgEquation::GetValue(float _x, float _y, double *_value) {
 
-	double loc_value=1.;
+	x = _x;
+	y = _y;
+
+	double loc_value = parser->evaluate();
 
 	if (_value) {
 		if (add)
@@ -41,9 +58,11 @@ double llAlgConst::GetValue(float _x, float _y, double *_value) {
 	return loc_value;
 }
 
-int llAlgConst::Exec(void) {
+int llAlgEquation::Exec(void) {
 
 	if (!llAlg::Exec()) return 0;
+
+	parser->compile(_T(parser_string));
 
 	if (alg_list) {
 		llAlgCollection *algs = _llAlgList()->GetAlgCollection(alg_list);

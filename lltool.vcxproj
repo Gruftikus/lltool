@@ -12,11 +12,29 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\dirent.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTException.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTGlobalString.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParser.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserCompiler.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserDefFuncs.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserDefOps.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserExcepStrEng.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserException.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserLocalizer.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserMacroFunc.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserPrivate.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserPublic.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserRegistrar.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTParserTestCases.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTSearchFile.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTTools.h" />
+    <ClInclude Include="externals\mtparser\MTParserLib\MTUnicodeANSIDefs.h" />
     <ClInclude Include="externals\triangle\triangle.h" />
     <ClInclude Include="include\llactivatevisiblevertices.h" />
     <ClInclude Include="include\lladdvertextopolygon.h" />
     <ClInclude Include="include\llalg.h" />
     <ClInclude Include="include\llalgconst.h" />
+    <ClInclude Include="include\llalgequation.h" />
     <ClInclude Include="include\llalgfirst.h" />
     <ClInclude Include="include\llalglist.h" />
     <ClInclude Include="include\llalgpeakfinder.h" />
@@ -75,11 +93,22 @@
     <ClInclude Include="include\llworker.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="externals\mtparser\MTParserLib\MTParser.cpp" />
+    <ClCompile Include="externals\mtparser\MTParserLib\MTParserCompiler.cpp" />
+    <ClCompile Include="externals\mtparser\MTParserLib\MTParserExcepStrEng.cpp" />
+    <ClCompile Include="externals\mtparser\MTParserLib\MTParserLocalizer.cpp" />
+    <ClCompile Include="externals\mtparser\MTParserLib\MTParserMacroFunc.cpp" />
+    <ClCompile Include="externals\mtparser\MTParserLib\MTParserRegistrar.cpp" />
+    <ClCompile Include="externals\mtparser\MTParserLib\MTParserTestCases.cpp" />
+    <ClCompile Include="externals\mtparser\MTParserLib\MTSearchFile.cpp" />
+    <ClCompile Include="externals\mtparser\MTParserLib\MTTools.cpp" />
+    <ClCompile Include="externals\mtparser\MTParserLib\MTUnicodeANSIDefs.cpp" />
     <ClCompile Include="externals\triangle\triangle.cc" />
     <ClCompile Include="src\llactivatevisiblevertices.cpp" />
     <ClCompile Include="src\lladdvertextopolygon.cpp" />
     <ClCompile Include="src\llalg.cpp" />
     <ClCompile Include="src\llalgconst.cpp" />
+    <ClCompile Include="src\llalgequation.cpp" />
     <ClCompile Include="src\llalgfirst.cpp" />
     <ClCompile Include="src\llalglist.cpp" />
     <ClCompile Include="src\llalgpeakfinder.cpp" />

@@ -36,7 +36,7 @@ public:
 		if (GetSize() == 0) return 1.;
 		if (_ceiling)
 			*_ceiling = GetAlg(0)->GetCeiling();
-		double value   = GetAlg(0)->GetValue(_x, _y);
+		double value = GetAlg(0)->GetValue(_x, _y);
 		for (int a=1; a<GetSize(); a++) {
 			GetAlg(a)->GetValue(_x, _y, &value);
 			if (_ceiling)

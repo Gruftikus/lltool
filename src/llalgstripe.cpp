@@ -63,6 +63,8 @@ double llAlgStripe::GetValue(float _x, float _y, double *_value) {
 	} else {
 		return loc_value*multiply + add*loc_value;
 	}
+
+	return loc_value;
 }
 
 int llAlgStripe::Exec(void) {

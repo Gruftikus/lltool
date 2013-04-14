@@ -39,7 +39,8 @@ double llAlgSecond::GetValue(float _x, float _y, double *_value) {
 			+ fabs(mapy2->GetZ(xx, yy)) );
 	}
 
-	if (loc_value > loc_ceiling && loc_value < 4.f)  //max turn about 400%
+	//if (loc_value > loc_ceiling && loc_value < 4.f)  //max turn about 400%
+	if (loc_value > loc_ceiling)
 		loc_ceiling = loc_value;
 
 	if (_value) {
@@ -51,6 +52,8 @@ double llAlgSecond::GetValue(float _x, float _y, double *_value) {
 	} else {
 		return loc_value*multiply + add*loc_value;
 	}
+
+	return loc_value;
 }
 
 int llAlgSecond::Exec(void) {
@@ -73,7 +76,7 @@ int llAlgSecond::Exec(void) {
 		return 0;
 	}
 	char * namey2 = new char[strlen(mapname) + 5];
-	sprintf_s(namey2, strlen(mapname)+5, "%s_d1y", mapname);
+	sprintf_s(namey2, strlen(mapname)+5, "%s_d2y", mapname);
 	mapy2 = _llMapList()->GetMap(namey2);
 	if (!mapy2) {
 		_llLogger()->WriteNextLine(-LOG_WARNING,"%s: derivative map %s not existing", command_name, namey2);

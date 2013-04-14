@@ -39,7 +39,7 @@ int llDiamondSquare::Exec(void) {
 	}
 
 //	float range_alg = range;
-	double alg = 1.f;
+	double alg = 1.;
 	offset = 0.5f - offset;
 
 	unsigned int old_widthx = map->GetWidthX();

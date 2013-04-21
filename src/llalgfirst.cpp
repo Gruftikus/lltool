@@ -40,7 +40,7 @@ double llAlgFirst::GetValue(float _x, float _y, double *_value) {
 			+ fabs(mapy1->GetZ(xx, yy)) );
 	}
 
-	if (loc_value > loc_ceiling && loc_value < 2.0f) //maxslope is 200%
+	if (loc_value > loc_ceiling)
 		loc_ceiling = loc_value;
 
 	if (_value) {

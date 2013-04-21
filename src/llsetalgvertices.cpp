@@ -145,9 +145,10 @@ loop:
 
 		double ceiling = 0;
 		double value   = 1;
-
 		
 		alg->GetValue(x, y, &value, &ceiling);
+		value   *= value;
+		ceiling *= ceiling;
 
 		//std::cout << "ceiling=" << ceiling << std::endl;
 
@@ -174,7 +175,7 @@ loop:
 
 		double test = double(rand())/double(RAND_MAX) * ceiling;
 		if (test > value) { 
-			//std::cout << "repeat, ceiling=" << ceiling << std::endl;
+			//std::cout << "repeat, value=" << value << ", ceiling=" << ceiling << std::endl;
 			goto loop; 
 		}
 		float mingrid_x = minab + 1.0f;

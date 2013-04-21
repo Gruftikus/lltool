@@ -14,8 +14,6 @@ private:
 	float radius, scan_radius, value_at_lowest, value_at_highest, lowest; 
 	int linear;
 
-	char *alg_list;
-
 public:
 
 	llAlgPeakFinder(char *_alg_list, char *_map);

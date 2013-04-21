@@ -1,6 +1,6 @@
 #include "../include/llalgpeakfinder.h"
 
-llAlgPeakFinder::llAlgPeakFinder(char *_alg_list, char *_map) : llAlg(alg_list, _map) {
+llAlgPeakFinder::llAlgPeakFinder(char *_alg_list, char *_map) : llAlg(_alg_list, _map) {
 	loc_ceiling = 0;
 
 	points = new llPointList(100, NULL);
@@ -10,7 +10,7 @@ llAlgPeakFinder::llAlgPeakFinder(char *_alg_list, char *_map) : llAlg(alg_list, 
 
 int llAlgPeakFinder::Prepare(void) {
 	if (!llAlg::Prepare()) return 0;
-
+	
 	radius           = 4096.f;
 	scan_radius      = 8192.f;
 	value_at_lowest  = 0.2f;

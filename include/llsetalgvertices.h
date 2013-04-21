@@ -7,8 +7,9 @@ class llSetAlgVertices : public llSet {
 
 private:
 
-	int   max, nmax;
-	char *alg_list;
+	int    max, nmax;
+	double cutoff;
+	char  *alg_list;
 
 public:
 

@@ -19,10 +19,10 @@ int llAlgStripe::Prepare(void) {
 int llAlgStripe::RegisterOptions(void) {
 	if (!llAlg::RegisterOptions()) return 0;
 
-	RegisterValue("-zmax",      &highest);
-	RegisterValue("-zmin",      &lowest);
-	RegisterValue("-zminval",   &value_at_lowest);
-	RegisterValue("-zmaxval",   &value_at_highest);	
+	RegisterValue("-zmax",       &highest);
+	RegisterValue("-zmin",       &lowest);
+	RegisterValue("-outsideval", &value_at_lowest);
+	RegisterValue("-insideval",  &value_at_highest);	
 
 	return 1;
 }

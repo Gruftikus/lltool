@@ -10,6 +10,8 @@ protected:
 
 	char *filename;
 	int  bits, compress;
+	int  scale;
+
 
 public:
 

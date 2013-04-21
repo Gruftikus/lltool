@@ -13,7 +13,6 @@ int llAlgSecond::RegisterOptions(void) {
 }
 
 double llAlgSecond::GetCeiling(double *_ceiling) {
-
 	if (_ceiling) {
 		if (add)
 			*_ceiling += loc_ceiling*add;
@@ -39,8 +38,9 @@ double llAlgSecond::GetValue(float _x, float _y, double *_value) {
 			+ fabs(mapy2->GetZ(xx, yy)) );
 	}
 
-	//if (loc_value > loc_ceiling && loc_value < 4.f)  //max turn about 400%
-	if (loc_value > loc_ceiling)
+	//std::cout << loc_value << ":" << loc_ceiling << std::endl;
+
+	if (loc_value > loc_ceiling) 
 		loc_ceiling = loc_value;
 
 	if (_value) {

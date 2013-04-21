@@ -19,6 +19,7 @@ int llExportMap::RegisterOptions(void) {
 	if (!llMapWorker::RegisterOptions()) return 0;
 
 	RegisterValue("-filename", &filename);
+	RegisterValue("-scale",    &scale);
 	RegisterValue("-depth",    &bits);
 	RegisterFlag ("-compress", &compress);
 	
@@ -100,7 +101,14 @@ int llExportMap::Exec(void) {
 			unsigned char byte3;
 			unsigned char byte4;
 
-			if (map->GetTupel(x, y, &byte1, &byte2, &byte3, &byte4)) {
+			int tupel = 0;
+			if (Used("-scale")) {
+				tupel = map->GetTupelScaled(x, y, &byte1, &byte2, &byte3, &byte4, scale);
+			} else {
+				tupel = map->GetTupel(x, y, &byte1, &byte2, &byte3, &byte4);
+			}
+
+			if (tupel) {
 				if (bits == 24) {
 					my_bytesPerLine -= 3;
 					fwrite(&byte1, 1, 1, fptr); //blue

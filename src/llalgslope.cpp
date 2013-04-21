@@ -50,8 +50,7 @@ double llAlgSlope::GetValue(float _x, float _y, double *_value) {
 		loc_value = value_at_lowest;
 	else if (z > highest) {
 		loc_value = value_at_highest;
-	}
-	else {
+	} else {
 		loc_value= value_at_lowest + 
 			((z - lowest)/(highest - lowest)) * (value_at_highest - value_at_lowest);
 	}

@@ -315,6 +315,23 @@ public:
 		return 1;
 	}
 
+	int GetTupelScaled(unsigned int _x, unsigned int _y, unsigned char *_x1, unsigned char *_x2, unsigned char *_x3, unsigned char *_x4,
+		int scale) {
+			if (_x>=widthx || _y>=widthy) return 0;
+			if (idata) {
+				*_x1 = char((idata[_x+_y*widthx] * scale) & 0xff);
+				*_x2 = char((idata[_x+_y*widthx] * scale)  & 0xff00     >> 8);
+				*_x3 = char((idata[_x+_y*widthx] * scale)  & 0xff0000   >> 16);
+				*_x4 = char((idata[_x+_y*widthx] * scale)  & 0xff000000 >> 24);
+				return 1;
+			}
+			*_x1 = char(( int(GetElementRaw(_x, _y) * float(scale))) & 0xff);
+			*_x2 = char(((int(GetElementRaw(_x, _y) * float(scale))) & 0xff00)     >> 8);
+			*_x3 = char(((int(GetElementRaw(_x, _y) * float(scale))) & 0xff0000)   >> 16);
+			*_x4 = char(((int(GetElementRaw(_x, _y) * float(scale))) & 0xff000000) >> 24);
+			return 1;
+	}
+
 	int SetBlue(unsigned int _x, unsigned int _y, unsigned char _val) {
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {

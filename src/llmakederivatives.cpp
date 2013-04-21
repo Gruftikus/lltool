@@ -17,7 +17,8 @@ int llMakeDerivatives::Prepare(void) {
 int llMakeDerivatives::RegisterOptions(void) {
 	if (!llMapWorker::RegisterOptions()) return 0;
 
-	RegisterFlag("-use16bit", &makeshort);
+	RegisterFlag ("-use16bit", &makeshort);
+
 
 	return 1;
 }
@@ -68,7 +69,7 @@ int llMakeDerivatives::Exec(void) {
 	llShortarray *data2y;
 
 	///float minheight = oldmap->GetDefaultHeight() + 1.0f;
-	float minheight = -9999;
+	//float minheight = -9999;
 	int redone = 0;
 
 repeat:
@@ -108,12 +109,12 @@ repeat:
 		data1x->SetElement(y*widthx, (map->GetElementRaw(1,y) - map->GetElementRaw(0,y)));
 		data1x->SetElement(y*widthx+widthx-1, (map->GetElementRaw(widthx-1,y) - map->GetElementRaw(widthx-2,y)));
 		for (unsigned int x=1; x<widthx-1; x++) {
-			if ((map->GetElementRaw(x-1,y) > minheight && map->GetElementRaw(x+1,y) > minheight)) {
+			//if ((map->GetElementRaw(x-1,y) > minheight && map->GetElementRaw(x+1,y) > minheight)) {
 				data1x->SetElement(x+y*widthx, (map->GetElementRaw(x-1,y) - map->GetElementRaw(x+1,y)) / (2.0f));
 				//cout << (oldmap->GetElementRaw(x-1,y) - oldmap->GetElementRaw(x+1,y)) / (2.0f) << endl;
 				if (fabs(((*data1x)[x+y*widthx])) > x1max) 
 					x1max = fabs(((*data1x)[x+y*widthx]));
-			}
+			//}
 		}
 	}
 
@@ -122,11 +123,11 @@ repeat:
 		data1y->SetElement(x, (map->GetElementRaw(x,1) - map->GetElementRaw(x,0)));
 		data1y->SetElement(widthx+(widthy-1)*widthx, (map->GetElementRaw(x,widthy-1) - map->GetElementRaw(x,widthy-2)));
 		for (unsigned int y=1; y<widthy-1; y++) {
-			if ((map->GetElementRaw(x,y-1) > minheight && map->GetElementRaw(x,y+1) > minheight)) {
+			//if ((map->GetElementRaw(x,y-1) > minheight && map->GetElementRaw(x,y+1) > minheight)) {
 				data1y->SetElement(x+y*widthx, (map->GetElementRaw(x,y-1) - map->GetElementRaw(x,y+1)) / (2.0f));
 				if (fabs(((*data1y)[x+y*widthx])) > y1max) 
 					y1max = fabs(((*data1y)[x+y*widthx]));
-			}
+			//}
 		}
 	}
 
@@ -142,12 +143,12 @@ repeat:
 		data1x->SetElement(y*widthx, mapx1->GetElementRaw(1,y) - mapx1->GetElementRaw(0,y));
 		data1x->SetElement(y*widthx+widthx-1, mapx1->GetElementRaw(widthx-1,y) - mapx1->GetElementRaw(widthx-2,y));
 		for (unsigned int x=1; x<widthx-1; x++) {
-			if ((map->GetElementRaw(x-1,y) > minheight && map->GetElementRaw(x+1,y) > minheight)) {
+			//if ((map->GetElementRaw(x-1,y) > minheight && map->GetElementRaw(x+1,y) > minheight)) {
 				data2x->SetElement(x+y*widthx, (mapx1->GetElementRaw(x-1,y) - mapx1->GetElementRaw(x+1,y)) / 2.0f);
 				//std::cout << (mapx1->GetElementRaw(x-1,y) - mapx1->GetElementRaw(x+1,y)) / 2.0f << std::endl;
 				if (fabs(((*data2x)[x+y*widthx])) > x2max) 
 					x1max = fabs(((*data2x)[x+y*widthx]));
-			}
+			//}
 		}
 	}
 
@@ -156,11 +157,11 @@ repeat:
 		data1y->SetElement(x, mapy1->GetElementRaw(x,1) - mapy1->GetElementRaw(x,0));
 		data1y->SetElement(widthx+(widthy-1)*widthx, mapy1->GetElementRaw(x,widthy-1) - mapy1->GetElementRaw(x,widthy-2));
 		for (unsigned int y=1; y<widthy-1; y++) {
-			if ((map->GetElementRaw(x,y-1) > minheight && map->GetElementRaw(x,y+1) > minheight)) {
+			//if ((map->GetElementRaw(x,y-1) > minheight && map->GetElementRaw(x,y+1) > minheight)) {
 				data2y->SetElement(x+y*widthx, (mapy1->GetElementRaw(x,y-1) - mapy1->GetElementRaw(x,y+1)) / 2.0f);
 				if (fabs(((*data2y)[x+y*widthx])) > y2max) 
 					y1max = fabs(((*data2y)[x+y*widthx]));
-			}
+			//}
 		}
 	}
 

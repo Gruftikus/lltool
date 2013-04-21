@@ -9,7 +9,8 @@ llSetAlgVertices::llSetAlgVertices() : llSet() {
 int llSetAlgVertices::Prepare(void) {
 	if (!llSet::Prepare()) return 0;
 
-	max = 0;
+	max      = 0;
+	cutoff   = 10;
 	alg_list = (char *)"_heightmap_alg";
 
 	return 1;
@@ -18,9 +19,10 @@ int llSetAlgVertices::Prepare(void) {
 int llSetAlgVertices::RegisterOptions(void) {
 	if (!llSet::RegisterOptions()) return 0;
 
-	RegisterValue("-n",   &nmax, LLWORKER_OBL_OPTION);
-	RegisterValue("-alg", &alg_list);
-	RegisterFlag ("-max", &max);
+	RegisterValue("-n",      &nmax, LLWORKER_OBL_OPTION);
+	RegisterValue("-alg",    &alg_list);
+	RegisterValue("-cutoff", &alg_list);
+	RegisterFlag ("-max",    &max);
 
 	return 1;
 }
@@ -127,6 +129,8 @@ int llSetAlgVertices::Exec(void) {
 	map->InitRnd(map->GetRawX(x1), map->GetRawY(y1),
 		map->GetRawX(x2), map->GetRawY(y2));
 
+	double mean=0, num=0, num_real=0, empty=0;
+
 	for (int num_point=0; num_point<nmax; num_point++) {	    
 		int maxtry       = 0, 
 			maxtry_total = 0;
@@ -139,12 +143,13 @@ loop:
 		float y = map->GetCoordRndY();
 		float z = map->GetZ(x,y);
 
-		double ceiling;
-		double value;
+		double ceiling = 0;
+		double value   = 1;
 
-		double mean=0, num=0, num_real=0, empty=0;
-
+		
 		alg->GetValue(x, y, &value, &ceiling);
+
+		//std::cout << "ceiling=" << ceiling << std::endl;
 
 		if (empty > 1000) {
 			_llLogger()->WriteNextLine(LOG_WARNING, "This selection seems to be empty, skipped after %i vertices", num_point);
@@ -164,10 +169,12 @@ loop:
 
 		if (idealdist < minab) idealdist = minab;
 
-		if (ceiling > (10.f*mean/num)) 
-			ceiling = (10.f*mean/num);  //fixed cutoff -> BUGBUG
+		if (ceiling > (cutoff*mean/num)) 
+			ceiling = (cutoff*mean/num);  
+
 		double test = double(rand())/double(RAND_MAX) * ceiling;
 		if (test > value) { 
+			//std::cout << "repeat, ceiling=" << ceiling << std::endl;
 			goto loop; 
 		}
 		float mingrid_x = minab + 1.0f;

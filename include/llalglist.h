@@ -34,9 +34,9 @@ public:
 
 	double GetValue(float _x, float _y, double *_value = NULL, double *_ceiling = NULL) {
 		if (GetSize() == 0) return 1.;
+		double value = GetAlg(0)->GetValue(_x, _y);
 		if (_ceiling)
 			*_ceiling = GetAlg(0)->GetCeiling();
-		double value = GetAlg(0)->GetValue(_x, _y);
 		for (int a=1; a<GetSize(); a++) {
 			GetAlg(a)->GetValue(_x, _y, &value);
 			if (_ceiling)

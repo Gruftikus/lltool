@@ -1,9 +1,8 @@
-lltool
-======
+# lltool
 
 ![panorama](https://lh6.googleusercontent.com/-Q4p5qHEUWps/UXVzhYw-YgI/AAAAAAAAAdw/MTd5Gd1_TuM/s971/lltool.jpg)
 
-Landscape and Heightmap Editing Tool and Library
+## Landscape and Heightmap Editing Tool and Library
 
 [Full manual](https://github.com/Gruftikus/lltool/wiki/) under construction.
 

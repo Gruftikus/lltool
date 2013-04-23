@@ -64,6 +64,7 @@
 
 //Triangle-Exporters:
 #include "../include/llexportmeshtoobj.h"
+#include "../include/llexportmeshtoVRML.h"
 #include "../include/llexportmeshtops.h"
 
 void CreateWorkers(llCommands *_batch) {
@@ -130,6 +131,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llActivateVisibleVertices());
 
 	_batch->RegisterWorker(new llExportMeshToObj());
+	_batch->RegisterWorker(new llExportMeshToVRML());
 	_batch->RegisterWorker(new llExportMeshToPs());
 
 }

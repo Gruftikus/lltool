@@ -188,6 +188,14 @@ int llExportMeshToObj::Exec(void) {
 
 	if (!MakeSelection()) return 0;
 
+	//look for _install_dir:
+	if (_llUtils()->GetValue("_install_dir")) {
+		char *filename_tmp = new char[strlen(filename) + strlen(_llUtils()->GetValue("_install_dir")) + 2];
+		sprintf_s(filename_tmp, strlen(filename) + strlen(_llUtils()->GetValue("_install_dir")) + 2, "%s\\%s", 
+			_llUtils()->GetValue("_install_dir"), filename);
+		filename = filename_tmp;
+	}
+
 	//Now the obj-specific part:
 	FILE *fptr;
 
@@ -258,6 +266,10 @@ int llExportMeshToObj::Exec(void) {
 	}
 
 	fclose(fptr);
+
+	if (_llUtils()->GetValue("_install_dir")) {
+		delete filename;
+	}
 
 	return 1;
 }

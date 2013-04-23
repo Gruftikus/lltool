@@ -168,4 +168,8 @@ pip-log.txt
 
 externals/
 sandbox/
+demo/*.bmp
+demo/*.obj
+demo/*.wrl
+demo/*.mtl
 *.log

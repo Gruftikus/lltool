@@ -1,0 +1,98 @@
+[lltool]
+
+SetFlag -name=_quadsize_x -value=5000
+
+CreateMap -widthx=2 -widthy=2 -x1=-10000.0 -y1=-10000.0 -x2=10000.0 -y2=10000.0 -zscale=1
+
+SelectAll
+SetHeight -z=15
+
+CreateAlgCollection -name=ds
+AlgRadial -alg=ds -x=0 -y=0 -near=3000 -far=8000 -nearval=1 -farval=0.2
+
+DiamondSquare -range=15000 -alg=ds -offset=0.7
+DiamondSquare -range=5000 -alg=ds ; -offset=0.3
+DiamondSquare -range=2500 -alg=ds ;-offset=0.0
+DiamondSquare -range=1250 -alg=ds
+DiamondSquare -range=750  -alg=ds
+DiamondSquare -range=320  -alg=ds
+
+DiamondSquare -range=150  -alg=ds
+DiamondSquare -range=80   -alg=ds
+DiamondSquare -range=40   -alg=ds
+DiamondSquare -range=20   -alg=ds
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CreateMap -name=colormap -widthx=1024 -widthy=1024 -x1=-10000.0 -y1=-10000.0 -x2=10000.0 -y2=10000.0 -zscale=1
+CreateAlgCollection -name=red
+CreateAlgCollection -name=blue
+CreateAlgCollection -name=green
+
+AlgLinear -alg=red -zmin=0 -zmax=2000 -zminval=0 -zmaxval=1
+
+;;AlgLinear -alg=blue -zmin=-200 -zmax=100 -zminval=255 -zmaxval=0
+AlgLinear -alg=blue -zmin=-500 -zmax=0 -zminval=1 -zmaxval=0
+
+AlgLinear -multiply=0.5 -alg=green -zmin=-100 -zmax=500 -zminval=0 -zmaxval=1
+AlgLinear -add=0.5 -alg=green -zmin=500 -zmax=1000 -zminval=1 -zmaxval=0
+;;AlgLinear -alg=green -zmin=0 -zmax=500 -zminval=0 -zmaxval=1
+
+;;MakeDerivatives -map=colormap 
+;;AlgFirstOrder -map=colormap -multiply=1 -alg=green 
+
+FillColorMap -map=colormap -algred=red -algblue=blue -alggreen=green
+;;FillColorMap -map=colormap  -alggreen=green
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+SetFlag -name=_mindistance -value=20
+SetGridBorder -x=1000 -y=1000
+
+;;Filter -n=4 -MakeDerivatives 
+Filter -n=4
+MakeDerivatives -map="_heightmap_filtered"
+
+AlgFirstOrder  -add=0.2
+AlgSecondOrder -add=0.5 
+
+AlgPeakFinder  -multiply=1 -radius=4096 -scanradius=8192 -lowest=4000 -insideval=1 -outsideval=0.5
+AlgSecondOrder -multiply=1
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+SelectAll 
+
+SetGrid -x=1000  -y=1000
+SetAtGridLine -x=1000  -y=1000 -max=10
+
+SetAlgVertices -n=10000
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+SelectAll 
+MakeTriangulation
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+::ExportMeshToObj -filename="map.obj" -texname="color.bmp"
+ExportMeshToVRML  -filename="map.wrl" -texname="color.bmp"
+ExportMap -depth=24  -filename="color.bmp" -map="colormap" 
+
+@writequads { SetFlag -name=level -value={0,1} {
+		QuadIterator -level=$level {
+			ExportMap -depth=32  -filename="$level.$_quad_x.$_quad_y.new.bmp" 
+			ExportMeshToObj      -filename="$level.$_quad_x.$_quad_y.new.obj" 
+		}
+	}
+}
+
+@writebmp {
+	ExportMap -depth=32  -filename="d1x.bmp" -map="_heightmap_filtered_d1x"
+	ExportMap -depth=32  -filename="d1y.bmp" -map="_heightmap_filtered_d1y"
+	ExportMap -depth=24  -filename="d2x.bmp" -map="_heightmap_filtered_d2x"
+	ExportMap -depth=24  -filename="d2y.bmp" -map="_heightmap_filtered_d2y"
+	ExportMap -depth=24  -filename="f.bmp" -map="_heightmap_filtered"
+}
+
+
+
+

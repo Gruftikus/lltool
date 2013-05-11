@@ -24,6 +24,7 @@ OBJS =  llactivatevisiblevertices.o \
 	llexportmap.o \
 	llexportmeshtoobj.o \
 	llexportmeshtops.o \
+	llexportmeshtoVRML.o \
 	llfillcolormap.o \
 	llfilter.o \
 	llinactivateallvertices.o \
@@ -65,6 +66,8 @@ OBJS =  llactivatevisiblevertices.o \
 
 XOBJS = externals/triangle/triangle.o
 
+all: lltool
+
 $(XOBJS): %.o : %.cc %.h
 	@echo Compiling $*
 	@$(CXX) $(CXXFLAGS) $< -o $@
@@ -81,7 +84,7 @@ lltool:	$(OBJS) $(XOBJS) lltool.o
 	$(LD) -g -O0 $(OBJS) lltool.o $(XOBJS) -o lltool
 
 clean:
-	rm *.o
+	rm *.o externals/triangle/*.o
 
 
 

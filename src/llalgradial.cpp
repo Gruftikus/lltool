@@ -27,7 +27,6 @@ int llAlgRadial::RegisterOptions(void) {
 	RegisterValue("-farval",  &value_at_far);
 	RegisterValue("-x",       &x);
 	RegisterValue("-y",       &y);
-	RegisterValue("-alg",     &alg_list);
 
 	return 1;
 }

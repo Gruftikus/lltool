@@ -22,7 +22,7 @@ int llExportMeshToVRML::RegisterOptions(void) {
 
 
 int llExportMeshToVRML::Exec(void) {
-	if (!llExportMeshToObj::Exec()) return 0;
+	if (!llTriMod::Exec()) return 0;
 
 	if (!Used("-filename"))
 	    filename = (char *)"map.nif";
@@ -46,63 +46,65 @@ int llExportMeshToVRML::Exec(void) {
 
 	fprintf(fptr, "#VRML V2.0 utf8\n");
 	fprintf(fptr, "DEF MATERIAL Material {\n");
-	fprintf(fptr, "   diffuseColor 1 1 1\n");
+	fprintf(fptr, "  diffuseColor 1 1 1\n");
 	fprintf(fptr, "}\n");
-	fprintf(fptr, "DEF ORITGT Transform {\n");
-	fprintf(fptr, "	 rotation 0.5774 0.5774 0.5774 -2.094\n");
-	fprintf(fptr, "	 scale 1 1 1\n");
-	fprintf(fptr, "	 children [\n");
-	fprintf(fptr, "	 Shape {\n");
-	fprintf(fptr, "		 appearance Appearance {\n");
-	fprintf(fptr, "			 material USE MATERIAL\n");
+	fprintf(fptr, "Transform {\n");
+	fprintf(fptr, "  rotation 0.5774 0.5774 0.5774 -2.094\n");
+	fprintf(fptr, "  scale 1 1 1\n");
+	fprintf(fptr, "  children [\n");
+	fprintf(fptr, "  Shape {\n");
+	fprintf(fptr, "    appearance Appearance {\n");
+	fprintf(fptr, "      material USE MATERIAL\n");
 
 	if (texname) {
-		fprintf(fptr, "texture ImageTexture {\n");
-		fprintf(fptr, "	 url \"%s\"\n", texname);
-		fprintf(fptr, "}\n");
+		fprintf(fptr, "      texture ImageTexture {\n");
+		fprintf(fptr, "      	 url \"%s\"\n", texname);
+		fprintf(fptr, "      }\n");
 	}
 
-	fprintf(fptr, "geometry IndexedFaceSet {\n");
-	fprintf(fptr, "		 creaseAngle 3.1415\n");
+	fprintf(fptr, "    }\n");
 
-	fprintf(fptr, "coord Coordinate {\n");
-	fprintf(fptr, "    point [\n");
+	fprintf(fptr, "    geometry IndexedFaceSet {\n");
+	fprintf(fptr, "      creaseAngle 3.1415\n");
+
+	fprintf(fptr, "      coord Coordinate {\n");
+	fprintf(fptr, "        point [\n");
 
 	//Vertices:
 	for (int i=0; i<newpoints->GetN(); i++) {
-		fprintf(fptr, "%f %f %f\n", newpoints->GetX(i), newpoints->GetY(i), newpoints->GetZ(i));
+		fprintf(fptr, "          %f %f %f\n", newpoints->GetX(i), newpoints->GetY(i), newpoints->GetZ(i));
 	}
 
-	fprintf(fptr, "] \n }\n");
+	fprintf(fptr, "        ] \n      }\n");
 
 	//Tex-coords:
 	if (texname) {
-		fprintf(fptr, "texCoord TextureCoordinate  {\n");
-		fprintf(fptr, "    point [\n");
+		fprintf(fptr, "      texCoord TextureCoordinate  {\n");
+		fprintf(fptr, "        point [\n");
 		for (int i=0; i<newpoints->GetN(); i++) {
-			fprintf(fptr, "%f %f\n", newpoints->GetU(i), newpoints->GetV(i));
+			fprintf(fptr, "          %f %f\n", newpoints->GetU(i), newpoints->GetV(i));
 		}
-		fprintf(fptr, "] \n }\n");
+		fprintf(fptr, "        ] \n      }\n");
 	}
 
-	fprintf(fptr, "coordIndex [ \n");
+	fprintf(fptr, "      coordIndex [ \n");
 
 	for (int i=0; i<newtriangles->GetN(); i++) {
-			fprintf(fptr, "%i %i %i -1 \n", newtriangles->GetPoint1(i),
+			fprintf(fptr, "        %i %i %i -1 \n", newtriangles->GetPoint1(i),
 				newtriangles->GetPoint2(i),
 				newtriangles->GetPoint3(i));
 	}
 
-	fprintf(fptr, "]\n");
+	fprintf(fptr, "      ]\n");
 
 	if (texname) {
-		fprintf(fptr, "texCoordIndex  [ \n");
+		fprintf(fptr, "      texCoordIndex  [ \n");
 		for (int i=0; i<newtriangles->GetN(); i++) {
-			fprintf(fptr, "%i %i %i -1 \n", newtriangles->GetPoint1(i),
+			fprintf(fptr, "        %i %i %i -1 \n", newtriangles->GetPoint1(i),
 				newtriangles->GetPoint2(i),
 				newtriangles->GetPoint3(i));
 		}
-		fprintf(fptr, "] \n");
+		fprintf(fptr, "      ] \n");
 	}
 
 
@@ -112,7 +114,7 @@ int llExportMeshToVRML::Exec(void) {
 	}
 
 
-	fprintf(fptr, " } \n } \n ] \n } \n");
+	fprintf(fptr, "    } \n  } \n  ] \n} \n");
 
 
 	return 1;

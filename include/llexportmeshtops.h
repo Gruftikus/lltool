@@ -9,6 +9,7 @@ class llExportMeshToPs : public llTriMod {
 protected:
 
 	char *filename;
+	float level;
 
 public:
 

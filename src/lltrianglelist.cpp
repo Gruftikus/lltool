@@ -1132,7 +1132,7 @@ void llTriangleList::DivideBetween(float _xx1, float _yy1, float _xx2, float _yy
 				Add2Triangles(point1,point2,orig1,orig2);
 			else {
 				int t = AddTriangle(point1,orig1,orig2);
-				v[t].SetCorrectParity();
+				if (t>=0) v[t].SetCorrectParity();
 			}
 		}
 	}
@@ -1218,6 +1218,9 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 					new1=x2s+slope1*(_n-y2s);
 				}
 				int point1;
+
+				//std::cout << "Seeking for " << _n << ":" << new1 << std::endl;
+
 				if (_atx) {
 					point1=points->GetPoint(_n,new1);
 					if (point1<0)
@@ -1227,6 +1230,8 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 					if (point1<0)
 						point1=points->AddPoint(new1, _n, _map->GetZ(new1,_n));
 				}
+
+				//std::cout << "Point is " << point1 << std::endl;
 
 				int orig1,orig2;
 				if (soliton==-1) {
@@ -1251,6 +1256,9 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 				float slope1,slope2,new1,new2;
 
 				if (_atx) {
+
+					//std::cout << "y1 " << y1s << " y2 " << y2s << " y3 " << y3s << std::endl;
+
 					slope1=(y2s-y1s)/(x2s-x1s);
 					slope2=(y3s-y1s)/(x3s-x1s);
 					new1=y1s+slope1*(_n-x1s);
@@ -1263,6 +1271,8 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 				}
 
 				int point1,point2;
+
+				//std::cout << "Seeking for " << _n << ":" << new1 << ":" << new2 << std::endl;
 
 				if (_atx) {
 					point1=points->GetPoint(_n,new1);
@@ -1279,6 +1289,8 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 					if (point2<0)
 						point2=points->AddPoint(new2, _n, _map->GetZ(new2,_n));
 				}
+
+				//std::cout << "Point is " << point1 << ":" << point2 << std::endl;
 
 				int orig1,orig2;
 				if (soliton==1) {
@@ -1303,7 +1315,7 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 					Add2Triangles(point1,point2,orig1,orig2);
 				else {
 					int t = AddTriangle(point1,orig1,orig2);
-					v[t].SetCorrectParity();
+					if (t>=0) v[t].SetCorrectParity();
 				}
 			}
 		}

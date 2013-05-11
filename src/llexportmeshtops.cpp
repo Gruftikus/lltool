@@ -9,7 +9,8 @@ llExportMeshToPs::llExportMeshToPs() : llTriMod() {
 int llExportMeshToPs::Prepare(void) {
 	if (!llTriMod::Prepare()) return 0;
 
-	filename        = NULL;
+	filename = NULL;
+	level    = 0;
 
 	return 1;
 }
@@ -18,6 +19,7 @@ int llExportMeshToPs::RegisterOptions(void) {
 	if (!llTriMod::RegisterOptions()) return 0;
 
 	RegisterValue("-filename", &filename);
+	RegisterValue("-sealevel", &level);
 	
 	return 1;
 }
@@ -40,6 +42,8 @@ int llExportMeshToPs::Exec(void) {
 		return 0;
 	}
 
+	fprintf(f,"%%! \n");	
+
 	float scale = 500.f / (x11 - x00);
 	for (unsigned int j=0; j<(unsigned int)triangles->GetN(); j++) {
 	    	//llTriangle * tri = triangles->GetTriangle(j);
@@ -57,7 +61,7 @@ int llExportMeshToPs::Exec(void) {
 		float y3 = (points->GetY(c3)-y00)*scale+200;
 		float z3 = points->GetZ(c3);
 
-		if (z1<=0 && z2<=0 && z3<=0) {
+		if (z1<=level && z2<=level && z3<=level) {
 			fprintf(f,"newpath %f %f moveto %f %f lineto %f %f lineto 0.9 setgray fill\n",x1,y1,x2,y2,x3,y3);
 		}
 

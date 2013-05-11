@@ -25,7 +25,7 @@ int llExportMeshToVRML::Exec(void) {
 	if (!llTriMod::Exec()) return 0;
 
 	if (!Used("-filename"))
-	    filename = (char *)"map.nif";
+	    filename = (char *)"map.wrl";
 	if (!MakeSelection()) return 0;
 
 	//look for _install_dir:

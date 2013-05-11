@@ -11,8 +11,9 @@ class llQuad {
 
 private:
 
-    	unsigned int npoints, maxpoints;
-    	int          has_sub_quads;
+    unsigned int npoints, maxpoints;
+    int          has_sub_quads;
+	
 	llQuad *subquads[2][2];
 
 	std::vector<int>   points;
@@ -82,7 +83,8 @@ public:
 	}
 
 	int GetPoint(float _x, float _y) {
-		for (unsigned int i=0; i<points.size();i++) {
+		for (unsigned int i=0; i<npoints; i++) {
+			//std::cout << points_x[i] << ":" << points_y[i] << std::endl;
 			if (fabs(points_x[i] - _x) < 1.f && fabs(points_y[i] - _y) < 1.f) return points[i];
 		}
 		return -1;

@@ -1,7 +1,7 @@
 #include "../include/llstencilpolygon.h"
 
 llStencilPolygon::llStencilPolygon() : llTriMod() {
-	SetCommandName("SplitAtPolygonBorder");
+	SetCommandName("StencilPolygon");
 }
 
 int llStencilPolygon::Prepare(void) {

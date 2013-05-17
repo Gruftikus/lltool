@@ -8,6 +8,8 @@ int llReadPolygonDataFile::Prepare(void) {
 	if (!llSet::Prepare()) return 0;
 
 	polygon_name = filename = NULL;
+	scale_x = scale_y       = 1.;
+	trans_x = trans_y       = 0.;
 
 	return 1;
 }
@@ -15,9 +17,12 @@ int llReadPolygonDataFile::Prepare(void) {
 int llReadPolygonDataFile::RegisterOptions(void) {
 	if (!llSet::RegisterOptions()) return 0;
 
-	RegisterValue("-filename", &filename);
-	RegisterValue("-name",     &polygon_name, LLWORKER_OBL_OPTION);
-
+	RegisterValue("-filename", &filename, LLWORKER_OBL_OPTION);
+	RegisterValue("-name",     &polygon_name);
+	RegisterValue("-scale_x",  &scale_x);
+	RegisterValue("-scale_y",  &scale_y);
+	RegisterValue("-transx",   &trans_x);
+	RegisterValue("-transy",   &trans_y);
 	return 1;
 }
 
@@ -61,14 +66,27 @@ int llReadPolygonDataFile::Exec(void) {
 					} else {
 						if (!polygon_name || _stricmp(polygon_name, current_polygon)==0) {
 							num_vertex++;
+							int has_komma = 0;
+							for (int i=0;i<strlen(linenew);i++)
+								if (linenew[i] == ',') 
+									has_komma = 1;
 							if (num_vertex == 1) {
-								sscanf_s(linenew, "%f %f", &x1, &y1);
+								if (has_komma)
+									sscanf_s(linenew, "%f,%f", &x1, &y1);
+								else
+									sscanf_s(linenew, "%f %f", &x1, &y1);
 							} else if (num_vertex == 2) {
-								sscanf_s(linenew, "%f %f", &x2, &y2);
-								polygons->AddPolygon(x1, y1, x2, y2, current_polygon);    	    		
+								if (has_komma)
+									sscanf_s(linenew, "%f,%f", &x2, &y2);
+								else
+									sscanf_s(linenew, "%f %f", &x2, &y2);
+								polygons->AddPolygon(x1*scale_x+trans_x, y1*scale_y+trans_y, x2*scale_x+trans_x, y2*scale_y+trans_y, current_polygon);    	    		
 							} else {
-								sscanf_s(linenew, "%f %f", &x1, &y1);
-								polygons->AddVertexToPolygon(x1, y1, current_polygon);    
+								if (has_komma)
+									sscanf_s(linenew, "%f,%f", &x1, &y1);
+								else
+									sscanf_s(linenew, "%f %f", &x1, &y1);
+								polygons->AddVertexToPolygon(x1*scale_x+trans_x, y1*scale_y+trans_y, current_polygon);    
 							}
 						}
 					}

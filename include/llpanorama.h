@@ -8,6 +8,7 @@ class llPanorama : public llSet {
 private:
 
 	float gx, gy, keepout;
+	float minab2;
 
 public:
 

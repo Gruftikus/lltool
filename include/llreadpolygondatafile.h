@@ -8,6 +8,8 @@ class llReadPolygonDataFile : public llSet {
 private:
 
 	char *polygon_name, *filename;
+	float scale_x, scale_y;
+	float trans_x, trans_y;
 
 public:
 

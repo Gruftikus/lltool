@@ -39,6 +39,12 @@ Linux:
 
 ...w.i.p
 
+### References and applications
+
+* [tes4ll](http://oblivion.nexusmods.com/mods/40549/)
+* [Immersive Interiors Landscape AddOn](http://oblivion.nexusmods.com/mods/43072/)
+* [Realistic Normal Maps with Faked Terrain Shadows](http://oblivion.nexusmods.com/mods/41243/)
+
 ### Licence
 
 Copyright (C) 2011-2013

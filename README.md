@@ -22,5 +22,28 @@ lltool provides several methods and algorithms for heightmap manipulation and te
 
 ### Installation
 
-...will come
+Make a directory "externals". lltool needs:
+
+* [Triangle](http://www.cs.cmu.edu/~quake/triangle.html) by J. R. Shewchuk, download the code and put it into externals/triangle/
+* [MTParser](http://www.codeproject.com/Articles/7335/An-extensible-math-expression-parser-with-plug-ins) by Mathieu Jacques, download the code and put it into externals/mtparser (Windows only!!!)
+ 
+Windows:
+
+* Open lltool.sln and build the project.
+
+Linux:
+
+* Run "make"
+
+### Syntax
+
+
+
+
+
+
+
+
+
+
 

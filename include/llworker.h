@@ -81,7 +81,7 @@ class llWorker {
 		return command_name;
 	}
 
-    	int RegisterFlag (const char *_name, int    *_flag,   int _opt = 0);
+    int RegisterFlag (const char *_name, int    *_flag,   int _opt = 0);
 	int RegisterValue(const char *_name, int    *_value,  int _opt = 0);
 	int RegisterValue(const char *_name, float  *_value,  int _opt = 0);
 	int RegisterValue(const char *_name, double *_value,  int _opt = 0);

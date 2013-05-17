@@ -57,7 +57,7 @@ int llCommands::Open(const char *_file, const char *_section) {
 	filename = new char[strlen(_file) + 1];
 	strcpy_s(filename, strlen(_file) + 1, _file);
 		
-	if (file) {
+	if (file && file != stdin) {
 		fclose(file);
 		file = NULL;
 	}
@@ -74,11 +74,11 @@ int llCommands::Open(const char *_file, const char *_section) {
 int llCommands::ReadCache(void) {
 
 	if (!file) {
-		_llLogger()->WriteNextLine(LOG_ERROR, "llCommands::ReadCache: no file open");
+		_llLogger()->WriteNextLine(-LOG_ERROR, "llCommands::ReadCache: no file open");
 		return 0;
 	}
 
-	while (fgets(dummyline, LLCOM_MAX_LINE, file)) {
+	while ((fgets(dummyline, LLCOM_MAX_LINE, file)) && _strnicmp(dummyline, "@end", 3) != 0) {
 		for (unsigned int i=0; i<strlen(dummyline); i++) { //covert DOS files
 			if (dummyline[i]=='\r' || dummyline[i]=='\n') dummyline[i]='\0';
 		}
@@ -313,6 +313,8 @@ exit:
 
 int llCommands::GetCommand(void) {
 	
+	CurrentCommand = NULL;
+
 	if (worker_pointer == worker_cache.size()) {
 		return -2; //EOF
 	}
@@ -394,6 +396,7 @@ int llCommands::GetCommand(void) {
 		if (skip_next_block & LLCOM_ITERATE_BLOCK) worker_pointer -= 2;
 		skip_next_block = 0;
 		com = worker->GetCommandIndex();
+		CurrentCommand = worker->GetCommandName();
 		worker->Prepare();
 	} else return 0;
 
@@ -406,6 +409,7 @@ int llCommands::GetCommand(void) {
 	} else if (worker->IsRepeatWorker() && !retval) {
 		skip_next_block |= LLCOM_SKIP_BLOCK;
 	}
+
 	return com;
 
 }

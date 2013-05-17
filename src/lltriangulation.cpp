@@ -16,6 +16,8 @@ int llTriangulation::RegisterOptions(void) {
 int llTriangulation::Exec(void) {
 	if (!llMapWorker::Exec()) return 0;
 
+	int *bla=0;*bla=0;
+
 	if (!points) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map [%s] has no point list", command_name, mapname);
 		return 0;

@@ -510,6 +510,8 @@ int llUtils::AddFlag(const char *_name) {
 	flag_list[num_flags]        = tmp;
 	flag_value[num_flags]       = val;
 	flag_value_f[num_flags]     = 0.0;
+	if (val && strlen(val))
+		sscanf_s(val, "%lf", &(flag_value_f[num_flags]));
 	flag_description[num_flags] = NULL;
 	flag_enable[num_flags]      = 1;
 	flag_hidden[num_flags]      = 0;

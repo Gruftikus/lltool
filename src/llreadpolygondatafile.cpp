@@ -19,8 +19,8 @@ int llReadPolygonDataFile::RegisterOptions(void) {
 
 	RegisterValue("-filename", &filename, LLWORKER_OBL_OPTION);
 	RegisterValue("-name",     &polygon_name);
-	RegisterValue("-scale_x",  &scale_x);
-	RegisterValue("-scale_y",  &scale_y);
+	RegisterValue("-scalex",  &scale_x);
+	RegisterValue("-scaley",  &scale_y);
 	RegisterValue("-transx",   &trans_x);
 	RegisterValue("-transy",   &trans_y);
 	return 1;

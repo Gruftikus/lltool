@@ -5,6 +5,7 @@
 #ifdef _MSC_VER
 #include <windows.h>
 #include <direct.h>
+#define USE_CATCH
 #else
 #include "../include/def.h"
 #endif
@@ -39,69 +40,64 @@ int main(int argc, char **argv) {
 	llUtils    *utils = _llUtils();
 	llCommands *batch = new llCommands();
 
-    std::cout << "" << std::endl;
+	std::cout << "Landscape and Heightmap Editing Tool" << std::endl;
 	std::cout << "Written by gruftikus@github" << std::endl;
-	std::cout << "V1.00, xx.xx.2013" << std::endl;
-    std::cout << "***********************" << std::endl;
+	std::cout << "V0.10 (alpha!), 17.05.2013" << std::endl;
+	std::cout << "***********************" << std::endl;
 
-    //******************
-    //read the arguments
-    //******************
+	//******************
+	//read the arguments
+	//******************
 
 	if (argc<2) {
 		usage();
 		DumpExit();
 	}
 
-    char * batchname = argv[argc-1];
+	char *batchname = NULL;
 
-	for (int i=1; i<(argc-1); i++) {
-		if (strcmp(argv[i],"-f")==0) {
-			//flagliste holen
-			char *ptr;          
-			char *saveptr1 = NULL;
-			ptr = strtok_int(argv[i+1], ',', &saveptr1);
-			
-			while(ptr != NULL) {
-				char *my_flag_list=new char[strlen(ptr)+2];
-				strcpy_s(my_flag_list,strlen(ptr)+1,ptr);
-				ptr = strtok_int(NULL, ',', &saveptr1);
-				utils->AddFlag(my_flag_list);
-
-				mesg->WriteNextLine(LOG_INFO,"Flag: %s",my_flag_list);
-			}
-		}
+	//check if last option is a filename
+	int has_eq=0, has_dot=0;
+	for (int i=0;i<strlen(argv[argc-1]);i++) {
+		if (argv[argc-1][i] == '.') has_dot++;
+		if (argv[argc-1][i] == '=') has_eq++;
 	}
+	if (has_dot && !has_eq) batchname = argv[argc-1];
+
+	char *section = NULL;
+
+	int num = argc-1;
+	if (batchname) num++;
+	for (int i=1; i<num; i++) {
+		if (argv[i][0] != '[') {
+			char *my_flag_list = new char[strlen(argv[i])+2];
+			strcpy_s(my_flag_list, strlen(argv[i])+1, argv[i]);
+			utils->AddFlag(my_flag_list);
+			mesg->WriteNextLine(LOG_INFO, "Flag: %s", my_flag_list);
+		} else
+			section = argv[i];
+	}
+
+	if (!section) section = "[lltool]";
 
 	mesg->Dump();		
 	CreateWorkers(batch);
 	mesg->Dump();
 
 	//******************
-    //open the batch
+	//open the batch
 	//******************
 	if (batchname) {
-		if (!batch->Open(batchname, "[lltool]")) DumpExit();
+		if (!batch->Open(batchname, section)) DumpExit();
 		batch->ReadCache();
 		batch->CompileScript();
 	} else {
-		batch->ReadStdin("[lltool]");
+		batch->ReadStdin(section);
 		batch->ReadCache();
 		batch->CompileScript();
 	}
 
-	//float minab=256;
-	_llUtils()->SetValue("_mindistance", "256");
-	_llUtils()->SetValue("_cellsize_x", "4096");
-	_llUtils()->SetValue("_cellsize_y", "4096");
-
-	_llUtils()->SetValue("_quadsize_x", "4096");
-	_llUtils()->SetValue("_quadsize_y", "4096");
-	_llUtils()->SetValue("_quad_levels", "2");
-
-
 	_llUtils()->SetValue("_dds_tool", "s3tc.exe");
-
 
 #ifdef _MSC_VER
 	__int64 time_statistics[LLCOM_MAX_WORKERS];
@@ -114,13 +110,12 @@ int main(int argc, char **argv) {
 	//batch loop
 	//******************
 
+	int com = 0;
 
-	int com;
+	mesg->WriteNextLine(LOG_INFO, "****** Go into batch mode in  %s ******", section);
 
-	mesg->WriteNextLine(LOG_INFO,"****** Go into batch mode ******");
+	while (com >-2) {
 
-	while ((com = batch->GetCommand())>-2) {
-		//cout << com << endl;
 #ifdef _MSC_VER
 		FILETIME idleTime;
 		FILETIME kernelTime;
@@ -128,206 +123,37 @@ int main(int argc, char **argv) {
 		BOOL res = GetSystemTimes( &idleTime, &kernelTime, &userTime );
 #endif
 
-		mesg->Dump();
-
 #ifdef USE_CATCH
 		try {
 #endif
 
+			com = batch->GetCommand();
+			mesg->Dump();
 
-#if 0
-		if (com == COM_SETOPTION) {
-			if (batch->quadtreelevels > 1) {
-				quadtreelevels = batch->quadtreelevels;
-				batch->quadtreelevels = 1;
-				mesg->WriteNextLine(LOG_INFO,"SetOption -quadtreelevels=%s", quadtreelevels);
-				quads->SubQuadLevels(quadtreelevels - 1);
-			}
-			if (batch->mindistance>0) {
-				mesg->WriteNextLine(LOG_INFO,"SetOption -mindistance=%i", batch->mindistance);
-				minab = float(batch->mindistance);
-			}
-			if (batch->nquadmax>0) {
-				mesg->WriteNextLine(LOG_INFO,"SetOption -nquadmax=%i", batch->nquadmax);
-				quads->SetMaxPoints(batch->nquadmax);
-			}
-			opt_size_x = batch->size_x;
-			opt_size_y = batch->size_y;
-			opt_center = batch->center;
-		}
-
-
-
-		if ((com == COM_SETPOINTS) || (com == COM_SETPOINTSPERQUAD) || 
-			(com == COM_SETMAXPOINTS) || (com == COM_SETMAXPOINTSPERQUAD)) {
-				mesg->WriteNextLine(LOG_COMMAND,"%s: -n=%i", batch->CurrentCommand, batch->npoints);
-				mesg->Dump();
-
-				if (!heightmap) {
-					mesg->WriteNextLine(LOG_FATAL,"No heightmap present.");
-					DumpExit();
-				}
-
-				if (com == COM_SETPOINTSPERQUAD || com == COM_SETMAXPOINTSPERQUAD) quads->Reset();
-setquadsloop:
-				int mynum=batch->npoints;
-				if (com == COM_SETMAXPOINTS) {
-#if 0
-					llquad * quad = 
-						quads->GetQuad((batch->x00+batch->x11)/2, (batch->y00+batch->y11)/2);
-					mynum -= quad->GetPoints();
-#endif
-					mynum -= gen_npoints;
-					mesg->WriteNextLine(LOG_INFO,"Vertices left to be placed: %i",mynum);
-				}
-
-				llQuad * my_quad = NULL;
-				double mean=0,num=0,num_real=0,empty=0;
-				if (com == COM_SETPOINTSPERQUAD || com == COM_SETMAXPOINTSPERQUAD) {
-
-					batch->x00 = float(quads->GetCurrentX())*batch->cellsize_x*batch->quadsize_x;
-					batch->x11 = (float(quads->GetCurrentX())+1.f)*batch->cellsize_x*batch->quadsize_x;
-					batch->y00 = float(quads->GetCurrentY())*batch->cellsize_y*batch->quadsize_y;
-					batch->y11 = (float(quads->GetCurrentY())+1.f)*batch->cellsize_y*batch->quadsize_y;
-					batch->quadx = float(quads->GetCurrentX());
-					batch->quady = float(quads->GetCurrentY());
-
-					mesg->WriteNextLine(LOG_INFO,"Current quad: x=%.0f,y=%.0f",batch->quadx,batch->quady);
-
-					if (com == COM_SETMAXPOINTSPERQUAD) {
-						my_quad = 
-							quads->GetQuad((batch->x00+batch->x11)/2, (batch->y00+batch->y11)/2);
-						mynum -= my_quad->GetNumPoints();
-						mesg->WriteNextLine(LOG_INFO,"Vertices left to be placed: %i",mynum);
-					}
-
-					if (batch->x00 < _llMapList()->GetX1()) batch->x00 = _llMapList()->GetX1();
-					if (batch->y00 < _llMapList()->GetY1()) batch->y00 = _llMapList()->GetY1();
-					if (batch->x11 > _llMapList()->GetX2()) batch->x11 = _llMapList()->GetX2();
-					if (batch->y11 > _llMapList()->GetY2()) batch->y11 = _llMapList()->GetY2();
-					int mynum2 = int(float(mynum)*((batch->x11-batch->x00)*(batch->y11-batch->y00))/(batch->cellsize_x*batch->quadsize_x*batch->cellsize_y*batch->quadsize_y));
-					if (mynum2<mynum)
-						mesg->WriteNextLine(LOG_INFO,"Partly filled quad: vertices reduced to: %i",mynum2);
-					mynum=mynum2;
-				}
-
-				if (alg_list->GetSize() == 0) {
-					mesg->WriteNextLine(LOG_ERROR,"%s: no algorithm specified", batch->CurrentCommand);
-					goto end;
-				}
-
-				heightmap->InitRnd(heightmap->GetRawX(batch->x00), heightmap->GetRawY(batch->y00),
-					heightmap->GetRawX(batch->x11), heightmap->GetRawY(batch->y11));
-
-				for (int num_point=0;num_point<mynum;num_point++) {	    
-					int maxtry=0,maxtry_total=0;
-					mesg->Dump();
-					if ((num_point % 1000) == 0 && num_point) 
-						mesg->WriteNextLine(LOG_INFO,"[%i]",num_point);
-			
-loop:	    
-					//float x = float((batch->x11 - batch->x00) * float(rand())/float(RAND_MAX)) + batch->x00;
-					float x = heightmap->GetCoordRndX();
-					//float y = float((batch->y11 - batch->y00) * float(rand())/float(RAND_MAX)) + batch->y00;
-					float y = heightmap->GetCoordRndY();
-
-					
-					float z=heightmap->GetZ(x,y);
-
-					double ceiling;
-					double value;
-
-					alg_list->GetValue(x,y,&value,&ceiling);
-
-					if (empty>1000) {
-						mesg->WriteNextLine(LOG_WARNING,"This quad seems to be empty, skipped after %i vertices",num_point);
-						goto end;
-					} else if (value<0.0000001) { //filter very small
-						empty++;
-						goto loop; 
-					}
-
-//					if (heightmap->IsDefault(x,y)) //NaN
-//						goto loop;
-
-
-					empty=0;
-					mean+=value;num++;
-					float idealdist = 4096.f- (((4096.f-minab)/float(mean/num)) * float(value));
-
-					if (idealdist < minab) idealdist = minab;
-
-					if (ceiling>(10.f*mean/num)) ceiling=(10.f*mean/num);  //cutoff -> BUGBUG
-					double test = double(rand())/double(RAND_MAX) * ceiling;
-					if (test>value) { 
-						goto loop; 
-					}
-					float mingrid = points->GetMinDistanceGrid(x,y);
-					float maxradius = idealdist + mingrid;
-					if (mingrid > minab) {
-						float mindist = points->GetMinDistance(x, y, maxradius, my_quad); //time consuming!!!
-						if (mindist > minab || mindist < 0) {
-						//if (mindist >= 0) {
-
-							test = 2 * float(rand())/float(RAND_MAX) * idealdist;
-							if (test> (mindist + mingrid))
-								goto loop; 
-
-							maxtry=0;
-							//all conditions fulfilled
-							points->AddPoint(x,y,z);
-							gen_npoints++;
-							num_real++;
-						} else { //1 -> see below
-							if (maxtry<50 && maxtry_total<100*batch->npoints) {
-								maxtry++;
-								maxtry_total++;
-								goto loop;
-							} else {
-								mesg->WriteNextLine(LOG_WARNING,"Mesh is too dense: quad aborted after %i vertices",num_point);
-								goto end;
-							}
-						}
-					} else { //2 -> this was done 2x on purpose to save time
-						if (maxtry<50 && maxtry_total<100*batch->npoints) {
-							maxtry++;
-							maxtry_total++;
-							goto loop;
-						} else {
-							mesg->WriteNextLine(LOG_WARNING,"Mesh is too dense: quad aborted after %i vertices",num_point);
-							goto end;
-						}
-					}
-				}
-end:
-				mesg->Dump();
-				if (com == COM_SETPOINTSPERQUAD || com == COM_SETMAXPOINTSPERQUAD) if (quads->GetNextQuad()) goto setquadsloop;
-		}
-#endif
+			//if (batch->CurrentCommand) std::cout << batch->CurrentCommand << std::endl;
 
 #ifdef USE_CATCH
-		} catch (char * str) {
+		} catch (char *str) {
 			if (batch->CurrentCommand)
-				mesg->WriteNextLine(LOG_FATAL,"Catched exception [%s] in [%s]", str, batch->CurrentCommand);
+				mesg->WriteNextLine(LOG_FATAL, "Catched exception [%s] in [%s]", str, batch->CurrentCommand);
 			else 
-				mesg->WriteNextLine(LOG_FATAL,"Catched exception [%s]", str);
+				mesg->WriteNextLine(LOG_FATAL, "Catched exception [%s]", str);
 			DumpExit();
 		} catch (int str) {
 			if (batch->CurrentCommand)
-				mesg->WriteNextLine(LOG_FATAL,"Catched exception [%i] in [%s]", str, batch->CurrentCommand);
+				mesg->WriteNextLine(LOG_FATAL, "Catched exception [%i] in [%s]", str, batch->CurrentCommand);
 			else
-				mesg->WriteNextLine(LOG_FATAL,"Catched exception [%i]", str);
+				mesg->WriteNextLine(LOG_FATAL, "Catched exception [%i]", str);
 			DumpExit();
 		} catch (...) {
 			if (batch->CurrentCommand)
-				mesg->WriteNextLine(LOG_FATAL,"Catched exception in [%s]", batch->CurrentCommand);
+				mesg->WriteNextLine(LOG_FATAL, "Catched exception in [%s]", batch->CurrentCommand);
 			else
-				mesg->WriteNextLine(LOG_FATAL,"Catched exception");
+				mesg->WriteNextLine(LOG_FATAL, "Catched exception");
 			DumpExit();
 		}
 #endif
 
-		mesg->Dump();
 #ifdef _MSC_VER
 		FILETIME userTime_old = userTime;
 
@@ -352,6 +178,7 @@ end:
 			time_statistics_pointer++;
 		}
 #endif
+
 	}
 
 	std::cout << "****** Batch loop done ******" << std::endl;
@@ -375,6 +202,8 @@ end:
 			std::cout << time_statistics_cmdname[ii] << ": " << (((double)time_statistics[ii]) /10000000.)<< " s" << std::endl;
 	}
 #endif
+
+
 	return 0;
 
 }

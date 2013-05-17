@@ -89,6 +89,10 @@ class llCommands {
 	int ReadStdin(void);
 	void ReadStdin(const char *_section) {
 		section = _section;
+		if (file && file != stdin) {
+			fclose(file);
+		}
+		file = stdin;
 	};
 	char *GetNextLine(int _cmd);
 	int SaveFile(const char *_file);

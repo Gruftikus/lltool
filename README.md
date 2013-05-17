@@ -43,7 +43,7 @@ The section used by the execution script is defined by a section name in squared
 
 The last option might be the filename (if not defined, stdin is used).
 
-    lltool flag1 flag2 [section] filename.mpb
+    lltool flag1 flag2 ... [section] filename.mpb
 
 ### References and applications
 

@@ -41,7 +41,7 @@ The command can be followed by several flags (see batch section in the full manu
 
 The section used by the execution script is defined by a section name in squared brackets (like the section in the script).
 
-The last option might be the filename (if not defined, stdin is used).
+The last option might be the filename. If no filename is given, stdin is used, in this case, reading can be stopped with `@end`.
 
     lltool flag1 flag2 ... [section] filename.mpb
 

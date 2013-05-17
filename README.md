@@ -37,7 +37,13 @@ Linux:
 
 ### Syntax
 
-...w.i.p
+The command can be followed by several flags (see batch section in the full manual) in order to propagate variables to the execution script.
+
+The section used by the execution script is defined by a section name in squared brackets (like the section in the script).
+
+The last option might be the filename (if not defined, stdin is used).
+
+lltool flag1 flag2 [section] filename.mpb
 
 ### References and applications
 

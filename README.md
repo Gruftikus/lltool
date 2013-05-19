@@ -4,7 +4,7 @@
 
 ## Landscape and Heightmap Editing Tool and Library
 
-[Full manual](https://github.com/Gruftikus/lltool/wiki/) under construction.
+For details take a look to the [full manual](https://github.com/Gruftikus/lltool/wiki/).
 
 ### Overview
 

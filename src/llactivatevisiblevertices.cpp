@@ -27,7 +27,7 @@ int llActivateVisibleVertices::Exec(void) {
 	if (!llTriMod::Exec()) return 0;
 
 	int n_rounds = 1;
-	if (!Used("-radius")) {
+	if (Used("-radius")) {
 		n_rounds = 1 + 6;	
 	} 
 

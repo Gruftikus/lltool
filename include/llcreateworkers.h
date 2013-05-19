@@ -10,6 +10,7 @@
 #include "../include/llexit.h"
 #include "../include/llsetflag.h"
 #include "../include/llecho.h"
+#include "../include/llsetpath.h"
 
 //Alg-based:
 #include "../include/llalg.h"
@@ -37,6 +38,8 @@
 #include "../include/llsetheight.h"
 #include "../include/llselectall.h"
 #include "../include/lltriangulation.h"
+#include "../include/llcopymap.h"
+#include "../include/llscalemap.h"
 
 //Vertex-setters:
 #include "../include/llset.h"
@@ -54,6 +57,7 @@
 
 //Triangle-modifiers:
 #include "../include/lltrimod.h"
+#include "../include/llinactivateallvertices.h"
 #include "../include/llactivatevisiblevertices.h"
 #include "../include/llremoveinactivetriangles.h"
 #include "../include/llsplitat.h"
@@ -74,6 +78,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llExit());
 	_batch->RegisterWorker(new llSetFlag());
 	_batch->RegisterWorker(new llEcho());
+	_batch->RegisterWorker(new llSetPath());
 
 	//Alg-based:
 	_llAlgList()->AddAlgCollection("_heightmap_alg", new llAlgCollection());
@@ -98,7 +103,8 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llQuadIterator());
 	_batch->RegisterWorker(new llSetHeight());
 	_batch->RegisterWorker(new llSelectAll());
-
+	_batch->RegisterWorker(new llCopyMap());
+	_batch->RegisterWorker(new llScaleMap());
 
 
 	_batch->RegisterWorker(new llFillColorMap());
@@ -127,6 +133,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llSplitBetween());
 	_batch->RegisterWorker(new llSplitAtPolygonBorder());
 	_batch->RegisterWorker(new llStencilPolygon());
+	_batch->RegisterWorker(new llInactivateAllVertices());
 	_batch->RegisterWorker(new llRemoveInactiveTriangles());
 	_batch->RegisterWorker(new llActivateVisibleVertices());
 

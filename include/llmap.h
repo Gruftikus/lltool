@@ -141,7 +141,7 @@ protected:
 	llShortarray *sdata;
 	unsigned int *idata;
 	float defaultheight;
-	int makeshort;
+	int makeshort, is_color_map;
 	llLogger *mesg;
 
 
@@ -283,6 +283,13 @@ public:
 		return defaultheight;
 	}
 
+	int GetShort(void) {
+		return makeshort;
+	}
+
+	int IsColorMap(void) {
+		return is_color_map;
+	}
 
 	void  SetScaling(float _s){scaling=_s;};
 	float GetScaling(){return scaling;};
@@ -333,6 +340,7 @@ public:
 	}
 
 	int SetBlue(unsigned int _x, unsigned int _y, unsigned char _val) {
+		is_color_map = 1;
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
 			idata[_x+_y*widthx] = (idata[_x+_y*widthx] & 0xffffff00) | _val;
@@ -343,6 +351,7 @@ public:
 	}
 
 	int SetGreen(unsigned int _x, unsigned int _y, unsigned char _val) {
+		is_color_map = 1;
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
 			idata[_x+_y*widthx] = (idata[_x+_y*widthx] & 0xffff00ff) | (_val << 8);
@@ -353,6 +362,7 @@ public:
 	}
 
 	int SetRed(unsigned int _x, unsigned int _y, unsigned char _val) {
+		is_color_map = 1;
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
 			idata[_x+_y*widthx] = (idata[_x+_y*widthx] & 0xff00ffff) | (_val << 16);
@@ -363,6 +373,7 @@ public:
 	}
 
 	int SetAlpha(unsigned int _x, unsigned int _y, unsigned char _val) {
+		is_color_map = 1;
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
 			idata[_x+_y*widthx] = (idata[_x+_y*widthx] & 0x00ffffff) | (_val << 24);

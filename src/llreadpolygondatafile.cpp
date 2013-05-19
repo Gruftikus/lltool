@@ -19,8 +19,8 @@ int llReadPolygonDataFile::RegisterOptions(void) {
 
 	RegisterValue("-filename", &filename, LLWORKER_OBL_OPTION);
 	RegisterValue("-name",     &polygon_name);
-	RegisterValue("-scalex",  &scale_x);
-	RegisterValue("-scaley",  &scale_y);
+	RegisterValue("-scalex",   &scale_x);
+	RegisterValue("-scaley",   &scale_y);
 	RegisterValue("-transx",   &trans_x);
 	RegisterValue("-transy",   &trans_y);
 	return 1;
@@ -67,7 +67,7 @@ int llReadPolygonDataFile::Exec(void) {
 						if (!polygon_name || _stricmp(polygon_name, current_polygon)==0) {
 							num_vertex++;
 							int has_komma = 0;
-							for (int i=0;i<strlen(linenew);i++)
+							for (unsigned int i=0; i<strlen(linenew); i++)
 								if (linenew[i] == ',') 
 									has_komma = 1;
 							if (num_vertex == 1) {

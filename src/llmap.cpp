@@ -17,9 +17,10 @@ llMap::llMap(unsigned int _x, unsigned int _y, int _makeshort, float _default) {
 	else
 		idata = new unsigned int[widthx*widthy];
 
-	scaling=1;
-	uneven=1;
+	scaling = 1;
+	uneven  = 1;
 	defaultheight = _default;
+	is_color_map  = 0;
 
 	InitRnd(0, 0, widthx-1, widthy-1);
 }
@@ -33,12 +34,13 @@ llMap::llMap(unsigned int _x, unsigned int _y, llShortarray *_data, float _defau
 	mesg     = _llLogger();
 
 	makeshort = 0;
-	sdata = _data;
-	idata    = NULL;
+	sdata     = _data;
+	idata     = NULL;
 
-	scaling=1;
-	uneven=1;
+	scaling = 1;
+	uneven  = 1;
 	defaultheight = _default;
+	is_color_map  = 0;
 
 	InitRnd(0, 0, widthx-1, widthy-1);
 

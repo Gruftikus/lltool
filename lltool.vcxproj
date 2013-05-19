@@ -29,6 +29,7 @@
     <ClInclude Include="externals\mtparser\MTParserLib\MTSearchFile.h" />
     <ClInclude Include="externals\mtparser\MTParserLib\MTTools.h" />
     <ClInclude Include="externals\mtparser\MTParserLib\MTUnicodeANSIDefs.h" />
+    <ClInclude Include="externals\resampler\resampler.h" />
     <ClInclude Include="externals\triangle\triangle.h" />
     <ClInclude Include="include\llactivatevisiblevertices.h" />
     <ClInclude Include="include\lladdvertextopolygon.h" />
@@ -43,6 +44,7 @@
     <ClInclude Include="include\llalgslope.h" />
     <ClInclude Include="include\llalgstripe.h" />
     <ClInclude Include="include\llcommands.h" />
+    <ClInclude Include="include\llcopymap.h" />
     <ClInclude Include="include\llcreatemap.h" />
     <ClInclude Include="include\llcreatenormalmap.h" />
     <ClInclude Include="include\llcreatepolygon.h" />
@@ -70,6 +72,7 @@
     <ClInclude Include="include\llreaddatafile.h" />
     <ClInclude Include="include\llreadpolygondatafile.h" />
     <ClInclude Include="include\llremoveinactivetriangles.h" />
+    <ClInclude Include="include\llscalemap.h" />
     <ClInclude Include="include\llselectall.h" />
     <ClInclude Include="include\llselectrec.h" />
     <ClInclude Include="include\llset.h" />
@@ -104,6 +107,7 @@
     <ClCompile Include="externals\mtparser\MTParserLib\MTSearchFile.cpp" />
     <ClCompile Include="externals\mtparser\MTParserLib\MTTools.cpp" />
     <ClCompile Include="externals\mtparser\MTParserLib\MTUnicodeANSIDefs.cpp" />
+    <ClCompile Include="externals\resampler\resampler.cpp" />
     <ClCompile Include="externals\triangle\triangle.cc" />
     <ClCompile Include="src\llactivatevisiblevertices.cpp" />
     <ClCompile Include="src\lladdvertextopolygon.cpp" />
@@ -118,6 +122,7 @@
     <ClCompile Include="src\llalgslope.cpp" />
     <ClCompile Include="src\llalgstripe.cpp" />
     <ClCompile Include="src\llcommands.cpp" />
+    <ClCompile Include="src\llcopymap.cpp" />
     <ClCompile Include="src\llcreatemap.cpp" />
     <ClCompile Include="src\llcreatenormalmap.cpp" />
     <ClCompile Include="src\llcreatepolygon.cpp" />
@@ -144,6 +149,7 @@
     <ClCompile Include="src\llreaddatafile.cpp" />
     <ClCompile Include="src\llreadpolygondatafile.cpp" />
     <ClCompile Include="src\llremoveinactivetriangles.cpp" />
+    <ClCompile Include="src\llscalemap.cpp" />
     <ClCompile Include="src\llselectall.cpp" />
     <ClCompile Include="src\llselectrec.cpp" />
     <ClCompile Include="src\llset.cpp" />

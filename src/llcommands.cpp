@@ -168,8 +168,8 @@ int llCommands::Reopen(const char *_section) {
 	return 1;
 }
 
-int llCommands::CompileScript(void) {
-	//int current_section = -1;
+int llCommands::CompileScript(int _compile_all_sections) {
+	char *current_section = "";
 	
 	for (unsigned int l=0; l<lines.size(); l++) {
 		strcpy_s(dummyline, LLCOM_MAX_LINE, lines[l]);
@@ -183,7 +183,8 @@ int llCommands::CompileScript(void) {
 			if (linex[0] == '[') {
 				char *sec = _llUtils()->NewString(linex);
 				sections.push_back(sec);
-			} else {
+				current_section = sec;
+			} else if (_compile_all_sections || _stricmp(current_section, section) == 0) {
 				ExtendWorkerCache();
 				
 				//check for flags

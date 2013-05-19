@@ -5,7 +5,7 @@
 #ifdef _MSC_VER
 #include <windows.h>
 #include <direct.h>
-#define USE_CATCH
+//#define USE_CATCH
 #else
 #include "../include/def.h"
 #endif
@@ -19,8 +19,8 @@
 
 void usage(void) {
 
-	_llLogger()->WriteNextLine(LOG_INFO,"Usage: lltool -f \"flags,flags,flags,...\" batchfile");
-	_llLogger()->WriteNextLine(LOG_INFO,"       batchfile: the name of the batch script");
+	_llLogger()->WriteNextLine(LOG_INFO,"Usage: lltool flag1 flag2 ... [section] filename.mpb");
+	_llLogger()->WriteNextLine(LOG_INFO,"       filename: the name of the batch script");
 	_llLogger()->WriteNextLine(LOG_INFO,"       flags: the flags which are propagated to the batch script");
 	_llLogger()->Dump();
 
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 	//read the arguments
 	//******************
 
-	if (argc<2) {
+	if (_stricmp(argv[argc-1], "-h") == 0 || _stricmp(argv[argc-1], "--help") == 0) {
 		usage();
 		DumpExit();
 	}
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 
 	//check if last option is a filename
 	int has_eq=0, has_dot=0;
-	for (int i=0;i<strlen(argv[argc-1]);i++) {
+	for (unsigned int i=0; i<strlen(argv[argc-1]); i++) {
 		if (argv[argc-1][i] == '.') has_dot++;
 		if (argv[argc-1][i] == '=') has_eq++;
 	}
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
 	char *section = NULL;
 
 	int num = argc-1;
-	if (batchname) num++;
+	if (batchname) num--;
 	for (int i=1; i<num; i++) {
 		if (argv[i][0] != '[') {
 			char *my_flag_list = new char[strlen(argv[i])+2];

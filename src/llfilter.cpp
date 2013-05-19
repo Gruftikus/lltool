@@ -41,7 +41,7 @@ int llFilter::Exec(void) {
 	llMap *newmap = _llMapList()->GetMap(targetname);
 
 	if (newmap) {
-		_llLogger()->WriteNextLine(-LOG_WARNING,"%s: map %s existing, going to delete it", command_name, targetname);
+		_llLogger()->WriteNextLine(-LOG_WARNING, "%s: map %s existing, going to delete it", command_name, targetname);
 		_llMapList()->DeleteMap(targetname);
 	}
 

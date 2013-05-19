@@ -110,7 +110,7 @@ class llCommands {
 		return 1;
 	};
 
-	int CompileScript(void);
+	int CompileScript(int _compile_all_sections = 1);
 	int GetCommand(void);
 	const char *CurrentCommand;
 

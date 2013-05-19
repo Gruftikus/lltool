@@ -22,11 +22,12 @@ lltool provides several methods and algorithms for heightmap manipulation and te
 
 ### Installation
 
-Make a directory "externals". lltool needs:
+Go to the directory "externals". lltool needs:
 
 * [Triangle](http://www.cs.cmu.edu/~quake/triangle.html) by J. R. Shewchuk, download the code and put it into externals/triangle/
 * [MTParser](http://www.codeproject.com/Articles/7335/An-extensible-math-expression-parser-with-plug-ins) by Mathieu Jacques, download the code and put it into externals/mtparser (Windows only!!!)
- 
+* [imageresampler](https://code.google.com/p/imageresampler/), a C++ class for separable filtering 2D image resampling by Rich Geldreich, already included.
+
 Windows:
 
 * Open lltool.sln and build the project.

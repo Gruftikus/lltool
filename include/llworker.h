@@ -4,6 +4,7 @@
 #define LLWORKER_OBL_OPTION 1
 
 #include <vector>
+#include <cstddef>
 
 class llWorker {
 

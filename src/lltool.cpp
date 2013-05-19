@@ -58,9 +58,11 @@ int main(int argc, char **argv) {
 
 	//check if last option is a filename
 	int has_eq=0, has_dot=0;
-	for (unsigned int i=0; i<strlen(argv[argc-1]); i++) {
-		if (argv[argc-1][i] == '.') has_dot++;
-		if (argv[argc-1][i] == '=') has_eq++;
+	if (argc > 1) {
+		for (unsigned int i=0; i<strlen(argv[argc-1]); i++) {
+			if (argv[argc-1][i] == '.') has_dot++;
+			if (argv[argc-1][i] == '=') has_eq++;
+		}
 	}
 	if (has_dot && !has_eq) batchname = argv[argc-1];
 

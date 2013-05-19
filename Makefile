@@ -15,6 +15,7 @@ OBJS =  llactivatevisiblevertices.o \
 	llalgslope.o \
 	llalgstripe.o \
 	llcommands.o \
+	llcopymap.o \
 	llcreatemap.o \
 	llcreatenormalmap.o \
 	llcreatepolygon.o \
@@ -41,6 +42,7 @@ OBJS =  llactivatevisiblevertices.o \
 	llreaddatafile.o \
 	llreadpolygondatafile.o \
 	llremoveinactivetriangles.o \
+	llscalemap.o \
 	llselectall.o \
 	llselectrec.o \
 	llsetalgvertices.o \
@@ -62,13 +64,19 @@ OBJS =  llactivatevisiblevertices.o \
 	lltriangulation.o \
 	lltrimod.o \
 	llutils.o \
-	llworker.o 
+	llworker.o \
 
-XOBJS = externals/triangle/triangle.o
+XOBJS = externals/triangle/triangle.o 
+
+XOBJSC = externals/resampler/resampler.o
 
 all: lltool
 
 $(XOBJS): %.o : %.cc %.h
+	@echo Compiling $*
+	@$(CXX) $(CXXFLAGS) $< -o $@
+
+$(XOBJS2): %.o : %.cpp %.h
 	@echo Compiling $*
 	@$(CXX) $(CXXFLAGS) $< -o $@
 
@@ -80,8 +88,8 @@ lltool.o : src/lltool.cpp
 	@echo Compiling $*
 	@$(CXX) $(CXXFLAGS) $< -o $@
 
-lltool:	$(OBJS) $(XOBJS) lltool.o
-	$(LD) -g -O0 $(OBJS) lltool.o $(XOBJS) -o lltool
+lltool:	$(OBJS) $(XOBJS) $(XOBJSC) lltool.o
+	$(LD) -g -O0 $(OBJS) lltool.o $(XOBJS) $(XOBJSC) -o lltool
 
 clean:
 	rm *.o externals/triangle/*.o

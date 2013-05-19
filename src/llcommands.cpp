@@ -77,7 +77,7 @@ int llCommands::ReadCache(void) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "llCommands::ReadCache: no file open");
 		return 0;
 	}
-
+	
 	while ((fgets(dummyline, LLCOM_MAX_LINE, file)) && _strnicmp(dummyline, "@end", 3) != 0) {
 		for (unsigned int i=0; i<strlen(dummyline); i++) { //covert DOS files
 			if (dummyline[i]=='\r' || dummyline[i]=='\n') dummyline[i]='\0';
@@ -87,7 +87,7 @@ int llCommands::ReadCache(void) {
 		lines[num] = new char[strlen(dummyline)+1];
 		strcpy_s(lines[num], strlen(dummyline)+1, dummyline);
 	}
-
+	
 	fclose(file);
 	file = NULL;
 	return 1;
@@ -132,6 +132,8 @@ int llCommands::ReadStdin(void) {
 		lines[num] = new char[strlen(dummyline)+1];
 		strcpy_s(lines[num], strlen(dummyline)+1, dummyline);
 	}
+
+	std::cout << lines.size() << std::endl;
 
 	return 1;
 };
@@ -302,7 +304,7 @@ repeat:
 exit:
 					if (!worker) {
 						mesg->WriteNextLine(-LOG_ERROR, "Compile error in line %i", l+1);
-						mesg->WriteNextLine(-LOG_ERROR, "--> Unknown command [%s]", ptr);
+						mesg->WriteNextLine(-LOG_ERROR, "--> Unknown command [%s]", ptr);						
 					}
 				} //strlen ptr
 			} //not section

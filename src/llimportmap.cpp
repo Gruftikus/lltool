@@ -38,6 +38,12 @@ int llImportMap::Exec(void) {
 
 	FILE *fptr;
 
+	llMap *newmap = _llMapList()->GetMap(mapname);
+	if (newmap) {
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map %s existing", command_name, mapname);
+		return 0;
+	}
+
 	if (fopen_s(&fptr, filename," rb")) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "Unable to open BMP file \"%s\"", filename);
 		return 0;
@@ -112,7 +118,6 @@ int llImportMap::Exec(void) {
 		colourindex[i].junk = rand() % 256;
 	}
 	if (infoheader.ncolours > 0) {
-		std::cout << "col:" << infoheader.ncolours << std::endl;
 		for (unsigned int i=0; i<infoheader.ncolours; i++) {
 			if (fread(&colourindex[i].b, sizeof(unsigned char), 1, fptr) != 1) {
 				_llLogger()->WriteNextLine(-LOG_ERROR, "Image read failed (ncolours)");

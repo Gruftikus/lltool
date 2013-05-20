@@ -36,6 +36,12 @@ int llCreateMap::RegisterOptions(void) {
 int llCreateMap::Exec(void) {
 	if (!llWorker::Exec()) return 0;
 
+	llMap *newmap = _llMapList()->GetMap(mapname);
+	if (newmap) {
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map %s existing", command_name, mapname);
+		return 0;
+	}
+
 	if (!Used("-x1")) x1 = _llUtils()->x00;
 	if (!Used("-x2")) x2 = _llUtils()->x11;
 	if (!Used("-y1")) y1 = _llUtils()->y00;

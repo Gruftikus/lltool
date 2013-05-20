@@ -32,7 +32,6 @@ int llCopyMap::Exec(void) {
 	}
 
 	llMap *newmap = _llMapList()->GetMap(targetname);
-
 	if (newmap) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map %s existing", command_name, targetname);
 		return 0;

@@ -5,6 +5,8 @@
 
 #include <vector>
 #include <cstddef>
+#include <iostream>
+
 
 class llWorker {
 
@@ -18,6 +20,8 @@ class llWorker {
 	 std::vector<const char*> name;
 	 std::vector<int*>    flag;
 	 std::vector<int>     flag_cache;
+	 std::vector<char*>   flag_cache_var;
+	 std::vector<int>     flag_cache_var_found;
 	 std::vector<int*>    i_value;
 	 std::vector<float*>  f_value;
 	 std::vector<double*> d_value;
@@ -32,6 +36,13 @@ class llWorker {
 	 std::vector<int>     s_value_num;
 	 std::vector<int>     opt;
 	 std::vector<int>     used;
+
+	 void AddElementVar(char *_string) {
+		 int size = flag_cache_var.size();
+		 flag_cache_var.resize(size + 1);
+		 flag_cache_var_found.resize(size + 1);
+		 flag_cache_var[size] = _string;
+	 }
 
 	 void AddElement(void) {
 		 int size = GetSize();

@@ -54,9 +54,14 @@ int llWorker::RegisterValue(const char *_name, char **_value, int _opt) {
 	return 1;
 }
 
-int llWorker::CheckFlag (char *_flag) {
+int llWorker::CheckFlag(char *_flag) {
+	char *myflag = _flag;
+	if (strlen(myflag) && myflag[0]=='$') {
+		AddElementVar(_llUtils()->NewString(myflag));
+		return 1;
+	}
 	for (unsigned int i=0; i<name.size(); i++) {
-		if (_stricmp(_flag, name[i]) == 0) {
+		if (_stricmp(myflag, name[i]) == 0) {
 			if (flag[i]) {
 				flag_cache[i] = 1;
 				return 1;
@@ -113,6 +118,13 @@ int llWorker::AddValue(char *_value) {
 int llWorker::ReplaceFlags(void) {
 	repeat_worker = false;
 	int left = 0;
+
+	for (unsigned int j=0; j<flag_cache_var.size(); j++) {
+		if (flag_cache_var[j]) {
+			flag_cache_var_found[j] = 0;
+		}
+	}
+
 	for (unsigned int i=0; i<name.size(); i++) {
 		if (i_value_cache[i]) {		
 			char *dummy = _llUtils()->GetPart(i_value_cache[i], i_value_num[i], &left);
@@ -188,8 +200,30 @@ int llWorker::ReplaceFlags(void) {
 		} else if (flag_cache[i]) {
 			used[i]    = 1;
 			*(flag[i]) = 1;
+		} else { 
+			for (unsigned int j=0; j<flag_cache_var.size(); j++) {
+				if (flag_cache_var[j]) {
+					char *var = _llUtils()->ReplaceFlags(flag_cache_var[j]);
+					if (strlen(var)) {
+						if (_stricmp(name[i], var) == 0) {
+							used[i]    = 1;
+							*(flag[i]) = 1;
+							flag_cache_var_found[j] = 1;
+						}
+					} else flag_cache_var_found[j] = 1; //switched off, but used
+				}
+			}
+		} 
+	}
+
+	for (unsigned int j=0; j<flag_cache_var.size(); j++) {
+		if (flag_cache_var[j] && !flag_cache_var_found[j]) {
+			_llLogger()->WriteNextLine(-LOG_WARNING, "%s: option [%s] defined by flag [%s] seems to be wrong", command_name, 
+				_llUtils()->ReplaceFlags(flag_cache_var[j]), flag_cache_var[j]);
+			return 0;
 		}
 	}
+
 	return 1;
 }
 

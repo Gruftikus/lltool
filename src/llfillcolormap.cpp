@@ -32,6 +32,11 @@ int llFillColorMap::RegisterOptions(void) {
 int llFillColorMap::Exec(void) {
 	if (!llMapWorker::Exec()) return 0;
 
+	if (!map->IsColorMap()) {
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map is no color map", command_name);
+		return 0;
+	}
+
 	llAlgCollection *algs_blue = NULL;
 	if (Used("-algblue")) {
 		algs_blue = _llAlgList()->GetAlgCollection(alg_list_blue);

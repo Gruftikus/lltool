@@ -45,7 +45,7 @@ int llCreateNormalMap::Exec(void) {
 
 	int widthx = map->GetWidthX();
 	int widthy = map->GetWidthY();
-	newmap = new llMap(widthx-1, widthy-1);
+	newmap = new llMap(widthx-1, widthy-1, MAP_COLOR);
 	newmap->SetEven();
 	newmap->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale());
 

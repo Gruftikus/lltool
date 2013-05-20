@@ -58,6 +58,7 @@
     <ClInclude Include="include\llexportmeshtoVRML.h" />
     <ClInclude Include="include\llfillcolormap.h" />
     <ClInclude Include="include\llfilter.h" />
+    <ClInclude Include="include\llimportmap.h" />
     <ClInclude Include="include\llinactivateallvertices.h" />
     <ClInclude Include="include\lllogger.h" />
     <ClInclude Include="include\llmakederivatives.h" />
@@ -135,6 +136,7 @@
     <ClCompile Include="src\llexportmeshtoVRML.cpp" />
     <ClCompile Include="src\llfillcolormap.cpp" />
     <ClCompile Include="src\llfilter.cpp" />
+    <ClCompile Include="src\llimportmap.cpp" />
     <ClCompile Include="src\llinactivateallvertices.cpp" />
     <ClCompile Include="src\lllogger.cpp" />
     <ClCompile Include="src\llmakederivatives.cpp" />

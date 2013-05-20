@@ -11,6 +11,9 @@
 #include "../include/llcommands.h"
 #include "../include/llquadlist.h"
 
+#define MAP_FLOAT 0
+#define MAP_SHORT 1
+#define MAP_COLOR 2
 
 class llShortarray {
 
@@ -309,16 +312,16 @@ public:
 	int GetTupel(unsigned int _x, unsigned int _y, unsigned char *_x1, unsigned char *_x2, unsigned char *_x3, unsigned char *_x4) {
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
-			*_x1 = char(idata[_x+_y*widthx] & 0xff);
-			*_x2 = char(idata[_x+_y*widthx] & 0xff00     >> 8);
-			*_x3 = char(idata[_x+_y*widthx] & 0xff0000   >> 16);
-			*_x4 = char(idata[_x+_y*widthx] & 0xff000000 >> 24);
+			*_x1 = unsigned char(idata[_x+_y*widthx] & 0xff);
+			*_x2 = unsigned char((idata[_x+_y*widthx] & 0xff00)     >> 8);
+			*_x3 = unsigned char((idata[_x+_y*widthx] & 0xff0000)   >> 16);
+			*_x4 = unsigned char((idata[_x+_y*widthx] & 0xff000000) >> 24);
 			return 1;
 		}
-		*_x1 = char( int(GetElementRaw(_x, _y)) & 0xff);
-		*_x2 = char((int(GetElementRaw(_x, _y)) & 0xff00)     >> 8);
-		*_x3 = char((int(GetElementRaw(_x, _y)) & 0xff0000)   >> 16);
-		*_x4 = char((int(GetElementRaw(_x, _y)) & 0xff000000) >> 24);
+		*_x1 = unsigned char( unsigned int(GetElementRaw(_x, _y)) & 0xff);
+		*_x2 = unsigned char((unsigned int(GetElementRaw(_x, _y)) & 0xff00)     >> 8);
+		*_x3 = unsigned char((unsigned int(GetElementRaw(_x, _y)) & 0xff0000)   >> 16);
+		*_x4 = unsigned char((unsigned int(GetElementRaw(_x, _y)) & 0xff000000) >> 24);
 		return 1;
 	}
 
@@ -326,21 +329,30 @@ public:
 		int scale) {
 			if (_x>=widthx || _y>=widthy) return 0;
 			if (idata) {
-				*_x1 = char((idata[_x+_y*widthx] * scale) & 0xff);
-				*_x2 = char((idata[_x+_y*widthx] * scale)  & 0xff00     >> 8);
-				*_x3 = char((idata[_x+_y*widthx] * scale)  & 0xff0000   >> 16);
-				*_x4 = char((idata[_x+_y*widthx] * scale)  & 0xff000000 >> 24);
+				*_x1 = unsigned char((idata[_x+_y*widthx] * scale)   & 0xff);
+				*_x2 = unsigned char(((idata[_x+_y*widthx] * scale)  & 0xff00)     >> 8);
+				*_x3 = unsigned char(((idata[_x+_y*widthx] * scale)  & 0xff0000)   >> 16);
+				*_x4 = unsigned char(((idata[_x+_y*widthx] * scale)  & 0xff000000) >> 24);
 				return 1;
 			}
-			*_x1 = char(( int(GetElementRaw(_x, _y) * float(scale))) & 0xff);
-			*_x2 = char(((int(GetElementRaw(_x, _y) * float(scale))) & 0xff00)     >> 8);
-			*_x3 = char(((int(GetElementRaw(_x, _y) * float(scale))) & 0xff0000)   >> 16);
-			*_x4 = char(((int(GetElementRaw(_x, _y) * float(scale))) & 0xff000000) >> 24);
+			*_x1 = unsigned char(( unsigned int(GetElementRaw(_x, _y) * float(scale))) & 0xff);
+			*_x2 = unsigned char(((unsigned int(GetElementRaw(_x, _y) * float(scale))) & 0xff00)     >> 8);
+			*_x3 = unsigned char(((unsigned int(GetElementRaw(_x, _y) * float(scale))) & 0xff0000)   >> 16);
+			*_x4 = unsigned char(((unsigned int(GetElementRaw(_x, _y) * float(scale))) & 0xff000000) >> 24);
 			return 1;
 	}
 
+	int SetTupel(unsigned int _x, unsigned int _y, unsigned char _x1, unsigned char _x2, unsigned char _x3, unsigned char _x4) {
+		if (_x>=widthx || _y>=widthy) return 0;
+		if (idata) {
+			idata[_x+_y*widthx] = unsigned int(_x1) | (unsigned int(_x2) << 8) | (unsigned int(_x3) << 16) | (unsigned int(_x4) << 24);
+			return 1;
+		}
+		SetElementRaw(_x, _y, int(unsigned int(_x1) | (unsigned int(_x2) << 8) | (unsigned int(_x3) << 16) | (unsigned int(_x4) << 24)));
+		return 1;
+	}
+
 	int SetBlue(unsigned int _x, unsigned int _y, unsigned char _val) {
-		is_color_map = 1;
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
 			idata[_x+_y*widthx] = (idata[_x+_y*widthx] & 0xffffff00) | _val;
@@ -351,7 +363,6 @@ public:
 	}
 
 	int SetGreen(unsigned int _x, unsigned int _y, unsigned char _val) {
-		is_color_map = 1;
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
 			idata[_x+_y*widthx] = (idata[_x+_y*widthx] & 0xffff00ff) | (_val << 8);
@@ -362,7 +373,6 @@ public:
 	}
 
 	int SetRed(unsigned int _x, unsigned int _y, unsigned char _val) {
-		is_color_map = 1;
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
 			idata[_x+_y*widthx] = (idata[_x+_y*widthx] & 0xff00ffff) | (_val << 16);
@@ -373,7 +383,6 @@ public:
 	}
 
 	int SetAlpha(unsigned int _x, unsigned int _y, unsigned char _val) {
-		is_color_map = 1;
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
 			idata[_x+_y*widthx] = (idata[_x+_y*widthx] & 0x00ffffff) | (_val << 24);

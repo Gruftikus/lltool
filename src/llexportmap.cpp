@@ -103,7 +103,7 @@ int llExportMap::Exec(void) {
 
 			int tupel = 0;
 			if (Used("-scale")) {
-				tupel = map->GetTupelScaled(x, y, &byte1, &byte2, &byte3, &byte4, scale);
+				tupel = map->GetTupelScaled(x, y, &byte1, &byte2, &byte3, &byte4, scale);			
 			} else {
 				tupel = map->GetTupel(x, y, &byte1, &byte2, &byte3, &byte4);
 			}

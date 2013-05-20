@@ -10,6 +10,8 @@ protected:
 
 	char *targetname;
 	float factor;
+	int   rgb;
+	float source_gamma;
 
 	char *pFilter;
 

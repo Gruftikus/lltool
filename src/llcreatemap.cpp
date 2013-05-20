@@ -20,14 +20,15 @@ int llCreateMap::RegisterOptions(void) {
 
 	RegisterValue("-widthx",  &widthx, LLWORKER_OBL_OPTION);
 	RegisterValue("-widthy",  &widthy, LLWORKER_OBL_OPTION);
-	RegisterValue("-x1",      &x1,     LLWORKER_OBL_OPTION);
-	RegisterValue("-y1",      &y1,     LLWORKER_OBL_OPTION);
-	RegisterValue("-x2",      &x2,     LLWORKER_OBL_OPTION);
-	RegisterValue("-y2",      &y2,     LLWORKER_OBL_OPTION);
+	RegisterValue("-x1",      &x1);
+	RegisterValue("-y1",      &y1);
+	RegisterValue("-x2",      &x2);
+	RegisterValue("-y2",      &y2);
 	RegisterValue("-zscale",  &z);
 	RegisterValue("-name",    &mapname);
 
 	RegisterFlag ("-even",    &even);
+	RegisterFlag ("-rgb",     &rgb);
 
 	return 1;
 }
@@ -35,7 +36,16 @@ int llCreateMap::RegisterOptions(void) {
 int llCreateMap::Exec(void) {
 	if (!llWorker::Exec()) return 0;
 
-	llMap * heightmap = new llMap(widthx, widthy);
+	if (!Used("-x1")) x1 = _llUtils()->x00;
+	if (!Used("-x2")) x2 = _llUtils()->x11;
+	if (!Used("-y1")) y1 = _llUtils()->y00;
+	if (!Used("-y2")) y2 = _llUtils()->y11;
+
+	llMap * heightmap = NULL;
+	if (Used("-rgb"))
+		heightmap = new llMap(widthx, widthy, MAP_COLOR);
+	else
+		heightmap = new llMap(widthx, widthy);
 	if (even) heightmap->SetEven();
 	heightmap->SetCoordSystem(x1, y1, x2, y2, z);
 

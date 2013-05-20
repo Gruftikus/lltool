@@ -38,17 +38,22 @@ int llCopyMap::Exec(void) {
 		return 0;
 	}
 
-	int widthx = map->GetWidthX();
-	int widthy = map->GetWidthY();
+	//int widthx = map->GetWidthX();
+	//int widthy = map->GetWidthY();
+
+	int x1 = map->GetRawX(_llUtils()->x00);
+	int y1 = map->GetRawY(_llUtils()->y00);
+	int x2 = map->GetRawX(_llUtils()->x11);
+	int y2 = map->GetRawY(_llUtils()->y11);
 
 	float defaultheight = map->GetDefaultHeight();
 	int   makeshort     = map->GetShort();
-	newmap = new llMap(widthx, widthy, makeshort, defaultheight);
+	newmap = new llMap(x2-x1+1, y2-y1+1, makeshort, defaultheight);
 	newmap->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale());
 
-	for (int y=0; y<widthy; y++) {
-		for (int x=0; x<widthx; x++) {
-			newmap->SetElementRaw(x, y, map->GetElementRaw(x,y));
+	for (int y=y1; y<=y2; y++) {
+		for (int x=x1; x<=x2; x++) {
+			newmap->SetElementRaw(x-x1, y-y1, map->GetElementRaw(x,y));
 		}
 	}
 

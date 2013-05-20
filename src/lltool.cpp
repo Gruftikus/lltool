@@ -101,6 +101,19 @@ int main(int argc, char **argv) {
 
 	_llUtils()->SetValue("_dds_tool", "s3tc.exe");
 
+	_llUtils()->SetValue("_mindistance", "50");
+	_llUtils()->SetValue("_cellsize_x",  "1000");
+	_llUtils()->SetValue("_cellsize_y",  "1000");
+
+	_llUtils()->SetValue("_quadsize_x",  "5000");
+	_llUtils()->SetValue("_quadsize_y",  "5000");
+	_llUtils()->SetValue("_quad_levels", "1");
+
+	_llUtils()->x00 = -10000.f;
+	_llUtils()->y00 = -10000.f;
+	_llUtils()->x11 =  10000.f;
+	_llUtils()->y11 =  10000.f;
+
 #ifdef _MSC_VER
 	__int64 time_statistics[LLCOM_MAX_WORKERS];
 	int time_statistics_cmd[LLCOM_MAX_WORKERS];

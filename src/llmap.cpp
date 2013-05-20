@@ -11,16 +11,18 @@ llMap::llMap(unsigned int _x, unsigned int _y, int _makeshort, float _default) {
 	sdata    = NULL;
 	idata    = NULL;
 
-	makeshort = _makeshort;
+	is_color_map = 0;
+	makeshort    = _makeshort;
 	if (makeshort == 0 || makeshort == 1)
 		sdata = new llShortarray(widthx*widthy, makeshort, _default); 
-	else
+	else {
+		is_color_map = 1;
 		idata = new unsigned int[widthx*widthy];
+	}
 
 	scaling = 1;
 	uneven  = 1;
 	defaultheight = _default;
-	is_color_map  = 0;
 
 	InitRnd(0, 0, widthx-1, widthy-1);
 }

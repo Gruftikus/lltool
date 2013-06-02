@@ -21,7 +21,7 @@ int llSetAlgVertices::RegisterOptions(void) {
 
 	RegisterValue("-n",      &nmax, LLWORKER_OBL_OPTION);
 	RegisterValue("-alg",    &alg_list);
-	RegisterValue("-cutoff", &alg_list);
+	RegisterValue("-cutoff", &cutoff);
 	RegisterFlag ("-max",    &max);
 
 	return 1;
@@ -161,14 +161,22 @@ loop:
 		}
 
 		empty = 0;
-		mean+=value;
+
+		if (num && value > (cutoff*mean/num)) 
+			value = (cutoff*mean/num);  
+
 		num++;
+		mean+=value;
 
 		float idealdist = minab;
 		if (cellsize_m)
 			idealdist = cellsize_m - (((cellsize_m-minab)/float(mean/num)) * float(value));
 
 		if (idealdist < minab) idealdist = minab;
+
+		//std::cout << "mean=" << mean << ", num=" << num << std::endl;
+
+		//if (mean>1) {int *t=0;*t=0;}
 
 		if (ceiling > (cutoff*mean/num)) 
 			ceiling = (cutoff*mean/num);  

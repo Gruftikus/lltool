@@ -114,6 +114,8 @@ class llCommands {
 	int GetCommand(void);
 	const char *CurrentCommand;
 
+	int Loop(void);
+
 	void CloseLogfile(void) {
 		if (logfile)
 			fclose(logfile);

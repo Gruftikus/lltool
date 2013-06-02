@@ -12,6 +12,9 @@
 #include "../include/def.h"
 #else
 
+#include "../externals/mtparser/MTParserLib/MTParser.h"
+#include "../externals/mtparser/MTParserLib/MTParserLocalizer.h"
+
 #include <iostream>
 
 #include <direct.h>
@@ -387,7 +390,7 @@ check_again:
 	//check for flag replacement
 	for (unsigned int i=0; i<strlen(tmp); i++) {
 		if ((tmp)[i]=='$') {
-			if (!(tmp[i+1]=='$') && !(i>0 && tmp[i-1]=='$')) {
+			if (!(tmp[i+1]=='$') && !(tmp[i+1]=='(') && !(i>0 && tmp[i-1]=='$')) {
 				//find the end
 				for (unsigned int j=i+1; j<strlen(tmp); j++) {
 					if (!(isalnum((tmp)[j]) || (tmp)[j]=='_')) { //find the end
@@ -444,9 +447,49 @@ check_again:
 				delete tmp;
 				tmp = linenew;
 				goto check_again;
+			} //if (!(tmp[i+1]=='$') && !(tmp[i+1]=='(')...
+		} //if ((tmp)[i]=='$') {
+	} //for...
+
+check_again2:
+
+#ifdef _MSC_VER
+	int bracket_position1 = -1;
+	int bracket_position2 = 0;
+	if (strlen(tmp)>2) {
+		for (unsigned int i=0; i<strlen(tmp)-2; i++) {
+			if ((tmp)[i]=='$' && (tmp)[i+1]=='(' && bracket_position1<0) {
+				int bracket_counter = 0;
+				bracket_position1 = i;
+				for (unsigned int j=i+1; j<strlen(tmp); j++) {
+					if (!bracket_position2 && (tmp)[j]=='(') bracket_counter++;
+					if (!bracket_position2 && (tmp)[j]==')') bracket_counter--;
+					if (!bracket_position2 && !bracket_counter) bracket_position2 = j;
+				}
 			}
 		}
+		if (bracket_position2) {
+			tmp[bracket_position2] = '\0';
+			tmp[bracket_position1] = '\0';
+			MTParser *parser = new MTParser();
+			parser->compile(_T(tmp + bracket_position1 + 2));
+			double val = parser->evaluate();
+			unsigned int len = strlen(tmp) + strlen(tmp + bracket_position2 + 1) + 20;
+			linenew = new char[len];
+			if (_llUtils()->GetValue("_format")) {
+				char format[1024];
+				sprintf_s(format, 1024, "%%s%%%slf%%s", _llUtils()->GetValue("_format"));
+				sprintf_s(linenew, len, format, tmp, val, tmp + bracket_position2 + 1);
+
+			} else
+				sprintf_s(linenew, len, "%s%lf%s", tmp, val, tmp + bracket_position2 + 1);
+			delete tmp;
+			tmp = linenew;
+			delete parser;
+			goto check_again2;
+		}
 	}
+#endif
 
 	for (unsigned int i=0; i<strlen(tmp); i++) {
 		if (i>0 && tmp[i]=='$' && tmp[i-1]=='$') {

@@ -415,6 +415,20 @@ check_again:
 								sprintf_s(linenew, len, "%s%s%s", tmp, val, tmp+j+1);
 							}
 						} else {
+							//(if a flag is not existing, we keep it free)	
+							if (end != '&') {
+								unsigned int len = strlen(tmp) + 2 + strlen(tmp+j+1);
+								linenew = new char[len];
+								sprintf_s(linenew, len, "%s%c%s", tmp, end, tmp+j+1);
+							} else {
+								unsigned int len = strlen(tmp) + 1 + strlen(tmp+j+1);
+								linenew = new char[len];
+								sprintf_s(linenew, len, "%s%s", tmp, tmp+j+1);
+							}
+						}
+
+#if 0 				
+						else {
 							if (end != '&') {
 								unsigned int len = strlen(tmp) + 7 + 2 + strlen(tmp+j+1);
 								linenew = new char[len];
@@ -425,6 +439,7 @@ check_again:
 								sprintf_s(linenew, len, "%s<error>%s", tmp, tmp+j+1);
 							}
 						}
+#endif
 						delete tmp;
 						tmp = linenew;
 						goto check_again;
@@ -440,10 +455,18 @@ check_again:
 					linenew = new char[len];
 					sprintf_s(linenew, len, "%s%s", tmp, val);
 				} else {
+					unsigned int len = strlen(tmp) + 1;
+					linenew = new char[len];
+					sprintf_s(linenew, len, "%s", tmp);
+				}
+
+#if 0
+				else {
 					unsigned int len = strlen(tmp) + 7 + 1;
 					linenew = new char[len];
 					sprintf_s(linenew, len, "%s<error>", tmp);
 				}
+#endif
 				delete tmp;
 				tmp = linenew;
 				goto check_again;
@@ -476,9 +499,9 @@ check_again2:
 			double val = parser->evaluate();
 			unsigned int len = strlen(tmp) + strlen(tmp + bracket_position2 + 1) + 20;
 			linenew = new char[len];
-			if (_llUtils()->GetValue("_format")) {
+			if (_llUtils()->GetValue("_flag_format")) {
 				char format[1024];
-				sprintf_s(format, 1024, "%%s%%%slf%%s", _llUtils()->GetValue("_format"));
+				sprintf_s(format, 1024, "%%s%%%slf%%s", _llUtils()->GetValue("_flag_format"));
 				sprintf_s(linenew, len, format, tmp, val, tmp + bracket_position2 + 1);
 
 			} else

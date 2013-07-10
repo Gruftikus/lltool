@@ -10,6 +10,8 @@ class llSetHeight : public llMapWorker {
 protected:
 
 	int   usegameunits;
+	int   min, max;
+
 	float zmin;
 	char *alg_list;
 

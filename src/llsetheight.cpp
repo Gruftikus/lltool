@@ -11,6 +11,7 @@ int llSetHeight::Prepare(void) {
 
 	usegameunits = 0;
 	alg_list     = NULL;
+	min = max    = 0;
 
 	return 1;
 }
@@ -20,7 +21,10 @@ int llSetHeight::RegisterOptions(void) {
 
 	RegisterValue("-z",            &zmin, LLWORKER_OBL_OPTION);
 	RegisterValue("-alg",          &alg_list);
+
 	RegisterFlag ("-usegameunits", &usegameunits);
+	RegisterFlag ("-min",          &min);
+	RegisterFlag ("-max",          &max);
 
 	return 1;
 }
@@ -50,7 +54,12 @@ int llSetHeight::Exec(void) {
 			if (algs) {
 				alg = algs->GetValue(map->GetCoordX(x), map->GetCoordY(y));
 			}
-			map->SetElementRaw(x, y, zmin + alg);
+			if (min && map->GetElementRaw(x, y) < zmin)
+				map->SetElementRaw(x, y, zmin + alg);
+			else if (max && map->GetElementRaw(x, y) > zmin)
+				map->SetElementRaw(x, y, zmin + alg);
+			else if (!min && !max)
+				map->SetElementRaw(x, y, zmin + alg);
 		}
 	}
 

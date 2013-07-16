@@ -177,10 +177,11 @@ int llScaleMap::Exec(void) {
 
 	llPointList    * points    = _llMapList()->GetPointList(mapname);
 	llTriangleList * triangles = _llMapList()->GetTriangleList(mapname);
+	llLineList     * lines     = _llMapList()->GetLineList(mapname);
 	llPolygonList  * polygons  = _llMapList()->GetPolygonList(mapname);
 
 	if (Used("-name")) {
-		_llMapList()->AddMap(targetname, newmap, points, triangles, polygons);
+		_llMapList()->AddMap(targetname, newmap, points, triangles, polygons, lines);
 	} else {
 		delete (map);
 		_llMapList()->ExchangeMap(mapname, newmap);

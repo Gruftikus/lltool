@@ -27,7 +27,7 @@ int llTriangulation::Exec(void) {
 	}
 
 	if (triangles->GetN()) {
-		_llLogger()->WriteNextLine(-LOG_ERROR,"%s: Triangulation already done.", command_name);
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: Triangulation already done.", command_name);
 		return 0;
 	}
 
@@ -84,8 +84,8 @@ int llTriangulation::Exec(void) {
 	/*   produce an edge list (e), a Voronoi diagram (v), and a triangle */
 	/*   neighbor list (n).   */
 
-	_llLogger()->WriteNextLine(-LOG_INFO,"Call Triangle algorithm");
-	_llLogger()->WriteNextLine(-LOG_INFO,"(written by by J. R. Shewchuk, see README)");
+	_llLogger()->WriteNextLine(-LOG_INFO, "Call Triangle algorithm");
+	_llLogger()->WriteNextLine(-LOG_INFO, "(written by by J. R. Shewchuk, see README)");
 
 	//triangulate("pczAevn", &in, &mid, &vorout);
 	triangulate((char *)"-YY -D -z -A -v -S0", &in, &mid, &vorout);
@@ -104,8 +104,13 @@ int llTriangulation::Exec(void) {
 	}
 
 	if (!good_flag) {
-		_llLogger()->WriteNextLine(-LOG_ERROR,"Triangulation (partly) failed.");
+		_llLogger()->WriteNextLine(-LOG_ERROR, "Triangulation (partly) failed.");
 		return 0;
+	}
+
+	llLineList *lines = _llMapList()->GetLineList(mapname);
+	if (lines) {
+		
 	}
 
 	return 1;

@@ -144,7 +144,7 @@ int llCreateNormalMap::Exec(void) {
 		}
 	}
 	
-	_llMapList()->AddMap(targetname, newmap, NULL, NULL, NULL);
+	_llMapList()->AddMap(targetname, newmap, NULL, NULL, NULL, NULL);
 
 	return 1;
 }

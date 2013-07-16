@@ -95,10 +95,11 @@ int llFilter::Exec(void) {
 	
 	//Filtered map shares the points, etc with its master
 	llPointList    * points    = _llMapList()->GetPointList(mapname);
+	llLineList     * lines     = _llMapList()->GetLineList(mapname);
 	llTriangleList * triangles = _llMapList()->GetTriangleList(mapname);
 	llPolygonList  * polygons  = _llMapList()->GetPolygonList(mapname);
 
-	_llMapList()->AddMap(targetname, newmap, points, triangles, polygons);
+	_llMapList()->AddMap(targetname, newmap, points, triangles, polygons, lines);
 
 	if (makederivatives) {
 		llMakeDerivatives *der = new llMakeDerivatives();

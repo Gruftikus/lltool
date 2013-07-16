@@ -13,14 +13,12 @@ llMapList * _llMapList() {
     return &_fllMapList();
 }
 
-
 llMapList::llMapList() {
 	map_list.resize(0);
 	map_name.resize(0);
 }
 
-
-int llMapList::AddMap(const char *_name, llMap *_map, llPointList *_points, llTriangleList *_triangles, llPolygonList *_polygons) {
+int llMapList::AddMap(const char *_name, llMap *_map, llPointList *_points, llTriangleList *_triangles, llPolygonList *_polygons, llLineList *_lines) {
 	int size = GetSize();
 	for (int i=0; i<size; i++) {
 		if (_stricmp(_name, map_name[i]) == 0) {
@@ -34,6 +32,8 @@ int llMapList::AddMap(const char *_name, llMap *_map, llPointList *_points, llTr
 	map_name[size]      = _name;
 	point_list.resize(size + 1);
 	point_list[size]    = _points;
+	line_list.resize(size + 1);
+	line_list[size]     = _lines;
 	triangle_list.resize(size + 1);
 	triangle_list[size] = _triangles;
 	polygon_list.resize(size + 1);
@@ -60,6 +60,8 @@ int llMapList::AddMap(const char *_name, llMap *_map, const char *_oldmap) {
 	map_name[size]      = _name;
 	point_list.resize(size + 1);
 	point_list[size]    = point_list[num];
+	line_list.resize(size + 1);
+	line_list[size]     = line_list[num];
 	triangle_list.resize(size + 1);
 	triangle_list[size] = triangle_list[num];
 	polygon_list.resize(size + 1);
@@ -103,12 +105,14 @@ int llMapList::DeleteMap(char *_name) {
 	llMap          *map       = map_list[num];
 	llPointList    *points    = point_list[num];
 	llTriangleList *triangles = triangle_list[num];
+	llLineList     *lines     = line_list[num];
 	llPolygonList  *poly      = polygon_list[num];
 
 	for (int i=0; i<GetSize(); i++) {
 		if (i != num) {
 			if (map == map_list[i])            map       = NULL;
 			if (points == point_list[i])       points    = NULL;
+			if (lines  == line_list[i])        lines     = NULL;
 			if (triangles == triangle_list[i]) triangles = NULL;
 			if (poly == polygon_list[i])       poly      = NULL;
 		}
@@ -116,6 +120,7 @@ int llMapList::DeleteMap(char *_name) {
 
 	if (!map) delete map;
 	if (!points) delete points;
+	if (!lines) delete lines;
 	if (!triangles) delete triangles;
 	if (!poly) delete poly;
 
@@ -123,6 +128,7 @@ int llMapList::DeleteMap(char *_name) {
 		map_name[i]      = map_name[i+1];
 		map_list[i]      = map_list[i+1];
 		point_list[i]    = point_list[i+1];
+		line_list[i]     = line_list[i+1];
 		triangle_list[i] = triangle_list[i+1];
 		polygon_list[i]  = polygon_list[i+1];
 	}
@@ -132,6 +138,7 @@ int llMapList::DeleteMap(char *_name) {
 	map_list.resize(size - 1);
 	map_name.resize(size - 1);
 	point_list.resize(size - 1);
+	line_list.resize(size - 1);
 	triangle_list.resize(size - 1);
 	polygon_list.resize(size - 1);
 

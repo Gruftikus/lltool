@@ -63,12 +63,13 @@ int llCreateMap::Exec(void) {
 	llQuadList     *quads      = heightmap->GenerateQuadList();
 	llPointList    *points     = new llPointList(0, quads); 
 	llPolygonList  *polygons   = new llPolygonList(points, heightmap);
+	llLineList     *lines      = new llLineList(0, points, heightmap);
 	llTriangleList *triangles  = new llTriangleList(0, points);
 		
 	if (!Used("-name"))
-		_llMapList()->AddMap("_heightmap", heightmap, points, triangles, polygons);
+		_llMapList()->AddMap("_heightmap", heightmap, points, triangles, polygons, lines);
 	else
-		_llMapList()->AddMap(mapname, heightmap, points, triangles, polygons);
+		_llMapList()->AddMap(mapname, heightmap, points, triangles, polygons, lines);
 
 	return 1;
 }

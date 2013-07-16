@@ -57,10 +57,11 @@ int llCopyMap::Exec(void) {
 	}
 
 	llPointList    * points    = _llMapList()->GetPointList(mapname);
+	llLineList     * lines     = _llMapList()->GetLineList(mapname);
 	llTriangleList * triangles = _llMapList()->GetTriangleList(mapname);
 	llPolygonList  * polygons  = _llMapList()->GetPolygonList(mapname);
 
-	_llMapList()->AddMap(targetname, newmap, points, triangles, polygons);
+	_llMapList()->AddMap(targetname, newmap, points, triangles, polygons, lines);
 
 	return 1;
 }

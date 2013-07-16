@@ -206,7 +206,7 @@ int llTriangleList::RemoveTriangle(unsigned int n) {
 int llTriangleList::AddTriangle(int _p1, int _p2, int _p3) {
 
 	if ((_p1 == _p2) ||  (_p3 == _p2) || (_p3 == _p1)) {
-		mesg->WriteNextLine(LOG_WARNING,"Triangle with two equal points (maybe a very small one) -> removed");
+		mesg->WriteNextLine(LOG_WARNING, "Triangle with two equal points (maybe a very small one) -> removed");
 		mesg->Dump();
 #if 0
 		std::cout << p1 << ":" << p2 << ":" << p3 << std::endl;

@@ -32,6 +32,7 @@ int llMakeDerivatives::Exec(void) {
 	//Filtered map shares the points, etc with its master
 	llPointList    * points    = _llMapList()->GetPointList(mapname);
 	llTriangleList * triangles = _llMapList()->GetTriangleList(mapname);
+	llLineList     * lines     = _llMapList()->GetLineList(mapname);
 	llPolygonList  * polygons  = _llMapList()->GetPolygonList(mapname);
 
 	char * namex1 = new char[strlen(mapname)+5];
@@ -133,10 +134,10 @@ repeat:
 
 	mapx1 = new llMap(widthx, widthy, data1x , 0);
 	mapx1->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale()/widthx_per_raw);
-	_llMapList()->AddMap(namex1, mapx1, points, triangles, polygons);
+	_llMapList()->AddMap(namex1, mapx1, points, triangles, polygons, lines);
 	mapy1 = new llMap(widthx, widthy, data1y , 0);
 	mapy1->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale()/widthy_per_raw);
-	_llMapList()->AddMap(namey1, mapy1, points, triangles, polygons);
+	_llMapList()->AddMap(namey1, mapy1, points, triangles, polygons, lines);
 
 	x2max=0;
 	for (unsigned int y=0; y<widthy; y++) {
@@ -172,10 +173,10 @@ repeat:
 
 	mapx2 = new llMap(widthx, widthy, data2x, 0);
 	mapx2->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale()/widthx_per_raw);
-	_llMapList()->AddMap(namex2, mapx2, points, triangles, polygons);
+	_llMapList()->AddMap(namex2, mapx2, points, triangles, polygons, lines);
 	mapy2 = new llMap(widthx, widthy, data2y, 0);
 	mapy2->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale()/widthy_per_raw);
-	_llMapList()->AddMap(namey2, mapy2, points, triangles, polygons);
+	_llMapList()->AddMap(namey2, mapy2, points, triangles, polygons, lines);
 
 	return 1;
 }

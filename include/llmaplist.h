@@ -5,6 +5,7 @@
 
 #include "../include/llmap.h"
 #include "../include/llpolygonlist.h"
+#include "../include/lllinelist.h"
 #include "../include/lltrianglelist.h"
 
 class       llMapList;
@@ -19,6 +20,7 @@ protected:
 	std::vector<const char*>     map_name;
 	std::vector<llPointList*>    point_list;
 	std::vector<llPolygonList*>  polygon_list;
+	std::vector<llLineList*>     line_list;
 	std::vector<llTriangleList*> triangle_list;
 
 
@@ -27,7 +29,7 @@ public:
 	//constructor
 	llMapList();
 
-	int AddMap(const char *_name, llMap *_map, llPointList *_points, llTriangleList *_triangles, llPolygonList *_polygons);
+	int AddMap(const char *_name, llMap *_map, llPointList *_points, llTriangleList *_triangles, llPolygonList *_polygons, llLineList *_lines);
 	int AddMap(const char *_name, llMap *_map, const char *_oldmap);
 
 	int DeleteMap(char *_name);
@@ -51,6 +53,11 @@ public:
 		int map_p = GetMapNum(_map);
 		if (map_p<0) return NULL;
 		return point_list[map_p];
+	}
+	llLineList *GetLineList(char *_map) {
+		int map_p = GetMapNum(_map);
+		if (map_p<0) return NULL;
+		return line_list[map_p];
 	}
 	llTriangleList *GetTriangleList(char *_map) {
 		int map_p = GetMapNum(_map);

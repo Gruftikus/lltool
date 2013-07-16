@@ -32,6 +32,7 @@
     <ClInclude Include="externals\resampler\resampler.h" />
     <ClInclude Include="externals\triangle\triangle.h" />
     <ClInclude Include="include\llactivatevisiblevertices.h" />
+    <ClInclude Include="include\lladddiscontinuityline.h" />
     <ClInclude Include="include\lladdvertextopolygon.h" />
     <ClInclude Include="include\llalg.h" />
     <ClInclude Include="include\llalgconst.h" />
@@ -60,6 +61,7 @@
     <ClInclude Include="include\llfilter.h" />
     <ClInclude Include="include\llimportmap.h" />
     <ClInclude Include="include\llinactivateallvertices.h" />
+    <ClInclude Include="include\lllinelist.h" />
     <ClInclude Include="include\lllogger.h" />
     <ClInclude Include="include\llmakederivatives.h" />
     <ClInclude Include="include\llmap.h" />
@@ -111,6 +113,7 @@
     <ClCompile Include="externals\resampler\resampler.cpp" />
     <ClCompile Include="externals\triangle\triangle.cc" />
     <ClCompile Include="src\llactivatevisiblevertices.cpp" />
+    <ClCompile Include="src\lladddiscontinuityline.cpp" />
     <ClCompile Include="src\lladdvertextopolygon.cpp" />
     <ClCompile Include="src\llalg.cpp" />
     <ClCompile Include="src\llalgconst.cpp" />
@@ -138,6 +141,7 @@
     <ClCompile Include="src\llfilter.cpp" />
     <ClCompile Include="src\llimportmap.cpp" />
     <ClCompile Include="src\llinactivateallvertices.cpp" />
+    <ClCompile Include="src\lllinelist.cpp" />
     <ClCompile Include="src\lllogger.cpp" />
     <ClCompile Include="src\llmakederivatives.cpp" />
     <ClCompile Include="src\llmap.cpp" />

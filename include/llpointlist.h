@@ -55,6 +55,8 @@ private:
 	std::vector<int>       tmp_active;
 	std::vector<int>       flag;
 	std::vector<int>       secondary;
+	std::vector<double>    angle1;
+	std::vector<double>    angle2;
 	std::vector<llCoord>   uv;
 	unsigned int counter;
 
@@ -135,6 +137,8 @@ public:
 		active.resize(counter);
 		tmp_active.resize(counter);
 		flag.resize(counter);
+		angle1.resize(counter);
+		angle2.resize(counter);
 	}
 
 	void Resize(int _i) {
@@ -144,6 +148,8 @@ public:
 		active.resize(_i);
 		tmp_active.resize(_i);
 		flag.resize(_i);
+		angle1.resize(_i);
+		angle2.resize(_i);
 	}
 
 	void SetFlag(int _i, int _flag) {
@@ -189,6 +195,11 @@ public:
 	void SetY(int _n, float _y) {
 		v[_n].y = _y;
 	}
+
+	void   SetAngle1(int _n, double _angle1) {angle1[_n] = _angle1;};
+	void   SetAngle2(int _n, double _angle2) {angle2[_n] = _angle2;};
+	double GetAngle1(int _n) {return angle1[_n];};
+	double GetAngle2(int _n) {return angle2[_n];};
 
 	void SetTexAnchor(float _f1, float _f2, float _f3, float _f4) {
 		tex00x = _f1;

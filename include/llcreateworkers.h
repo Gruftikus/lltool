@@ -55,6 +55,7 @@
 #include "../include/llsetgrid.h"
 #include "../include/llsetgridborder.h"
 #include "../include/llsetvertex.h"
+#include "../include/lladddiscontinuityline.h"
 
 //Triangle-modifiers:
 #include "../include/lltrimod.h"
@@ -127,6 +128,8 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llPanorama());
 	_batch->RegisterWorker(new llCreatePolygon());
 	_batch->RegisterWorker(new llAddVertexToPolygon());
+
+	_batch->RegisterWorker(new llAddDiscontinuityLine());
 
 	_batch->RegisterWorker(new llTriangulation());
 

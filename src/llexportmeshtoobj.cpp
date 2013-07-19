@@ -63,10 +63,30 @@ int llExportMeshToObj::MakeSelection() {
 			points->GetY(i) >= y00 && points->GetY(i)<= y11) {
 
 				float z = map->GetZ(points->GetX(i), points->GetY(i));
-				int newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), z);
 				if (z < lowestz) 
 					lowestz = z;
-				points->SetSecondary(i, newp);
+
+				float angles[10], az[10];
+
+				int num = _llMapList()->GetNumHeights(mapname, points->GetX(i), points->GetY(i), angles, az, 10);
+				if (num > 1) {
+					//std::cout << "multiple height at " << points->GetX(i) << ":" << points->GetY(i) << std::endl;
+					int newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), az[0]);
+					newpoints->SetAngle1(newp, angles[num-1]);
+					newpoints->SetAngle2(newp, angles[0]);
+					points->SetSecondary(i, newp);
+					for (int j=1; j<num; j++) {
+						int oldp = newp;
+						newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), az[j]);
+						newpoints->SetAngle1(newp, angles[j-1]);
+						newpoints->SetAngle2(newp, angles[j]);
+						newpoints->SetSecondary(oldp, newp);
+					//std::cout << angles[j] << ":" << az[j] << std::endl;
+					}				
+				} else {
+					int newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), z);
+					points->SetSecondary(i, newp);
+				}
 		}
 	}
 

@@ -1,5 +1,6 @@
 #include "../include/lltriangulation.h"
 #include "../include/llmaplist.h"
+#include "../include/llsplitbetween.h"
 
 #define REAL double
 #include "../externals/triangle/triangle.h"
@@ -110,7 +111,28 @@ int llTriangulation::Exec(void) {
 
 	llLineList *lines = _llMapList()->GetLineList(mapname);
 	if (lines) {
-		
+		llSplitBetween *splitter = new llSplitBetween();
+		if (!splitter->RegisterOptions()) return 0;
+
+		for (int i=0; i<lines->GetN(); i++) {
+			char dummy[100];
+			sprintf_s(dummy, "%f", lines->GetLine(i)->GetX1());
+			splitter->SetValue("-x1", dummy);
+			sprintf_s(dummy, "%f", lines->GetLine(i)->GetX2());
+			splitter->SetValue("-x2", dummy);
+			sprintf_s(dummy, "%f", lines->GetLine(i)->GetY1());
+			splitter->SetValue("-y1", dummy);
+			sprintf_s(dummy, "%f", lines->GetLine(i)->GetY2());
+			splitter->SetValue("-y2", dummy);
+			splitter->Prepare();
+			splitter->ReplaceFlags();
+			//splitter->Print();
+			if (!splitter->Exec()) {
+				delete splitter;
+				return 0;
+			}
+		}
+
 	}
 
 	return 1;

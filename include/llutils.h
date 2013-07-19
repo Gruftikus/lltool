@@ -5,6 +5,10 @@
 #define MAX_FLAGS				2000
 #define MAX_GAMES				10
 
+#ifndef M_PI
+#define M_PI           3.14159265358979323846
+#endif
+
 #include <iostream>
 #include <stdarg.h>
 #include <vector>

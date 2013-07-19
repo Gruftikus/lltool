@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 
+
 llMapList& _fllMapList() {
     static llMapList* ans = new llMapList();
     return *ans;
@@ -143,5 +144,103 @@ int llMapList::DeleteMap(char *_name) {
 	polygon_list.resize(size - 1);
 
 	return 1;
+
+}
+
+int llMapList::GetNumHeights(char *_mapname, float _x, float _y, float *_angles, float *_z, int _size) {
+	//returns the number of possible height of the map _mapname
+	//at position _x, _y
+
+	llLineList *lines = GetLineList(_mapname);
+	if (!lines) return 1; //no lines, no problem...
+
+	llPointList *points = GetPointList(_mapname);
+	if (!points) return 1;
+
+	llMap *map = GetMap(_mapname);
+
+	int angles_counter = 0;
+
+	float pixelsize = (map->GetWidthXPerRaw() + map->GetWidthXPerRaw()) / 2.f;
+
+	for (int i=0; i<lines->GetN(); i++) {
+		float t, px, py, pz;
+
+		points->GetClosestPointOnLine(lines->GetLine(i)->GetX1(), lines->GetLine(i)->GetY1(), 0,
+			lines->GetLine(i)->GetX2() - lines->GetLine(i)->GetX1(), lines->GetLine(i)->GetY2() - lines->GetLine(i)->GetY1(), 0,
+			_x, _y, 0, &t, &px, &py, &pz);
+
+		float distance = sqrt((px - _x)*(px - _x) + (py - _y)*(py - _y));
+
+		if (distance <= pixelsize && t >= 0 && t <= 1) {
+			float angle = atan((lines->GetLine(i)->GetY2() - lines->GetLine(i)->GetY1()) / 
+				(lines->GetLine(i)->GetX2() - lines->GetLine(i)->GetX1()));
+			if (angles_counter < _size-1) {
+				_angles[angles_counter++] = angle;
+
+				if (sqrt((px - lines->GetLine(i)->GetX1())*(px - lines->GetLine(i)->GetX1()) + (py - lines->GetLine(i)->GetY1())*(py - lines->GetLine(i)->GetY1())) > pixelsize &&
+					sqrt((px - lines->GetLine(i)->GetX2())*(px - lines->GetLine(i)->GetX2()) + (py - lines->GetLine(i)->GetY2())*(py - lines->GetLine(i)->GetY2())) > pixelsize) {
+						//in the middle of the line
+						_angles[angles_counter++] = angle + M_PI;
+				}
+
+			} else {
+				_llLogger()->WriteNextLine(-LOG_ERROR, "too many discontinuities in map [%s] at (%f, %f)", _mapname, _x, _y);
+			}
+		}
+	}
+
+	for (int i=0; i<angles_counter; i++) {
+		if (_angles[i] < 0)      _angles[i] += 2*M_PI;
+		if (_angles[i] > 2*M_PI) _angles[i] -= 2*M_PI;
+	}
+
+	//bubble sort
+	for (int i=0; i<angles_counter; i++) {
+		for (int j=0; j<i-1; j++) {
+			if (_angles[j] > _angles[j+1]) {
+				double x     = _angles[j];
+				_angles[j]   = _angles[j+1];
+				_angles[j+1] = x;
+			}
+		}
+	}
+
+	//calculate section angles
+	float *secangles = new float[_size];
+
+	if (_angles[0] == 0) {
+		secangles[0] = _angles[1] / 2.;
+	} else { //first section angle must take the last one into account
+		secangles[0] = (_angles[0] + (_angles[angles_counter-1] - 2*M_PI)) / 2.;
+		if (secangles[0] < 0) secangles[0] += 2*M_PI;
+	}
+
+	for (int i=1; i<angles_counter; i++) {
+		secangles[i] = (_angles[i] + _angles[i-1]) / 2.;
+	}
+
+	//find pixel
+	unsigned int posx = map->GetRawX(_x);
+	unsigned int posy = map->GetRawX(_y);
+
+	for (int i=0; i<angles_counter; i++) {
+		unsigned int loc_posx = posx;
+		unsigned int loc_posy = posy;
+		if (secangles[i] < M_PI/8.)          {loc_posx++;}
+		else if (secangles[i] < M_PI*3./8.)  {loc_posx++;loc_posy++;}
+		else if (secangles[i] < M_PI*5./8.)  {loc_posy++;}
+		else if (secangles[i] < M_PI*7./8.)  {loc_posx--;loc_posy++;}
+		else if (secangles[i] < M_PI*9./8.)  {loc_posx--;}
+		else if (secangles[i] < M_PI*11./8.) {loc_posx--;loc_posy--;}
+		else if (secangles[i] < M_PI*13./8.) {loc_posy--;}
+		else if (secangles[i] < M_PI*15./8.) {loc_posx++;loc_posy--;}
+		else                                 {loc_posx++;}
+
+		_z[i] = map->GetZ(loc_posx, loc_posy);
+	}
+
+	delete secangles;
+	return angles_counter;
 
 }

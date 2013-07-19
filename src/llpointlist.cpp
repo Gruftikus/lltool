@@ -22,6 +22,9 @@ int llPointList::AddPoint(float _x, float _y, float _z) {
 	active[counter]     = 1;
 	tmp_active[counter] = 1;
 	flag[counter]       = 0;
+	angle1[counter]     = 0;
+	angle2[counter]     = 0;
+	secondary[counter]  = -1;
 
 	counter++;
 

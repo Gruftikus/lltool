@@ -21,7 +21,7 @@ int llSplitBetween::Exec(void) {
 
 	triangles->DivideBetween(x1, y1, x2, y2, map);  
 
-	_llLogger()->WriteNextLine(LOG_COMMAND,"%s: done", command_name);
+	//_llLogger()->WriteNextLine(LOG_COMMAND,"%s: done", command_name);
 
 	return 1;
 }

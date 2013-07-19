@@ -35,6 +35,7 @@ public:
 	int DeleteMap(char *_name);
 
 	void ExchangeMap(char *_name, llMap *_map);
+
 	llMap *GetMap(const char* _name);
 
 	int GetMapNum(const char* _name) {
@@ -100,6 +101,8 @@ public:
 		if (!map) return 0.f;
 		return map->GetWidthYPerRaw();
 	};
+
+	int GetNumHeights(char *_mapname, float _x, float _y, float *_angles, float *_z, int _size);
 
 };
 

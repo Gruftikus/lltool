@@ -161,7 +161,7 @@ int llMapList::GetNumHeights(char *_mapname, float _x, float _y, float *_angles,
 
 	int angles_counter = 0;
 
-	float pixelsize = (map->GetWidthXPerRaw() + map->GetWidthXPerRaw()) / 2.f;
+	float scansize = 1.f;
 
 	for (int i=0; i<lines->GetN(); i++) {
 		float t, px, py, pz;
@@ -172,14 +172,14 @@ int llMapList::GetNumHeights(char *_mapname, float _x, float _y, float *_angles,
 
 		float distance = sqrt((px - _x)*(px - _x) + (py - _y)*(py - _y));
 
-		if (distance <= pixelsize && t >= 0 && t <= 1) {
+		if (distance <= scansize && t >= 0 && t <= 1) {
 			float angle = atan((lines->GetLine(i)->GetY2() - lines->GetLine(i)->GetY1()) / 
 				(lines->GetLine(i)->GetX2() - lines->GetLine(i)->GetX1()));
 			if (angles_counter < _size-1) {
 				_angles[angles_counter++] = angle;
 
-				if (sqrt((px - lines->GetLine(i)->GetX1())*(px - lines->GetLine(i)->GetX1()) + (py - lines->GetLine(i)->GetY1())*(py - lines->GetLine(i)->GetY1())) > pixelsize &&
-					sqrt((px - lines->GetLine(i)->GetX2())*(px - lines->GetLine(i)->GetX2()) + (py - lines->GetLine(i)->GetY2())*(py - lines->GetLine(i)->GetY2())) > pixelsize) {
+				if (sqrt((px - lines->GetLine(i)->GetX1())*(px - lines->GetLine(i)->GetX1()) + (py - lines->GetLine(i)->GetY1())*(py - lines->GetLine(i)->GetY1())) > scansize &&
+					sqrt((px - lines->GetLine(i)->GetX2())*(px - lines->GetLine(i)->GetX2()) + (py - lines->GetLine(i)->GetY2())*(py - lines->GetLine(i)->GetY2())) > scansize) {
 						//in the middle of the line
 						_angles[angles_counter++] = angle + M_PI;
 				}
@@ -193,11 +193,12 @@ int llMapList::GetNumHeights(char *_mapname, float _x, float _y, float *_angles,
 	for (int i=0; i<angles_counter; i++) {
 		if (_angles[i] < 0)      _angles[i] += 2*M_PI;
 		if (_angles[i] > 2*M_PI) _angles[i] -= 2*M_PI;
+		if (_angles[i] < 0.001)  _angles[i]  = 0.;
 	}
 
 	//bubble sort
 	for (int i=0; i<angles_counter; i++) {
-		for (int j=0; j<i-1; j++) {
+		for (int j=i-1; j>=0; j--) {
 			if (_angles[j] > _angles[j+1]) {
 				double x     = _angles[j];
 				_angles[j]   = _angles[j+1];
@@ -206,18 +207,19 @@ int llMapList::GetNumHeights(char *_mapname, float _x, float _y, float *_angles,
 		}
 	}
 
+	//for (int i=0; i<angles_counter; i++) std::cout << _angles[i] << std::endl;
+
 	//calculate section angles
 	float *secangles = new float[_size];
+	//first section angle must take the last one into account
+	secangles[0] = (_angles[0] + (_angles[angles_counter-1] - 2*M_PI)) / 2.;
+	if (secangles[0] < 0) secangles[0] += 2*M_PI;
 
-	if (_angles[0] == 0) {
-		secangles[0] = _angles[1] / 2.;
-	} else { //first section angle must take the last one into account
-		secangles[0] = (_angles[0] + (_angles[angles_counter-1] - 2*M_PI)) / 2.;
-		if (secangles[0] < 0) secangles[0] += 2*M_PI;
-	}
+	//std::cout << "sec0:" << secangles[0] << std::endl;
 
 	for (int i=1; i<angles_counter; i++) {
 		secangles[i] = (_angles[i] + _angles[i-1]) / 2.;
+		//std::cout << "sec:" << secangles[i] << std::endl;
 	}
 
 	//find pixel
@@ -238,6 +240,14 @@ int llMapList::GetNumHeights(char *_mapname, float _x, float _y, float *_angles,
 		else                                 {loc_posx++;}
 
 		_z[i] = map->GetZ(loc_posx, loc_posy);
+
+#if 0
+		//if (angles_counter > 2) {
+			std::cout << "angle:" << _angles[i] << std::endl;
+			std::cout << posx << ":" << posy << std::endl;
+			std::cout << loc_posx << ":" << loc_posy << std::endl;
+		//}
+#endif
 	}
 
 	delete secangles;

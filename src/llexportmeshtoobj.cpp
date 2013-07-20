@@ -81,7 +81,8 @@ int llExportMeshToObj::MakeSelection() {
 						newpoints->SetAngle1(newp, angles[j-1]);
 						newpoints->SetAngle2(newp, angles[j]);
 						newpoints->SetSecondary(oldp, newp);
-					//std::cout << angles[j] << ":" << az[j] << std::endl;
+						//std::cout << oldp << ":" << newp << std::endl;
+						//std::cout << angles[j-1] << ":" << angles[j] << ":" << az[j] << std::endl;
 					}				
 				} else {
 					int newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), z);
@@ -113,6 +114,63 @@ int llExportMeshToObj::MakeSelection() {
 		int new1 = points->GetSecondary(old1);
 		int new2 = points->GetSecondary(old2);
 		int new3 = points->GetSecondary(old3);
+
+		for (int j=0; j<3; j++) {
+			int my_new1 = new1;
+			int my_new2 = new2;
+			int my_new3 = new3;
+			if (j==1) {
+				my_new1 = new3;
+				my_new2 = new1;
+				my_new3 = new2;
+			} else if (j==2) {
+				my_new1 = new2;
+				my_new2 = new3;
+				my_new3 = new1;
+			} 
+			if (newpoints->GetAngle1(my_new1) != 0 || newpoints->GetAngle2(my_new1) != 0) {
+				//direction-specific height
+				float x1 = newpoints->GetX(my_new1);
+				float y1 = newpoints->GetY(my_new1);
+				float x2 = newpoints->GetX(my_new2);
+				float y2 = newpoints->GetY(my_new2);
+				float x3 = newpoints->GetX(my_new3);
+				float y3 = newpoints->GetY(my_new3);
+				int used_point = -1;
+				int do_loop    = 1;
+
+			//	std::cout << "j:" << j << ":" << my_new1 << std::endl;
+
+				while(do_loop) {
+					double angle1 = newpoints->GetAngle1(my_new1);
+					double angle2 = newpoints->GetAngle2(my_new1);
+					//std::cout << angle1 << ":" << angle2 << std::endl;
+					if (newpoints->IsTriangleInsideAngleRange(x1, y1, x2, y2, x3, y3, angle1, angle2)) {
+						used_point = my_new1;
+#if 0
+						std::cout << "found:" << std::endl;
+						std::cout << x1 << ":" << y1 << std::endl;
+						std::cout << x2 << ":" << y2 << std::endl;
+						std::cout << x3 << ":" << y3 << std::endl;
+						std::cout << "with:" << std::endl;
+						std::cout << newpoints->TriangleMiddleAngle(x1, y1, x2, y2, x3, y3) << std::endl;
+#endif
+						do_loop = 0;
+					}
+					if (do_loop) {
+						my_new1 = newpoints->GetSecondary(my_new1);
+						if (my_new1 < 0) do_loop = 0;
+					}
+				}	
+				if (used_point < 0) {
+					_llLogger()->WriteNextLine(LOG_WARNING, "Secondary point not found");
+				} else {
+					if (j==0)      new1 = used_point;
+					else if (j==1) new3 = used_point;
+					else           new2 = used_point;
+				}
+			}
+		}
 
 		if (new1 > -1 && new2 > -1 && new3 > -1 && triangles->GetTriangle(i)->write_flag) {
 			newtriangles->AddTriangle(new1, new2, new3);

@@ -19,6 +19,7 @@ void llCommands::SetDefaults() {
 	lines.resize(0);
 	worker_cache.resize(0);
 	worker_flags.resize(0);
+	worker_list.resize(0);
 	sections.resize(0);
 	CurrentCommand = "";
 	worker_pointer = 0;
@@ -409,7 +410,9 @@ int llCommands::GetCommand(void) {
 	//afterburner	
 	worker->ReplaceFlags();
 	worker->Print();
+
 	int retval = worker->Exec();
+
 	if (worker->Repeat()) {
 		skip_next_block |= LLCOM_ITERATE_BLOCK;
 	} else if (worker->IsRepeatWorker() && !retval) {

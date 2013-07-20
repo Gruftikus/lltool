@@ -122,7 +122,7 @@ repeat:
 	y1max=0;
 	for (unsigned int x=0; x<widthx; x++) {
 		data1y->SetElement(x, (map->GetElementRaw(x,1) - map->GetElementRaw(x,0)));
-		data1y->SetElement(widthx+(widthy-1)*widthx, (map->GetElementRaw(x,widthy-1) - map->GetElementRaw(x,widthy-2)));
+		data1y->SetElement(x+(widthy-1)*widthx, (map->GetElementRaw(x,widthy-1) - map->GetElementRaw(x,widthy-2)));
 		for (unsigned int y=1; y<widthy-1; y++) {
 			//if ((map->GetElementRaw(x,y-1) > minheight && map->GetElementRaw(x,y+1) > minheight)) {
 				data1y->SetElement(x+y*widthx, (map->GetElementRaw(x,y-1) - map->GetElementRaw(x,y+1)) / (2.0f));
@@ -156,7 +156,7 @@ repeat:
 	y2max=0;
 	for (unsigned int x=0; x<widthx; x++) {
 		data1y->SetElement(x, mapy1->GetElementRaw(x,1) - mapy1->GetElementRaw(x,0));
-		data1y->SetElement(widthx+(widthy-1)*widthx, mapy1->GetElementRaw(x,widthy-1) - mapy1->GetElementRaw(x,widthy-2));
+		data1y->SetElement(x+(widthy-1)*widthx, mapy1->GetElementRaw(x,widthy-1) - mapy1->GetElementRaw(x,widthy-2));
 		for (unsigned int y=1; y<widthy-1; y++) {
 			//if ((map->GetElementRaw(x,y-1) > minheight && map->GetElementRaw(x,y+1) > minheight)) {
 				data2y->SetElement(x+y*widthx, (mapy1->GetElementRaw(x,y-1) - mapy1->GetElementRaw(x,y+1)) / 2.0f);

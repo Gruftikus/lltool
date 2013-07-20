@@ -3,6 +3,10 @@
 
 #include <math.h>
 
+#ifndef M_PI
+#define M_PI           3.14159265358979323846
+#endif
+
 #include "../include/llquadlist.h"
 
 //Never change something in the basic types, because of the cast in tes4ll::llexportmeshtonif
@@ -229,6 +233,10 @@ public:
 
 	int VectorIntersectsWithTriangle(float _x, float _y, float _z, float _vx, float _vy, float _vz, 
 		float _x1, float _y1, float _z1, float _x2, float _y2, float _z2, float _x3, float _y3, float _z3, float *_s, float *_u, float *_v);
+
+	double TriangleMiddleAngle(float _x1, float _y1, float _x2, float _y2, float _x3, float _y3);
+
+	int IsTriangleInsideAngleRange(float _x1, float _y1, float _x2, float _y2, float _x3, float _y3, double _angle1, double _angle2);
 
 };
 

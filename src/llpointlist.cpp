@@ -49,7 +49,7 @@ int llPointList::GetPoint(float _x, float _y) {
 
 int llPointList::GetPoint(float _x, float _y, float _z) {
 	for (unsigned int i=0; i<counter;i++) {
-		if (fabs(GetX(i) - _x)<1.f && fabs(GetY(i) - _y)<1.f && fabs(GetZ(i) - _z)<1.f) return i;
+		if (fabs(GetX(i)-_x) < 1.f && fabs(GetY(i)-_y) < 1.f && fabs(GetZ(i)-_z) < 1.f) return i;
 	}
 	return -1;
 }
@@ -324,4 +324,27 @@ int llPointList::VectorIntersectsWithTriangle(float _x, float _y, float _z, floa
 		}
 
 		return 0;
+}
+
+double llPointList::TriangleMiddleAngle(float _x1, float _y1, float _x2, float _y2, float _x3, float _y3) {
+	//angle which is defined by the point 1 (starting) and the middle between point 2 and 3, relative
+	//to the x-axis
+
+	//double angle = atan2(((_x3 + _x2) / 2. - _x1) , ((_y3 + _y2) / 2. - _y1));
+	double angle = atan2( ((_y3 + _y2) / 2. - _y1) , ((_x3 + _x2) / 2. - _x1) );
+	if (angle < 0) angle += 2*M_PI;
+
+	return angle;
+}
+
+int llPointList::IsTriangleInsideAngleRange(float _x1, float _y1, float _x2, float _y2, float _x3, float _y3, double _angle1, double _angle2) {
+	if (_angle2 < _angle1) _angle1 -= 2*M_PI;
+
+	double angle = TriangleMiddleAngle(_x1, _y1, _x2, _y2, _x3, _y3);
+
+	if (angle > _angle2) angle -= 2*M_PI;
+
+	if (angle >= _angle1 && angle <= _angle2) return 1;
+
+	return 0;
 }

@@ -56,6 +56,12 @@ public:
 
 		if ((!my_shortarray && !my_longarray) || !mysize) return 0;
 
+		if (_x < 0 || _x >= mysize) {
+			std::cout << "[Error] Out of bounds: " << _x << " of " << mysize <<  std::endl;
+			int *bla =0; *bla =0;
+			return 0;
+		}
+
 		if (my_longarray) {
 			my_longarray[_x] = _val;
 			return 1;
@@ -80,10 +86,10 @@ public:
 
 	void Print(char *_st, llLogger *_mesg) {
 		if (_mesg) {
-			if (my_longarray)  _mesg->WriteNextLine(LOG_INFO,"Array '%s' has 32 bit floats",_st);
-			if (my_shortarray) _mesg->WriteNextLine(LOG_INFO,"Array '%s' has 16 bit shorts",_st);
+			if (my_longarray)  _mesg->WriteNextLine(LOG_INFO, "Array '%s' has 32 bit floats", _st);
+			if (my_shortarray) _mesg->WriteNextLine(LOG_INFO, "Array '%s' has 16 bit shorts", _st);
 			if (out_of_bounds) {
-				_mesg->WriteNextLine(LOG_INFO,"Array '%s' has %i elements, out of which %i had to be truncated",_st,num_total,out_of_bounds);
+				_mesg->WriteNextLine(LOG_INFO, "Array '%s' has %i elements, out of which %i had to be truncated", _st,num_total, out_of_bounds);
 			}
 		} else {
 			if (my_longarray)  std::cout << "[Info] Array '"<< _st <<"' has 32 bit floats" <<  std::endl;

@@ -58,7 +58,6 @@ public:
 
 		if (_x < 0 || _x >= mysize) {
 			std::cout << "[Error] Out of bounds: " << _x << " of " << mysize <<  std::endl;
-			int *bla =0; *bla =0;
 			return 0;
 		}
 

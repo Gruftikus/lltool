@@ -148,7 +148,7 @@ int llMapList::DeleteMap(char *_name) {
 
 }
 
-int llMapList::GetNumHeights(char *_mapname, float _x, float _y, float *_angles, float *_z, int _size) {
+int llMapList::GetNumHeights(char *_mapname, float _x, float _y, double *_angles, float *_z, int _size) {
 	//returns the number of possible height of the map _mapname
 	//at position _x, _y
 

@@ -66,7 +66,8 @@ int llExportMeshToObj::MakeSelection() {
 				if (z < lowestz) 
 					lowestz = z;
 
-				float angles[10], az[10];
+				double angles[10];
+				float az[10];
 
 				int num = _llMapList()->GetNumHeights(mapname, points->GetX(i), points->GetY(i), angles, az, 10);
 				if (num > 1) {
@@ -75,17 +76,30 @@ int llExportMeshToObj::MakeSelection() {
 					newpoints->SetAngle1(newp, angles[num-1]);
 					newpoints->SetAngle2(newp, angles[0]);
 					points->SetSecondary(i, newp);
+					float oldheight = az[0];
+					int origp = newp;
 					for (int j=1; j<num; j++) {
-						int oldp = newp;
-						newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), az[j]);
-						newpoints->SetAngle1(newp, angles[j-1]);
-						newpoints->SetAngle2(newp, angles[j]);
-						newpoints->SetSecondary(oldp, newp);
-						//std::cout << oldp << ":" << newp << std::endl;
-						//std::cout << angles[j-1] << ":" << angles[j] << ":" << az[j] << std::endl;
-					}				
+						if (fabs(az[j] - oldheight) > 1.f) {
+							int oldp = newp;
+							newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), az[j]);
+							newpoints->SetAngle1(newp, angles[j-1]);
+							newpoints->SetAngle2(newp, angles[j]);
+							newpoints->SetSecondary(oldp, newp);
+							//std::cout << oldp << ":" << newp << std::endl;
+							//std::cout << angles[j-1] << ":" << angles[j] << ":" << az[j] << std::endl;
+							oldheight = az[j];
+						} else {
+							newpoints->SetAngle2(newp, angles[j]); //extend range
+						}
+					}	
+					if (origp == newp) {
+						newpoints->SetAngle1(newp, 0.0);
+						newpoints->SetAngle2(newp, 0.0);
+					}
 				} else {
 					int newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), z);
+					newpoints->SetAngle1(newp, 0.0);
+					newpoints->SetAngle2(newp, 0.0);
 					points->SetSecondary(i, newp);
 				}
 		}
@@ -128,7 +142,7 @@ int llExportMeshToObj::MakeSelection() {
 				my_new2 = new3;
 				my_new3 = new1;
 			} 
-			if (newpoints->GetAngle1(my_new1) != 0 || newpoints->GetAngle2(my_new1) != 0) {
+			if (newpoints->GetAngle1(my_new1) > 0.01 || newpoints->GetAngle2(my_new1) > 0.01) {
 				//direction-specific height
 				float x1 = newpoints->GetX(my_new1);
 				float y1 = newpoints->GetY(my_new1);
@@ -139,7 +153,8 @@ int llExportMeshToObj::MakeSelection() {
 				int used_point = -1;
 				int do_loop    = 1;
 
-			//	std::cout << "j:" << j << ":" << my_new1 << std::endl;
+				//std::cout << newpoints->GetAngle1(my_new1) << ":" << newpoints->GetAngle2(my_new1) << std::endl;
+				//std::cout << "j:" << j << ":" << my_new1 << std::endl;
 
 				while(do_loop) {
 					double angle1 = newpoints->GetAngle1(my_new1);

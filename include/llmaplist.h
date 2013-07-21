@@ -102,7 +102,7 @@ public:
 		return map->GetWidthYPerRaw();
 	};
 
-	int GetNumHeights(char *_mapname, float _x, float _y, float *_angles, float *_z, int _size);
+	int GetNumHeights(char *_mapname, float _x, float _y, double *_angles, float *_z, int _size);
 
 };
 

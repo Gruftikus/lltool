@@ -124,6 +124,8 @@ int llTriangulation::Exec(void) {
 			splitter->SetValue("-y1", dummy);
 			sprintf_s(dummy, "%f", lines->GetLine(i)->GetY2());
 			splitter->SetValue("-y2", dummy);
+			sprintf_s(dummy, "%s", mapname);
+			splitter->SetValue("-map", dummy);
 			splitter->Prepare();
 			splitter->ReplaceFlags();
 			//splitter->Print();

@@ -130,6 +130,8 @@ llQuadList *llMap::GenerateQuadList(void) {
 
 	while (levels) {
 
+		//std::cout << x1 << ":" << y1 << ":" <<  x2 << ":" << y2 << std::endl;
+
 		int quadx1 = int(floor((x1+.5f) / quadsize_x));
 		int quady1 = int(floor((y1+.5f) / quadsize_y));
 		int quadx2 = int(floor((x2-.5f) / quadsize_x));
@@ -139,7 +141,7 @@ llQuadList *llMap::GenerateQuadList(void) {
 	
 		llQuadList *quads= new llQuadList();
 		if (!master) {
-			mesg->WriteNextLine(-LOG_INFO, "The map covers %i quads at %i level(s)", nquads, levels);
+			_llLogger()->WriteNextLine(-LOG_INFO, "The map covers %i quads at %i level(s)", nquads, levels);
 			master = quads;
 		}
 

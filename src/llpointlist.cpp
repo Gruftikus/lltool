@@ -330,8 +330,8 @@ double llPointList::TriangleMiddleAngle(float _x1, float _y1, float _x2, float _
 	//angle which is defined by the point 1 (starting) and the middle between point 2 and 3, relative
 	//to the x-axis
 
-	//double angle = atan2(((_x3 + _x2) / 2. - _x1) , ((_y3 + _y2) / 2. - _y1));
-	double angle = atan2( ((_y3 + _y2) / 2. - _y1) , ((_x3 + _x2) / 2. - _x1) );
+	//double angle = atan2(((_x3 + _x2) / 2. - _x1), ((_y3 + _y2) / 2. - _y1));
+	double angle = atan2(((_y3 + _y2) / 2. - _y1), ((_x3 + _x2) / 2. - _x1));
 	if (angle < 0) angle += 2*M_PI;
 
 	return angle;

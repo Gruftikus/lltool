@@ -3,6 +3,7 @@
 #include "../include/llmaplist.h"
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 
 llMapList& _fllMapList() {
@@ -173,8 +174,13 @@ int llMapList::GetNumHeights(char *_mapname, float _x, float _y, float *_angles,
 		float distance = sqrt((px - _x)*(px - _x) + (py - _y)*(py - _y));
 
 		if (distance <= scansize && t >= 0 && t <= 1) {
-			float angle = atan((lines->GetLine(i)->GetY2() - lines->GetLine(i)->GetY1()) / 
+			double angle = 0.;
+			if (t < 0.5)
+				angle = atan2((lines->GetLine(i)->GetY2() - lines->GetLine(i)->GetY1()), 
 				(lines->GetLine(i)->GetX2() - lines->GetLine(i)->GetX1()));
+			else
+				angle = atan2((lines->GetLine(i)->GetY1() - lines->GetLine(i)->GetY2()), 
+				(lines->GetLine(i)->GetX1() - lines->GetLine(i)->GetX2()));
 			if (angles_counter < _size-1) {
 				_angles[angles_counter++] = angle;
 
@@ -223,29 +229,33 @@ int llMapList::GetNumHeights(char *_mapname, float _x, float _y, float *_angles,
 	}
 
 	//find pixel
-	unsigned int posx = map->GetRawX(_x);
-	unsigned int posy = map->GetRawX(_y);
+	float dx = map->GetWidthXPerRaw()/1.9f;
+	float dy = map->GetWidthYPerRaw()/1.9f;
+
+	// std::cout << "****** " << _x << ":" << _y << std::endl;
 
 	for (int i=0; i<angles_counter; i++) {
-		unsigned int loc_posx = posx;
-		unsigned int loc_posy = posy;
-		if (secangles[i] < M_PI/8.)          {loc_posx++;}
-		else if (secangles[i] < M_PI*3./8.)  {loc_posx++;loc_posy++;}
-		else if (secangles[i] < M_PI*5./8.)  {loc_posy++;}
-		else if (secangles[i] < M_PI*7./8.)  {loc_posx--;loc_posy++;}
-		else if (secangles[i] < M_PI*9./8.)  {loc_posx--;}
-		else if (secangles[i] < M_PI*11./8.) {loc_posx--;loc_posy--;}
-		else if (secangles[i] < M_PI*13./8.) {loc_posy--;}
-		else if (secangles[i] < M_PI*15./8.) {loc_posx++;loc_posy--;}
-		else                                 {loc_posx++;}
+		//float x = _x + 0.1*map->GetWidthXPerRaw();
+		//float y = _y + 0.1*map->GetWidthYPerRaw();
+		float x = _x;
+		float y = _y;
 
-		_z[i] = map->GetZ(loc_posx, loc_posy);
+		if (secangles[i] < M_PI/8.)          {x += dx;}
+		else if (secangles[i] < M_PI*3./8.)  {x += dx; y += dy;}
+		else if (secangles[i] < M_PI*5./8.)  {y += dy;}
+		else if (secangles[i] < M_PI*7./8.)  {x -= dx; y += dy;}
+		else if (secangles[i] < M_PI*9./8.)  {x -= dx;}
+		else if (secangles[i] < M_PI*11./8.) {x -= dx; y -= dy;}
+		else if (secangles[i] < M_PI*13./8.) {y -= dy;}
+		else if (secangles[i] < M_PI*15./8.) {x += dx; y -= dy;}
+		else                                 {x += dx;}
+
+		_z[i] = map->GetZ(x, y);
 
 #if 0
 		//if (angles_counter > 2) {
-			std::cout << "angle:" << _angles[i] << std::endl;
-			std::cout << posx << ":" << posy << std::endl;
-			std::cout << loc_posx << ":" << loc_posy << std::endl;
+			std::cout << "angles:" << _angles[i] << ":"<< secangles[i] << std::endl;
+			std::cout << x << ":" << y << std::endl;
 		//}
 #endif
 	}

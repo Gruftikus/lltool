@@ -32,6 +32,7 @@
     <ClInclude Include="externals\resampler\resampler.h" />
     <ClInclude Include="externals\triangle\triangle.h" />
     <ClInclude Include="include\llactivatevisiblevertices.h" />
+    <ClInclude Include="include\lladddiscontinuitygrid.h" />
     <ClInclude Include="include\lladddiscontinuityline.h" />
     <ClInclude Include="include\lladdvertextopolygon.h" />
     <ClInclude Include="include\llalg.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="externals\resampler\resampler.cpp" />
     <ClCompile Include="externals\triangle\triangle.cc" />
     <ClCompile Include="src\llactivatevisiblevertices.cpp" />
+    <ClCompile Include="src\lladddiscontinuitygrid.cpp" />
     <ClCompile Include="src\lladddiscontinuityline.cpp" />
     <ClCompile Include="src\lladdvertextopolygon.cpp" />
     <ClCompile Include="src\llalg.cpp" />

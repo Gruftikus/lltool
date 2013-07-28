@@ -12,7 +12,7 @@ protected:
 	char *texname;
 	char *mtlname;
 	int   createpedestals;
-	float trans_x, trans_y, trans_z;
+	float trans_x, trans_y, trans_z, scale;
 
 	llPointList    *newpoints;
 	llTriangleList *newtriangles;

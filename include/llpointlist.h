@@ -82,10 +82,18 @@ public:
 	};
 
 	void Translation(float _x, float _y, float _z) {
-		for (unsigned int i=0; i<counter;i++) {
+		for (unsigned int i=0; i<counter; i++) {
 			v[i].x += _x;
 			v[i].y += _y;
 			v[i].z += _z;
+		}
+	}
+
+	void Scale(float _scale) {
+		for (unsigned int i=0; i<counter; i++) {
+			v[i].x *= _scale;
+			v[i].y *= _scale;
+			v[i].z *= _scale;
 		}
 	}
 

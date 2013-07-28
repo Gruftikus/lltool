@@ -1,6 +1,8 @@
 #include "../include/llexportmeshtoobj.h"
 #include "../include/llmaplist.h"
 
+#define MAX_ANGLES 10
+
 //constructor
 llExportMeshToObj::llExportMeshToObj() : llTriMod() {
 	SetCommandName("ExportMeshToObj");
@@ -17,6 +19,7 @@ int llExportMeshToObj::Prepare(void) {
 	mtlname         = NULL;
 	createpedestals = 0;
 	trans_x = trans_y = trans_z = 0;
+	scale   = 1.0f;
 
 	return 1;
 }
@@ -30,6 +33,7 @@ int llExportMeshToObj::RegisterOptions(void) {
 	RegisterValue("-transx",          &trans_x);
 	RegisterValue("-transy",          &trans_y);
 	RegisterValue("-transz",          &trans_z);
+	RegisterValue("-scale",           &scale);
 	RegisterFlag ("-createpedestals", &createpedestals);
 	
 	return 1;
@@ -66,10 +70,10 @@ int llExportMeshToObj::MakeSelection() {
 				if (z < lowestz) 
 					lowestz = z;
 
-				double angles[10];
-				float az[10];
+				double angles[MAX_ANGLES];
+				float az[MAX_ANGLES];
 
-				int num = _llMapList()->GetNumHeights(mapname, points->GetX(i), points->GetY(i), angles, az, 10);
+				int num = _llMapList()->GetNumHeights(mapname, points->GetX(i), points->GetY(i), angles, az, MAX_ANGLES);
 				if (num > 1) {
 					//std::cout << "multiple height at " << points->GetX(i) << ":" << points->GetY(i) << std::endl;
 					int newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), az[0]);
@@ -142,7 +146,7 @@ int llExportMeshToObj::MakeSelection() {
 				my_new2 = new3;
 				my_new3 = new1;
 			} 
-			if (newpoints->GetAngle1(my_new1) > 0.01 || newpoints->GetAngle2(my_new1) > 0.01) {
+			if ((newpoints->GetAngle1(my_new1) > 0.01 || newpoints->GetAngle2(my_new1) > 0.01) && my_new1 > -1 && my_new2 > -1 && my_new3) {
 				//direction-specific height
 				float x1 = newpoints->GetX(my_new1);
 				float y1 = newpoints->GetY(my_new1);
@@ -155,6 +159,8 @@ int llExportMeshToObj::MakeSelection() {
 
 				//std::cout << newpoints->GetAngle1(my_new1) << ":" << newpoints->GetAngle2(my_new1) << std::endl;
 				//std::cout << "j:" << j << ":" << my_new1 << std::endl;
+
+				int loops = 0;
 
 				while(do_loop) {
 					double angle1 = newpoints->GetAngle1(my_new1);
@@ -175,6 +181,11 @@ int llExportMeshToObj::MakeSelection() {
 					if (do_loop) {
 						my_new1 = newpoints->GetSecondary(my_new1);
 						if (my_new1 < 0) do_loop = 0;
+					}
+					loops++;
+					if (loops == MAX_ANGLES) {
+						_llLogger()->WriteNextLine(LOG_WARNING, "Stop loop");
+						do_loop = 0;
 					}
 				}	
 				if (used_point < 0) {
@@ -266,6 +277,7 @@ int llExportMeshToObj::MakeSelection() {
 	}
 
 	newpoints->Resize();
+	if (Used("-scale")) newpoints->Scale(scale);
 	newpoints->Translation(trans_x, trans_y, trans_z);
 
 	return 1;

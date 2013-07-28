@@ -45,8 +45,8 @@ int llSetHeight::Exec(void) {
 	
 	int x1 = (int) map->GetRawX(_llUtils()->x00);
 	int x2 = (int) map->GetRawX(_llUtils()->x11);
-	int y1 = (int) map->GetRawX(_llUtils()->y00);
-	int y2 = (int) map->GetRawX(_llUtils()->y11);
+	int y1 = (int) map->GetRawY(_llUtils()->y00);
+	int y2 = (int) map->GetRawY(_llUtils()->y11);
 
 	for (int x=x1; x<=x2; x+=1) {
 		for (int y=y1; y<=y2; y+=1) {

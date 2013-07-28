@@ -36,6 +36,11 @@ int llCreateMap::RegisterOptions(void) {
 int llCreateMap::Exec(void) {
 	if (!llWorker::Exec()) return 0;
 
+	if (!mapname) {
+		_llLogger()->WriteNextLine(-LOG_ERROR, "No mapname");
+		return 0;
+	}
+
 	llMap *newmap = _llMapList()->GetMap(mapname);
 	if (newmap) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map %s existing", command_name, mapname);

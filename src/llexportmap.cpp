@@ -124,6 +124,7 @@ int llExportMap::Exec(void) {
 					fwrite(&byte1, 1, 1, fptr); //blue
 					fwrite(&byte2, 1, 1, fptr); //green
 					fwrite(&byte3, 1, 1, fptr); //red
+					//std::cout << byte1 << ":" << byte2 << ":" << byte3 << std::endl;
 				} else {
 					fwrite(&byte1, 1, 1, fptr); //blue
 					fwrite(&byte2, 1, 1, fptr); //green

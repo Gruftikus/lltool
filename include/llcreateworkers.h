@@ -33,6 +33,7 @@
 #include "../include/llfillcolormap.h"
 #include "../include/llfilter.h"
 #include "../include/llexportmap.h"
+#include "../include/llexportmaptodds.h"
 #include "../include/llimportmap.h"
 #include "../include/llmakederivatives.h"
 #include "../include/llquaditerator.h"
@@ -104,6 +105,7 @@ void CreateWorkers(llCommands *_batch) {
 	//Map worker:
 	_batch->RegisterWorker(new llCreateNormalMap());
 	_batch->RegisterWorker(new llExportMap());
+	_batch->RegisterWorker(new llExportMapToDDS());
 	_batch->RegisterWorker(new llImportMap());
 	_batch->RegisterWorker(new llQuadIterator());
 	_batch->RegisterWorker(new llSetHeight());

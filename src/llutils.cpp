@@ -661,6 +661,24 @@ int llUtils::SetHidden(const char *_name) {
 
 const char* llUtils::GetValue(const char *_name) {
 	int p = 0;
+	if (_stricmp(_name, "_x1") == 0) {
+		char tmp[LOG_MAX_LENGTH];
+		sprintf_s(tmp, LOG_MAX_LENGTH, "%f", x00); 
+		return NewString(tmp);
+	} else if (_stricmp(_name, "_x2") == 0) {
+		char tmp[LOG_MAX_LENGTH];
+		sprintf_s(tmp, LOG_MAX_LENGTH, "%f", x11); 
+		return NewString(tmp);
+	} else if (_stricmp(_name, "_y1") == 0) {
+		char tmp[LOG_MAX_LENGTH];
+		sprintf_s(tmp, LOG_MAX_LENGTH, "%f", y00); 
+		return NewString(tmp);
+	} else if (_stricmp(_name, "_y2") == 0) {
+		char tmp[LOG_MAX_LENGTH];
+		sprintf_s(tmp, LOG_MAX_LENGTH, "%f", y11); 
+		return NewString(tmp);
+	} 
+
 	if (_stricmp(_name, "_flaglist") == 0) {
 		char tmp[LOG_MAX_LENGTH];
 		sprintf_s(tmp, LOG_MAX_LENGTH, "%s", "\0");

@@ -191,6 +191,8 @@ public:
 	
 	void SetEven() {uneven=0;};
 
+	int IsUneven() {return uneven;};
+
 	//With coordinates:
 	void SetCoordSystem(float _x1, float _y1, float _x2, float _y2, float _z) {
 		x1 = _x1;

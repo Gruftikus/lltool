@@ -36,7 +36,7 @@ int llStencilPolygon::Exec(void) {
 		llPolygon *mypoly = polygons->GetPolygon(polygon_name);
 		if (mypoly) {
 			//......
-			for (unsigned int i = 0; i < (unsigned int) mypoly->GetSize()-1; i++) {
+			for (unsigned int i=0; i<(unsigned int) mypoly->GetSize()-1; i++) {
 				int i1 = mypoly->GetPoint(i);
 				int i2 = mypoly->GetPoint(i+1);
 				if (i1>=0 && i2>=0) {
@@ -45,7 +45,7 @@ int llStencilPolygon::Exec(void) {
 			}
 			//........
 			v = triangles->GetN();
-			for (int i=0;i<v;i++) {
+			for (int i=0; i<v; i++) {
 
 				int o1 = triangles->GetPoint1(i);
 				int o2 = triangles->GetPoint2(i);
@@ -71,9 +71,9 @@ int llStencilPolygon::Exec(void) {
 			return 0;
 		}
 	} else {
-		for (int i=0;i<polygons->GetSize();i++) {
+		for (int i=0; i<polygons->GetSize(); i++) {
 			llPolygon *mypoly = polygons->GetPolygon(i);
-
+			//std::cout << mypoly->name << std::endl;
 			//......
 			for (unsigned int i = 0; i < (unsigned int) mypoly->GetSize()-1; i++) {
 				int i1 = mypoly->GetPoint(i);
@@ -84,8 +84,8 @@ int llStencilPolygon::Exec(void) {
 			}
 			//........
 			v = triangles->GetN();
-			for (int i=0;i<v;i++) {
 
+			for (int i=0; i<v; i++) {
 				int o1 = triangles->GetPoint1(i);
 				int o2 = triangles->GetPoint2(i);
 				int o3 = triangles->GetPoint3(i);

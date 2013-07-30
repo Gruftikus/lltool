@@ -13,6 +13,8 @@ private:
 	
 	llPointList *points;
 
+	float min_x, max_x, min_y, max_y;
+
 public:
 
 	llPolygon(int _n1, int _n2, char *_name, llPointList *_r);

@@ -28,9 +28,10 @@ const int cDefaultCRNQualityLevel = 128;
 static crn_bool progress_callback_func(crn_uint32 phase_index, crn_uint32 total_phases, crn_uint32 subphase_index, 
 	crn_uint32 total_subphases, void* pUser_data_ptr)
 {
-   int percentage_complete = (int)(.5f + (phase_index + float(subphase_index) / total_subphases) * 100.0f) / total_phases;
-   printf("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bProcessing: %u%%", std::min(100, std::max(0, percentage_complete)));
-   return true;
+	int percentage_complete = (int)(.5f + (phase_index + float(subphase_index) / total_subphases) * 100.0f) / total_phases;
+	if (!(percentage_complete % 10) && percentage_complete > 1 && percentage_complete < 99)
+		_llLogger()->WriteNextLine(-LOG_INFO, "Processing: %u%%", std::min(100, std::max(0, percentage_complete)));
+	return true;
 }
 
 //constructor
@@ -42,6 +43,11 @@ int llExportMapToDDS::Prepare(void) {
 	if (!llMapWorker::Prepare()) return 0;
 
 	filename = NULL;
+	bitrate  = 0.0f;
+	quality_level    = -1;
+	noAdaptiveBlocks = 0;
+	makemips   = 0;
+	fmt_string = "DXT1";
 
 	return 1;
 }
@@ -51,6 +57,12 @@ int llExportMapToDDS::RegisterOptions(void) {
 
 	RegisterValue("-filename", &filename);
 	RegisterValue("-scale",    &scale);
+	RegisterValue("-bitrate",  &bitrate);
+	RegisterValue("-quality",  &quality_level);
+	RegisterValue("-format",   &fmt_string);
+
+	RegisterFlag("-noAdaptiveBlocks",  &noAdaptiveBlocks);
+	RegisterFlag("-MakeMips",  &makemips);
 	
 	return 1;
 }
@@ -113,15 +125,32 @@ int llExportMapToDDS::Exec(void) {
 	bool srgb_colorspace = true;
 	bool enable_dxt1a = false;
 	bool has_alpha_channel = true;
-	//bool enable_dxt1a = true;
-	//bool has_alpha_channel = false;
+
 	bool use_adaptive_block_sizes = true;
+	if (noAdaptiveBlocks) use_adaptive_block_sizes = false;
+
 	bool output_crn = false;
-	//crn_format fmt = cCRNFmtDXT5A;
-	crn_format fmt = cCRNFmtDXT3;
-	float bitrate = 0.0f;
-	int quality_level = -1;
-	bool create_mipmaps = true;
+	crn_format fmt = cCRNFmtDXT1;
+	if (!_stricmp(fmt_string, "dxt1a")) {
+		enable_dxt1a = true;
+		fmt = cCRNFmtDXT1;
+	} else  {
+		int f;
+		for (f = 0; f < cCRNFmtTotal; f++) {
+			if (!_stricmp(fmt_string, crn_get_format_stringa(static_cast<crn_format>(f)))) {
+				fmt = static_cast<crn_format>(f);
+				break;
+			}
+		}
+		if (f == cCRNFmtTotal) {
+			_llLogger()->WriteNextLine(-LOG_ERROR, "Unrecognized pixel format: %s", fmt_string);
+			return 0;
+		}
+	}
+
+	bool create_mipmaps = false;
+	if (makemips) create_mipmaps = true;
+	
 
 	crn_comp_params comp_params;
 	comp_params.m_width = width;
@@ -160,7 +189,7 @@ int llExportMapToDDS::Exec(void) {
       float actual_bitrate;
       crn_uint32 output_file_size;
 
-      printf("Compressing to %s\n", crn_get_format_stringa(comp_params.m_format));
+      _llLogger()->WriteNextLine(-LOG_INFO, "Compressing to %s\n", crn_get_format_stringa(comp_params.m_format));
       
       // Now compress to DDS or CRN.
       void *pOutput_file_data = crn_compress(comp_params, mip_params, output_file_size, &actual_quality_level, &actual_bitrate);
@@ -175,7 +204,7 @@ int llExportMapToDDS::Exec(void) {
 		  actual_quality_level, actual_bitrate);
 
 	  // Write the output file.
-	  printf("Writing %s file: %s\n", output_crn ? "CRN" : "DDS", filename);
+	  _llLogger()->WriteNextLine(-LOG_INFO, "Writing %s file: %s\n", output_crn ? "CRN" : "DDS", filename);
 	  FILE *pFile = fopen(filename, "wb");
 	  if ((!pFile) || (fwrite(pOutput_file_data, output_file_size, 1, pFile) != 1) || (fclose(pFile) == EOF)) {
 		  crn_free_block(pOutput_file_data);

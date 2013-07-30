@@ -9,7 +9,13 @@ class llExportMapToDDS : public llMapWorker {
 protected:
 
 	char *filename;
-	int  scale;
+	int   scale;
+	float bitrate;
+	int   quality_level;
+	int   noAdaptiveBlocks;
+	int   makemips;
+	char *fmt_string;
+
 
 
 public:

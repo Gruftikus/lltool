@@ -6,6 +6,24 @@ llPolygon::llPolygon(int _n1, int _n2, char *_name, llPointList *_r) {
 	p[1]   = _n2;
 	name   = _name;
 	points = _r;
+	float x1 = points->GetX(_n1);
+	float y1 = points->GetY(_n1);
+	float x2 = points->GetX(_n2);
+	float y2 = points->GetY(_n2);
+	if (x1 < x2) {
+		min_x = x1;
+		max_x = x2;
+	} else  {
+		min_x = x2;
+		max_x = x1;
+	} 
+	if (y1 < y2) {
+		min_y = y1;
+		max_y = y2;
+	} else  {
+		min_y = y2;
+		max_y = y1;
+	} 
 }
 
 int llPolygon::AddPoint(int _n) {
@@ -13,10 +31,23 @@ int llPolygon::AddPoint(int _n) {
 	p.resize(p.size()+1);
 	p[p.size()-1] = _n;
 
+	float x1 = points->GetX(_n);
+	float y1 = points->GetY(_n);
+
+	if (x1 < min_x) min_x = x1;
+	if (x1 > max_x) max_x = x1;
+	if (y1 < min_y) min_y = y1;
+	if (y1 > max_y) max_y = y1;
+
 	return 1;
 }
 
 int llPolygon::IsPointInsidePolygon(float _x, float _y) {
+
+	//quick look:
+	if (_x > max_x || _x < min_x) return 0;
+	if (_y > max_y || _y < min_y) return 0;
+
 	//Raycasting algo: http://en.wikipedia.org/wiki/Point_in_polygon
 	int num=0;
 	int v = points->GetPoint(_x, _y);

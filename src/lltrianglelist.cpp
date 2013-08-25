@@ -1032,110 +1032,131 @@ void llTriangleList::DivideBetween(float _xx1, float _yy1, float _xx2, float _yy
 	int p2 = points->GetPoint(_xx2, _yy2);
 
 	if (p1 < 0) {
-		mesg->WriteNextLine(LOG_ERROR,"DivideBetween: vertex (%f,%f) not found in vertex list",_xx1, _yy1);
+		mesg->WriteNextLine(LOG_ERROR, "DivideBetween: vertex (%f,%f) not found in vertex list", _xx1, _yy1);
 		return;
 	}
 	if (p2 < 0) {
-		mesg->WriteNextLine(LOG_ERROR,"DivideBetween: vertex (%f,%f) not found in vertex list",_xx2, _yy2);
+		mesg->WriteNextLine(LOG_ERROR, "DivideBetween: vertex (%f,%f) not found in vertex list", _xx2, _yy2);
 		return;
 	}
 
-	unsigned old_counter=counter;
-	for (unsigned int i=0;i<old_counter;i++) {
+	unsigned old_counter = counter;
+	for (unsigned int i=0; i<old_counter; i++) {
 
-		int num12 = points->GetOverlap(p1,p2,GetPoint1(i),GetPoint2(i));
-		int num13 = points->GetOverlap(p1,p2,GetPoint1(i),GetPoint3(i));
-		int num23 = points->GetOverlap(p1,p2,GetPoint2(i),GetPoint3(i));
+		int num12 = points->GetOverlap(p1, p2, GetPoint1(i), GetPoint2(i));
+		int num13 = points->GetOverlap(p1, p2, GetPoint1(i), GetPoint3(i));
+		int num23 = points->GetOverlap(p1, p2, GetPoint2(i), GetPoint3(i));
 
 		int num_all = num12 + num13 + num23;
 
+		if (num_all == 3) {
+			//hit one point, have to see which is the false one
+			float x1, y1, x2, y2, x3, y3;
+			num12 = num13 = num23 = 0;
+			points->GetIntersection(p1, p2, GetPoint1(i), GetPoint2(i), &x1, &y1);
+			points->GetIntersection(p1, p2, GetPoint1(i), GetPoint3(i), &x2, &y2);
+			points->GetIntersection(p1, p2, GetPoint2(i), GetPoint3(i), &x3, &y3);
+			int point1 = points->GetPoint(x1, y1);
+			int point2 = points->GetPoint(x2, y2);
+			int point3 = points->GetPoint(x3, y3);
+			if (point1>=0 && point2>=0 && point1==point2) {
+				num_all = 1;
+				num23   = 1;
+			} else if (point1>=0 && point3>=0 && point1==point3) {
+				num_all = 1;
+				num13   = 1;
+			} else if (point2>=0 && point3>=0 && point2==point3) {
+				num_all = 1;
+				num12   = 1;
+			} else {
+				mesg->WriteNextLine(LOG_WARNING, "DivideBetween: could not correct false touch problem");
+			}
+		}
+
 		if (num_all == 1) {
 			//GetTriangle(i)->Print();
-			float x,y;
+			float x, y;
 			if (num12 == 1) {
-				points->GetIntersection(p1,p2,GetPoint1(i),GetPoint2(i),&x,&y);
+				points->GetIntersection(p1, p2, GetPoint1(i), GetPoint2(i), &x, &y);
 			}
 			if (num23 == 1) {
-				points->GetIntersection(p1,p2,GetPoint2(i),GetPoint3(i),&x,&y);
+				points->GetIntersection(p1, p2, GetPoint2(i), GetPoint3(i), &x, &y);
 			}
 			if (num13 == 1) {
-				points->GetIntersection(p1,p2,GetPoint1(i),GetPoint3(i),&x,&y);
+				points->GetIntersection(p1, p2, GetPoint1(i), GetPoint3(i), &x, &y);
 			}
 
-			int point1 = points->GetPoint(x,y);
-			if (point1<0)
-				point1=points->AddPoint(x, y, _map->GetZ(x,y));
+			int point1 = points->GetPoint(x, y);
+			if (point1 < 0)
+				point1 = points->AddPoint(x, y, _map->GetZ(x,y));
 			int orig1,orig2;
 			if (num23 == 1) {
-				orig1=v[i].GetPoint1();
-				orig2=v[i].GetPoint2();
+				orig1 = v[i].GetPoint1();
+				orig2 = v[i].GetPoint2();
 				v[i].SetPoint2(point1);
 				AddTriangle(orig1, orig2, point1);
 			}
 			if (num13 == 1) {
-				orig1=v[i].GetPoint2();
-				orig2=v[i].GetPoint3();
+				orig1 = v[i].GetPoint2();
+				orig2 = v[i].GetPoint3();
 				v[i].SetPoint3(point1);
 				AddTriangle(orig1, orig2, point1);
 			}
 			if (num12 == 1) {
-				orig1=v[i].GetPoint3();
-				orig2=v[i].GetPoint1();
+				orig1 = v[i].GetPoint3();
+				orig2 = v[i].GetPoint1();
 				v[i].SetPoint1(point1);
 				AddTriangle(orig1, orig2, point1);
 			}
 			v[i].SetCorrectParity();
-		}
-
-		if (num_all == 2) {
-
-			float x1,y1,x2,y2;
+		} else if (num_all == 2) {
+			float x1, y1, x2, y2;
 			if (num12 == 0) {
-				points->GetIntersection(p1,p2,GetPoint1(i),GetPoint3(i),&x1,&y1);
-				points->GetIntersection(p1,p2,GetPoint2(i),GetPoint3(i),&x2,&y2);
+				points->GetIntersection(p1, p2, GetPoint1(i), GetPoint3(i), &x1, &y1);
+				points->GetIntersection(p1, p2, GetPoint2(i), GetPoint3(i), &x2, &y2);
 			}
 			if (num23 == 0) {
-				points->GetIntersection(p1,p2,GetPoint1(i),GetPoint2(i),&x1,&y1);
-				points->GetIntersection(p1,p2,GetPoint1(i),GetPoint3(i),&x2,&y2);
+				points->GetIntersection(p1, p2, GetPoint1(i), GetPoint2(i), &x1, &y1);
+				points->GetIntersection(p1, p2, GetPoint1(i), GetPoint3(i), &x2, &y2);
 			}
 			if (num13 == 0) {
-				points->GetIntersection(p1,p2,GetPoint1(i),GetPoint2(i),&x1,&y1);
-				points->GetIntersection(p1,p2,GetPoint2(i),GetPoint3(i),&x2,&y2);
+				points->GetIntersection(p1, p2, GetPoint1(i), GetPoint2(i), &x1, &y1);
+				points->GetIntersection(p1, p2, GetPoint2(i), GetPoint3(i), &x2, &y2);
 			}
-			int point1 = points->GetPoint(x1,y1);
-			if (point1<0)
-				point1=points->AddPoint(x1, y1, _map->GetZ(x1,y1));
+			int point1 = points->GetPoint(x1, y1);
+			if (point1 < 0)
+				point1 = points->AddPoint(x1, y1, _map->GetZ(x1,y1));
 			int point2 = points->GetPoint(x2,y2);
-			if (point2<0)
-				point2=points->AddPoint(x2, y2, _map->GetZ(x2,y2));
-			int orig1,orig2;
+			if (point2 < 0)
+				point2 = points->AddPoint(x2, y2, _map->GetZ(x2,y2));
+			int orig1, orig2;
 			if (num23 == 0) {
-				orig1=v[i].GetPoint2();
-				orig2=v[i].GetPoint3();
+				orig1 = v[i].GetPoint2();
+				orig2 = v[i].GetPoint3();
 				v[i].SetPoint2(point1);
 				v[i].SetPoint3(point2);
 			}
 			if (num13 == 0) {
-				orig1=v[i].GetPoint1();
-				orig2=v[i].GetPoint3();
+				orig1 = v[i].GetPoint1();
+				orig2 = v[i].GetPoint3();
 				v[i].SetPoint1(point1);
 				v[i].SetPoint3(point2);
 			}		
 			if (num12 == 0) {
-				orig1=v[i].GetPoint1();
-				orig2=v[i].GetPoint2();
+				orig1 = v[i].GetPoint1();
+				orig2 = v[i].GetPoint2();
 				v[i].SetPoint1(point1);
 				v[i].SetPoint2(point2);
 			}
 			v[i].SetCorrectParity();
 
 			if (point1 != point2)
-				Add2Triangles(point1,point2,orig1,orig2);
+				Add2Triangles(point1, point2, orig1, orig2);
 			else {
-				int t = AddTriangle(point1,orig1,orig2);
+				int t = AddTriangle(point1, orig1, orig2);
 				if (t>=0) v[t].SetCorrectParity();
 			}
-		}
+		} 
 	}
 }
 

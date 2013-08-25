@@ -11,6 +11,7 @@ int llExportMap::Prepare(void) {
 
 	filename = NULL;
 	compress = 0;
+	flipx = flipy = 0;
 
 	return 1;
 }
@@ -21,7 +22,10 @@ int llExportMap::RegisterOptions(void) {
 	RegisterValue("-filename", &filename);
 	RegisterValue("-scale",    &scale);
 	RegisterValue("-depth",    &bits);
+
 	RegisterFlag ("-compress", &compress);
+	RegisterFlag ("-FlipX",    &flipx);
+	RegisterFlag ("-FlipY",    &flipy);
 	
 	return 1;
 }
@@ -98,7 +102,7 @@ int llExportMap::Exec(void) {
 
 	/* Read and check the information header */
 	if (fwrite(&infoheader, sizeof(INFOHEADER), 1, fptr) != 1) {
-		_llLogger()->WriteNextLine(-LOG_ERROR,"Failed to write BMP info header");
+		_llLogger()->WriteNextLine(-LOG_ERROR, "Failed to write BMP info header");
 		return 0;
 	}
 
@@ -112,10 +116,16 @@ int llExportMap::Exec(void) {
 			unsigned char byte4;
 
 			int tupel = 0;
+
+			int xl = x;
+			int yl = y;
+			if (flipx) xl = x2 - (x - x1);
+			if (flipy) yl = y2 - (y - y1);
+
 			if (Used("-scale")) {
-				tupel = map->GetTupelScaled(x, y, &byte1, &byte2, &byte3, &byte4, scale);			
+				tupel = map->GetTupelScaled(xl, yl, &byte1, &byte2, &byte3, &byte4, scale);			
 			} else {
-				tupel = map->GetTupel(x, y, &byte1, &byte2, &byte3, &byte4);
+				tupel = map->GetTupel(xl, yl, &byte1, &byte2, &byte3, &byte4);
 			}
 
 			if (tupel) {

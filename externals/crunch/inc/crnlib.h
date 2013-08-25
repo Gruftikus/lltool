@@ -74,6 +74,7 @@ enum crn_limits
 {
    // Max. mipmap level resolution on any axis (will be doubled to 8k in next release).
    cCRNMaxLevelResolution     = 4096,
+	//cCRNMaxLevelResolution     = 8192,
 
    cCRNMinPaletteSize         = 8,
    cCRNMaxPaletteSize         = 8192,
@@ -236,6 +237,8 @@ struct crn_comp_params
          (m_dxt_quality > cCRNDXTQualityUber) ||
          (m_dxt_compressor_type >= cCRNTotalDXTCompressors) )
       {
+		 if (m_width > cCRNMaxLevelResolution)  printf("Width (%i) too large",  m_width);
+		 if (m_height > cCRNMaxLevelResolution) printf("Height (%i) too large", m_height);
          return false;
       }
       return true;

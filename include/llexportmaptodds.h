@@ -10,6 +10,8 @@ protected:
 
 	char *filename;
 	int   scale;
+	int   flipx, flipy;
+
 	float bitrate;
 	int   quality_level;
 	int   noAdaptiveBlocks;

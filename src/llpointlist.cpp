@@ -136,10 +136,9 @@ int llPointList::GetN(float _x1, float _y1, float _x2, float _y2) {
 	return num;
 }
 
-int llPointList::GetOverlap(int _p1,int _p2, int _p3,int _p4) {
+int llPointList::GetOverlap(int _p1, int _p2, int _p3, int _p4) {
 
-	//if both lines are equal, or they form a triangle, this is OK
-
+	//if both lines are equal, or they form a triangle, this is OK:
 	if ((_p1 == _p3) || (_p1 == _p4) || (_p2 == _p3) || (_p2 == _p4)) return 0;
 
 	float s1_x, s1_y, s2_x, s2_y; 
@@ -153,8 +152,7 @@ int llPointList::GetOverlap(int _p1,int _p2, int _p3,int _p4) {
 		(GetY(_p1) - GetY(_p3))) / (-s2_x * s1_y + s1_x * s2_y); 
 	t = ( s2_x * (GetY(_p1) - GetY(_p3)) - s2_y * 
 		(GetX(_p1) - GetX(_p3))) / (-s2_x * s1_y + s1_x * s2_y); 
-	if (s >= 0 && s <= 1 && t >= 0 && t <= 1) 
-	{ 
+	if (s >= 0 && s <= 1 && t >= 0 && t <= 1) { 
 		// Collision detected 
 		return 1; 
 	} 
@@ -171,10 +169,10 @@ int llPointList::GetIntersection(int _p1, int _p2, int _p3,
 	s2_x = GetX(_p4) - GetX(_p3);
 	s2_y = GetY(_p4) - GetY(_p3);
 
-	float x1=GetX(_p1); 
-	float x2=GetX(_p3); 
-	float y1=GetY(_p1); 
-	float y2=GetY(_p3); 
+	float x1 = GetX(_p1); 
+	float x2 = GetX(_p3); 
+	float y1 = GetY(_p1); 
+	float y2 = GetY(_p3); 
 
 	float s2 = (y1*s1_x - y2*s1_x + x2*s1_y - x1*s1_y)/(s2_y*s1_x - s2_x*s1_y);
 	*_x = x2 + s2*s2_x;

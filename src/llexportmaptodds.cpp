@@ -48,6 +48,7 @@ int llExportMapToDDS::Prepare(void) {
 	noAdaptiveBlocks = 0;
 	makemips   = 0;
 	fmt_string = "DXT1";
+	flipx = flipy = 0;
 
 	return 1;
 }
@@ -63,6 +64,8 @@ int llExportMapToDDS::RegisterOptions(void) {
 
 	RegisterFlag("-noAdaptiveBlocks",  &noAdaptiveBlocks);
 	RegisterFlag("-MakeMips",  &makemips);
+	RegisterFlag("-FlipX",    &flipx);
+	RegisterFlag("-FlipY",    &flipy);
 	
 	return 1;
 }
@@ -109,16 +112,22 @@ int llExportMapToDDS::Exec(void) {
 			unsigned char byte4;
 
 			int tupel = 0;
+
+			int xl = x;
+			int yl = y;
+			if (flipx) xl = x2 - (x - x1);
+			if (flipy) yl = y2 - (y - y1);
+
 			if (Used("-scale")) {
-				tupel = map->GetTupelScaled(x, y, &byte1, &byte2, &byte3, &byte4, scale);			
+				tupel = map->GetTupelScaled(xl, yl, &byte1, &byte2, &byte3, &byte4, scale);			
 			} else {
-				tupel = map->GetTupel(x, y, &byte1, &byte2, &byte3, &byte4);
+				tupel = map->GetTupel(xl, yl, &byte1, &byte2, &byte3, &byte4);
 			}
 
 			if (tupel) {
-				pSrc_image[(x-x1)+(y-y1)*width] = byte3 | (byte2 << 8) | (byte1 << 16) | (byte4 << 24);
+				pSrc_image[(xl-x1)+(yl-y1)*width] = byte3 | (byte2 << 8) | (byte1 << 16) | (byte4 << 24);
 			} else 
-				pSrc_image[(x-x1)+(y-y1)*width] = 0;
+				pSrc_image[(xl-x1)+(yl-y1)*width] = 0;
 		}
 	}
 

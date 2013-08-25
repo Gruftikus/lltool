@@ -11,7 +11,7 @@ protected:
 	char *filename;
 	int  bits, compress;
 	int  scale;
-
+	int  flipx, flipy;
 
 public:
 

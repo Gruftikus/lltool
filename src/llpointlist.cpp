@@ -136,6 +136,25 @@ int llPointList::GetN(float _x1, float _y1, float _x2, float _y2) {
 	return num;
 }
 
+int llPointList::RemoveInactiveVertices(void) {
+	int num = 0;
+	for (unsigned int i=0; i<counter; i++) {
+		if (active[i]) {
+			v[num]          = v[i];
+			active[num]     = active[i];
+			tmp_active[num] = tmp_active[i];
+			flag[num]       = flag[i];
+			secondary[num]  = secondary[i];
+			angle1[num]     = angle1[i];
+			angle2[num]     = angle2[i];
+			uv[num]         = uv[i];
+			num++;
+		}
+	}
+	counter = num;
+	return num;
+}
+
 int llPointList::GetOverlap(int _p1, int _p2, int _p3, int _p4) {
 
 	//if both lines are equal, or they form a triangle, this is OK:

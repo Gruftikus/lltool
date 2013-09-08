@@ -19,9 +19,18 @@ int llInactivateAllVertices::Exec(void) {
 		return 0;
 	}
 
-	for (int j=0; j<points->GetN(); j++) {
-		points->SetInactive(j);
+	int num = 0;
+
+	for (int i=0; i<points->GetN(); i++) {
+		if (points->GetActive(i) && 
+			points->GetX(i) >= _llUtils()->x00 && points->GetX(i) <= _llUtils()->x11  &&
+			points->GetY(i) >= _llUtils()->y00 && points->GetY(i) <= _llUtils()->y11) {
+				points->SetInactive(i);
+				num++;
+		}
 	}
+
+	_llLogger()->WriteNextLine(LOG_INFO, "%s: %i vertices inactivated", command_name, num);
 
 	return 1;
 }

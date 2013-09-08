@@ -58,6 +58,8 @@
 #include "../include/llsetvertex.h"
 #include "../include/lladddiscontinuityline.h"
 #include "../include/lladddiscontinuitygrid.h"
+#include "../include/llremoveinactivevertices.h"
+#include "../include/llactivatefractionofvertices.h"
 
 
 //Triangle-modifiers:
@@ -70,6 +72,7 @@
 #include "../include/llsplitatpolygonborder.h"
 #include "../include/llsplitbetween.h"
 #include "../include/llstencilpolygon.h"
+#include "../include/llremovetriangulation.h"
 
 //Triangle-Exporters:
 #include "../include/llexportmeshtoobj.h"
@@ -113,13 +116,11 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llCopyMap());
 	_batch->RegisterWorker(new llScaleMap());
 
-
 	_batch->RegisterWorker(new llFillColorMap());
 
 	_batch->RegisterWorker(new llDiamondSquare());
 	_batch->RegisterWorker(new llFilter());
 	_batch->RegisterWorker(new llMakeDerivatives());
-
 
 	_batch->RegisterWorker(new llSetVertex());
 	_batch->RegisterWorker(new llSetAlgVertices());
@@ -132,7 +133,9 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llPanorama());
 	_batch->RegisterWorker(new llCreatePolygon());
 	_batch->RegisterWorker(new llAddVertexToPolygon());
-
+	_batch->RegisterWorker(new llRemoveInactiveVertices());
+	_batch->RegisterWorker(new llActivateFractionOfVertices());
+	
 	_batch->RegisterWorker(new llAddDiscontinuityLine());
 	_batch->RegisterWorker(new llAddDiscontinuityGrid());
 
@@ -146,6 +149,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llInactivateAllVertices());
 	_batch->RegisterWorker(new llRemoveInactiveTriangles());
 	_batch->RegisterWorker(new llActivateVisibleVertices());
+	_batch->RegisterWorker(new llRemoveTriangulation());
 
 	_batch->RegisterWorker(new llExportMeshToObj());
 	_batch->RegisterWorker(new llExportMeshToVRML());

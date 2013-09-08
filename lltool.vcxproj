@@ -131,6 +131,7 @@
     <ClInclude Include="externals\mtparser\MTParserLib\MTUnicodeANSIDefs.h" />
     <ClInclude Include="externals\resampler\resampler.h" />
     <ClInclude Include="externals\triangle\triangle.h" />
+    <ClInclude Include="include\llactivatefractionofvertices.h" />
     <ClInclude Include="include\llactivatevisiblevertices.h" />
     <ClInclude Include="include\lladddiscontinuitygrid.h" />
     <ClInclude Include="include\lladddiscontinuityline.h" />
@@ -177,6 +178,8 @@
     <ClInclude Include="include\llreaddatafile.h" />
     <ClInclude Include="include\llreadpolygondatafile.h" />
     <ClInclude Include="include\llremoveinactivetriangles.h" />
+    <ClInclude Include="include\llremoveinactivevertices.h" />
+    <ClInclude Include="include\llremovetriangulation.h" />
     <ClInclude Include="include\llscalemap.h" />
     <ClInclude Include="include\llselectall.h" />
     <ClInclude Include="include\llselectrec.h" />
@@ -286,6 +289,7 @@
     <ClCompile Include="externals\mtparser\MTParserLib\MTUnicodeANSIDefs.cpp" />
     <ClCompile Include="externals\resampler\resampler.cpp" />
     <ClCompile Include="externals\triangle\triangle.cc" />
+    <ClCompile Include="src\llactivatefractionofvertices.cpp" />
     <ClCompile Include="src\llactivatevisiblevertices.cpp" />
     <ClCompile Include="src\lladddiscontinuitygrid.cpp" />
     <ClCompile Include="src\lladddiscontinuityline.cpp" />
@@ -331,6 +335,8 @@
     <ClCompile Include="src\llreaddatafile.cpp" />
     <ClCompile Include="src\llreadpolygondatafile.cpp" />
     <ClCompile Include="src\llremoveinactivetriangles.cpp" />
+    <ClCompile Include="src\llremoveinactivevertices.cpp" />
+    <ClCompile Include="src\llremovetriangulation.cpp" />
     <ClCompile Include="src\llscalemap.cpp" />
     <ClCompile Include="src\llselectall.cpp" />
     <ClCompile Include="src\llselectrec.cpp" />

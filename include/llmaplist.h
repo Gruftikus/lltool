@@ -33,8 +33,9 @@ public:
 	int AddMap(const char *_name, llMap *_map, const char *_oldmap);
 
 	int DeleteMap(char *_name);
-
 	void ExchangeMap(char *_name, llMap *_map);
+
+	int DeleteTriangles(char *_name);
 
 	llMap *GetMap(const char* _name);
 

@@ -148,6 +148,25 @@ int llMapList::DeleteMap(char *_name) {
 
 }
 
+int llMapList::DeleteTriangles(char *_name) {
+
+	int num = GetMapNum(_name);
+	if (num<0) {
+		_llLogger()->WriteNextLine(-LOG_ERROR, "llMapList::DeleteTriangles: map %s not found", _name);
+		return 0;
+	}
+	
+	llTriangleList *triangles = triangle_list[num];
+	if (!triangles) {
+		_llLogger()->WriteNextLine(-LOG_WARNING, "llMapList::DeleteTriangles: map %s has no triangles", _name);
+		return 0;
+	}
+
+	triangles->RemoveTriangles();
+
+	return 1;
+}
+
 int llMapList::GetNumHeights(char *_mapname, float _x, float _y, double *_angles, float *_z, int _size) {
 	//returns the number of possible height of the map _mapname
 	//at position _x, _y

@@ -13,9 +13,10 @@ int llRemoveInactiveTriangles::RegisterOptions(void) {
 int llRemoveInactiveTriangles::Exec(void) {
 	if (!llTriMod::Exec()) return 0;
 
-	int v = triangles->GetN();
-	int num=0;
-	for (int i=0;i<v;i++) {
+	int v   = triangles->GetN();
+	int num = 0;
+
+	for (int i=0; i<v; i++) {
 
 		int o1 = triangles->GetPoint1(i);
 		int o2 = triangles->GetPoint2(i);
@@ -23,7 +24,7 @@ int llRemoveInactiveTriangles::Exec(void) {
 
 		if (!points->GetActive(o1) && !points->GetActive(o2) && !points->GetActive(o3)) {
 			triangles->RemoveTriangle(i);
-			i--;v--;num++;
+			i--; v--; num++;
 		}
 	}
 	_llLogger()->WriteNextLine(LOG_INFO,"%s: %i triangles removed", command_name, num);

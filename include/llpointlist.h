@@ -142,6 +142,8 @@ public:
 		}
 	}
 
+	int RemoveInactiveVertices(void);
+
 	void Resize(void) {
 		v.resize(counter);
 		uv.resize(counter);

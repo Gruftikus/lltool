@@ -129,6 +129,7 @@ public:
 	int  AddTriangle(int _p1, int _p2, int _p3);
 	void Add2Triangles(int _p1, int _p2, int _p3, int _p4);
 	int  RemoveTriangle(unsigned int _n);
+	int  RemoveTriangles(void) {counter = 0; return 1;};
 
 	llTriangle * GetTriangle(unsigned int _n);
 	int GetTriangle(int _p1, int _p2); //returns triangle which shares p1 and p2

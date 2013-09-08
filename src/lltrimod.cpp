@@ -43,6 +43,7 @@ int llTriMod::Exec(void) {
 		_llLogger()->WriteNextLine(-LOG_FATAL, "%s: no triangle list in map [%s]", command_name, mapname);
 		return 0;
 	}
+
 	if (!triangles->GetN()) {
 		_llLogger()->WriteNextLine(-LOG_FATAL, "%s: map [%s] not triangulated. Call MakeTriangulation before.", command_name, mapname);
 		return 0;

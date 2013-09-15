@@ -287,6 +287,11 @@ llUtils::llUtils() {
 	zero      = 0.0;
 	one       = 1.0;
 	mod_list.resize(0);
+
+	x00 = 0;
+	x11 = 1;
+	y00 = 0;
+	y11 = 1;
 }
 
 

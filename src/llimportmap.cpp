@@ -12,6 +12,7 @@ int llImportMap::Prepare(void) {
 	filename = NULL;
 	z        = 1.0;
 	even     = 0;
+	rgb      = 0;
 
 	return 1;
 }

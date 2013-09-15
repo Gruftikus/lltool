@@ -215,6 +215,7 @@ public:
 			widthx_per_raw2 =  0.0f;
 			widthy_per_raw2 =  0.0f;
 		}
+		//std::cout << widthx_per_raw << ":" << widthy_per_raw2 << std::endl;
 	}
 	float GetX1() {return x1;};
 	float GetY1() {return y1;};

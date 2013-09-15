@@ -60,9 +60,19 @@ int llExportMap::Exec(void) {
 	int x2 = map->GetRawX(_llUtils()->x11);
 	int y2 = map->GetRawY(_llUtils()->y11);
 
+	if (!map->IsUneven()) {
+		x1 = map->GetRawX(_llUtils()->x00 + map->GetWidthXPerRaw()*.01f);
+		y1 = map->GetRawY(_llUtils()->y00 + map->GetWidthYPerRaw()*.01f);
+		x2 = map->GetRawX(_llUtils()->x11 - map->GetWidthXPerRaw()*.01f);
+		y2 = map->GetRawY(_llUtils()->y11 - map->GetWidthYPerRaw()*.01f);
+	}
+
 	INFOHEADER infoheader;
 	infoheader.width  = x2-x1+1;
 	infoheader.height = y2-y1+1;
+
+	//std::cout << x1 << ":" << y1 << ":" << x2 << ":" << y2 << ":" << infoheader.width << ":" << infoheader.height << std::endl;
+
 	infoheader.compression=0;
 	infoheader.size   = 40;  
 	infoheader.planes = 1;       /* Number of colour planes   */

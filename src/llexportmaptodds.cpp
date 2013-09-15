@@ -91,7 +91,10 @@ int llExportMapToDDS::Exec(void) {
 	int y2 = map->GetRawY(_llUtils()->y11);
 
 	if (!map->IsUneven()) {
-		x2--; y2--;
+		x1 = map->GetRawX(_llUtils()->x00 + map->GetWidthXPerRaw()*.01f);
+		y1 = map->GetRawY(_llUtils()->y00 + map->GetWidthYPerRaw()*.01f);
+		x2 = map->GetRawX(_llUtils()->x11 - map->GetWidthXPerRaw()*.01f);
+		y2 = map->GetRawY(_llUtils()->y11 - map->GetWidthYPerRaw()*.01f);
 	}
 
 	//std::cout << x1 << ":" << y1 << ":" << x2 << ":" << y2 << std::endl;

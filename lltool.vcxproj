@@ -163,6 +163,7 @@
     <ClInclude Include="include\llfillcolormap.h" />
     <ClInclude Include="include\llfilter.h" />
     <ClInclude Include="include\llimportmap.h" />
+    <ClInclude Include="include\llimportmapfromdds.h" />
     <ClInclude Include="include\llinactivateallvertices.h" />
     <ClInclude Include="include\lllinelist.h" />
     <ClInclude Include="include\lllogger.h" />
@@ -320,6 +321,7 @@
     <ClCompile Include="src\llfillcolormap.cpp" />
     <ClCompile Include="src\llfilter.cpp" />
     <ClCompile Include="src\llimportmap.cpp" />
+    <ClCompile Include="src\llimportmapfromdds.cpp" />
     <ClCompile Include="src\llinactivateallvertices.cpp" />
     <ClCompile Include="src\lllinelist.cpp" />
     <ClCompile Include="src\lllogger.cpp" />

@@ -24,7 +24,9 @@ int llScaleMap::RegisterOptions(void) {
 
 	RegisterValue("-name",   &targetname);
 	RegisterValue("-filter", &pFilter);
-	RegisterValue("-factor", &factor, LLWORKER_OBL_OPTION);
+	RegisterValue("-factor", &factor);
+	RegisterValue("-sizeX",  &sizex);
+	RegisterValue("-sizeY",  &sizey);
 	RegisterValue("-gamma",  &source_gamma);
 
 	RegisterFlag ("-rgb",    &rgb);
@@ -40,6 +42,11 @@ int llScaleMap::Exec(void) {
 		sprintf_s(targetname, strlen(mapname)+5, "%s_tmp", mapname);
 	}
 
+	if (!Used("-factor") && (!Used("-sizeX") || !Used("-sizeY"))) {
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: -sizeX and -sizeY must be used if no factor is given", command_name);
+		return 0;
+	}
+
 	llMap *newmap = _llMapList()->GetMap(targetname);
 
 	if (newmap) {
@@ -49,8 +56,14 @@ int llScaleMap::Exec(void) {
 
 	int widthx = map->GetWidthX();
 	int widthy = map->GetWidthY();
-	int newwidthx = int(float(map->GetWidthX())*factor);
-	int newwidthy = int(float(map->GetWidthY())*factor);
+
+	int newwidthx = (int)sizex;
+	int newwidthy = (int)sizey;
+
+	if (Used("-factor")) {
+		newwidthx = int(float(map->GetWidthX())*factor);
+		newwidthy = int(float(map->GetWidthY())*factor);
+	}
 
 	float defaultheight = map->GetDefaultHeight();
 	int   makeshort     = map->GetShort();

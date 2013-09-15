@@ -9,7 +9,7 @@ class llScaleMap : public llMapWorker {
 protected:
 
 	char *targetname;
-	float factor;
+	float factor, sizex, sizey;
 	int   rgb;
 	float source_gamma;
 

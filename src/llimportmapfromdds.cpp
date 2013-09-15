@@ -117,10 +117,7 @@ int llImportMapFromDDS::Exec(void) {
 	if (!Used("-y2")) y2 = _llUtils()->y11;
 
 	llMap * heightmap = NULL;
-	if (Used("-rgb"))
-		heightmap = new llMap(widthx, widthy, MAP_COLOR);
-	else
-		heightmap = new llMap(widthx, widthy);
+	heightmap = new llMap(widthx, widthy, MAP_COLOR);
 	if (even) heightmap->SetEven();
 	heightmap->SetCoordSystem(x1, y1, x2, y2, z);
 

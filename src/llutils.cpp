@@ -82,10 +82,14 @@ char * strtok_int(char *ptr, const char delim, char **saveptr1) {
 				foundquot=0;
 				if (h>0 && (*saveptr1)[h-1]=='\\') 
 					foundquot=1;
+				if (h>1 && (*saveptr1)[h-2]=='\\') 
+					foundquot=0;
 			} else if ((*saveptr1)[h]=='\"' && !foundquot) {
 				foundquot=1;
 				if (h>0 && (*saveptr1)[h-1]=='\\') 
 					foundquot=0;
+				if (h>1 && (*saveptr1)[h-2]=='\\') 
+					foundquot=1;
 			}
 			if ((*saveptr1)[h]==delim && !foundquot) 
 				(*saveptr1)[h]='§';
@@ -98,10 +102,14 @@ char * strtok_int(char *ptr, const char delim, char **saveptr1) {
 				foundquot=0;
 				if (h>0 && (ptr)[h-1]=='\\') 
 					foundquot=1;
+				if (h>1 && (ptr)[h-2]=='\\') 
+					foundquot=0;
 			} else if ((ptr)[h]=='\"' && !foundquot) {
 				foundquot=1;
 				if (h>0 && (ptr)[h-1]=='\\') 
 					foundquot=0;
+				if (h>1 && (ptr)[h-2]=='\\') 
+					foundquot=1;
 			}
 			if ((ptr)[h]==delim && !foundquot) 
 				(ptr)[h]='§';
@@ -115,10 +123,14 @@ char * strtok_int(char *ptr, const char delim, char **saveptr1) {
 				foundquot=0;
 				if (h>0 && (*saveptr1)[h-1]=='\\') 
 					foundquot=1;
+				if (h>1 && (*saveptr1)[h-2]=='\\') 
+					foundquot=0;
 			} else if ((*saveptr1)[h]=='\"' && !foundquot) {
 				foundquot=1;
 				if (h>0 && (*saveptr1)[h-1]=='\\') 
 					foundquot=0;
+				if (h>1 && (*saveptr1)[h-2]=='\\') 
+					foundquot=1;
 			}
 			if ((*saveptr1)[h]=='§' && !foundquot) 
 				(*saveptr1)[h]=delim;
@@ -129,19 +141,21 @@ char * strtok_int(char *ptr, const char delim, char **saveptr1) {
 		for (unsigned int h=0; h<strlen(ptr1); h++) {
 			if ((ptr1)[h]=='\"' && foundquot) {
 				foundquot = 0;
-				if (h>0 && (ptr1)[h-1]=='\\') {
+				if (h>0 && (ptr1)[h-1]=='\\') 
 					foundquot = 1;
+				if (h>1 && (ptr1)[h-2]=='\\') 
+					foundquot = 0;
 					//for (unsigned int j=h-1;j<strlen(ptr1)-1;j++) (ptr1)[j]=(ptr1)[j+1];
-					//(ptr1)[strlen(ptr1)-1]='\0';
-				}
+					//(ptr1)[strlen(ptr1)-1]='\0';				
 			}
 			else if ((ptr1)[h]=='\"' && !foundquot) {
 				foundquot = 1;
-				if (h>0 && (ptr1)[h-1]=='\\') {
+				if (h>0 && (ptr1)[h-1]=='\\') 
 					foundquot = 0;
+				if (h>1 && (ptr1)[h-2]=='\\') 
+					foundquot = 1;
 					//for (unsigned int j=h-1;j<strlen(ptr1)-1;j++) (ptr1)[j]=(ptr1)[j+1];
 					//(ptr1)[strlen(ptr1)-1]='\0';
-				}
 			}
 			if ((ptr1)[h]=='§' && !foundquot) 
 				(ptr1)[h]=delim;
@@ -300,7 +314,7 @@ void llUtils::StripQuot(char **_tmp) {
 	if ((*_tmp)[strlen(*_tmp)-1] == '\"') (*_tmp)[strlen(*_tmp)-1]='\0';
 	for (unsigned int h=0; h<strlen(*_tmp); h++) {
 		if ((*_tmp)[h]=='\"') { //convert protected \" into "
-			if (h>0 && (*_tmp)[h-1]=='\\') {
+			if (h>0 && (*_tmp)[h-1]=='\\' && (h==1 || (h>1 && (*_tmp)[h-2]!='\\')) ) {
 				for (unsigned int j=h-1; j<strlen(*_tmp)-1; j++) 
 					(*_tmp)[j]=(*_tmp)[j+1];
 				(*_tmp)[strlen(*_tmp)-1]='\0';
@@ -521,6 +535,15 @@ check_again2:
 
 	for (unsigned int i=0; i<strlen(tmp); i++) {
 		if (i>0 && tmp[i]=='$' && tmp[i-1]=='$') {
+			for (unsigned int j=i; j<strlen(tmp); j++) {
+				tmp[j]=tmp[j+1];
+			}
+			i--;
+		}
+	}
+
+	for (unsigned int i=0; i<strlen(tmp); i++) {
+		if (i>0 && tmp[i]=='\\' && tmp[i-1]=='\\') {
 			for (unsigned int j=i; j<strlen(tmp); j++) {
 				tmp[j]=tmp[j+1];
 			}

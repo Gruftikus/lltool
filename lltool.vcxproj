@@ -160,6 +160,7 @@
     <ClInclude Include="include\llexportmeshtoobj.h" />
     <ClInclude Include="include\llexportmeshtops.h" />
     <ClInclude Include="include\llexportmeshtoVRML.h" />
+    <ClInclude Include="include\llfileiterator.h" />
     <ClInclude Include="include\llfillcolormap.h" />
     <ClInclude Include="include\llfilter.h" />
     <ClInclude Include="include\llimportmap.h" />
@@ -318,6 +319,7 @@
     <ClCompile Include="src\llexportmeshtoobj.cpp" />
     <ClCompile Include="src\llexportmeshtops.cpp" />
     <ClCompile Include="src\llexportmeshtoVRML.cpp" />
+    <ClCompile Include="src\llfileiterator.cpp" />
     <ClCompile Include="src\llfillcolormap.cpp" />
     <ClCompile Include="src\llfilter.cpp" />
     <ClCompile Include="src\llimportmap.cpp" />

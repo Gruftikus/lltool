@@ -11,6 +11,7 @@
 #include "../include/llsetflag.h"
 #include "../include/llecho.h"
 #include "../include/llsetpath.h"
+#include "../include/llfileiterator.h"
 
 //Alg-based:
 #include "../include/llalg.h"
@@ -88,6 +89,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llSetFlag());
 	_batch->RegisterWorker(new llEcho());
 	_batch->RegisterWorker(new llSetPath());
+	_batch->RegisterWorker(new llFileIterator());
 
 	//Alg-based:
 	_llAlgList()->AddAlgCollection("_heightmap_alg", new llAlgCollection());

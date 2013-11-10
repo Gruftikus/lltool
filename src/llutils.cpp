@@ -164,7 +164,37 @@ char * strtok_int(char *ptr, const char delim, char **saveptr1) {
 	return ptr1;
 }
 
+//http://www.dateiliste.com/en/source-code/16-cc/577-stristr-case-insensitive-strstr-function.html
+char *stristr (char *ch1, const char *ch2)
+{
+	char  *chN1, *chN2;
+	char  *chNdx;
+	char  *chRet        = NULL;
 
+	chN1 = strdup (ch1);
+	chN2 = strdup (ch2);
+	if (chN1 && chN2)
+	{
+		chNdx = chN1;
+		while (*chNdx)
+		{
+			*chNdx = (char) tolower (*chNdx);
+			chNdx ++;
+		}
+		chNdx = chN2;
+		while (*chNdx)
+		{
+			*chNdx = (char) tolower (*chNdx);
+			chNdx ++;
+		}
+		chNdx = strstr (chN1, chN2);
+		if (chNdx)
+			chRet = ch1 + (chNdx - chN1);
+	}
+	free (chN1);
+	free (chN2);
+	return chRet;
+}
 
 int ReadUShort(FILE *fptr,short unsigned *n,int swap)
 {
@@ -552,6 +582,37 @@ check_again2:
 	}
 
 	return tmp;
+}
+
+//taken from http://coding.debuntu.org/c-implementing-str_replace-replace-all-occurrences-substring
+char *llUtils::Replace(const char *string, const char *substr, const char *replacement) {
+
+	char *tok = NULL;
+	char *newstr = NULL;
+	char *oldstr = NULL;
+	char *head = NULL;
+
+	/* if either substr or replacement is NULL, duplicate string a let caller handle it */
+	if ( substr == NULL || replacement == NULL ) return NewString(string);
+	newstr = NewString(string);
+	head = newstr;
+	while ( (tok = stristr ( head, substr ))){
+		oldstr = newstr;
+		newstr = new char[ strlen ( oldstr ) - strlen ( substr ) + strlen ( replacement ) + 1 ];
+		/*failed to alloc mem, free old string and return NULL */
+		if ( newstr == NULL ){
+			free (oldstr);
+			return NULL;
+		}
+		memcpy ( newstr, oldstr, tok - oldstr );
+		memcpy ( newstr + (tok - oldstr), replacement, strlen ( replacement ) );
+		memcpy ( newstr + (tok - oldstr) + strlen( replacement ), tok + strlen ( substr ), strlen ( oldstr ) - strlen ( substr ) - ( tok - oldstr ) );
+		memset ( newstr + strlen ( oldstr ) - strlen ( substr ) + strlen ( replacement ) , 0, 1 );
+		/* move back head right after the last replacement */
+		head = newstr + (tok - oldstr) + strlen( replacement );
+		free (oldstr);
+	}
+	return newstr;
 }
 
 int llUtils::SeekNextSpace(char *_tmp) {

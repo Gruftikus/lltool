@@ -90,11 +90,13 @@ class llUtils {
 	char  *ReplaceFlags(char *_in);
 	char  *ReplaceProtectedKomma(char *_in);
 	char  *GetPart(char *_in, int _num, int *_numleft);
-	char  *NewString(char *_in) {
+	char  *NewString(const char *_in) {
 		char * delme = new char[strlen(_in) + 1];
 		strcpy_s(delme, strlen(_in)+1, _in);
 		return delme;
 	};
+
+	char *Replace(const char *string, const char *substr, const char *replacement);
 
 	int   SeekNextSpace(char *_tmp);
 

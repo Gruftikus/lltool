@@ -10,6 +10,7 @@ protected:
 
 	int hidden, unselect;
 	char *name, *value;
+	char *replace, *with;
 	
 public:
 

@@ -11,6 +11,7 @@
 #include "../include/llsetflag.h"
 #include "../include/llecho.h"
 #include "../include/llsetpath.h"
+#include "../include/llmkdir.h"
 #include "../include/llfileiterator.h"
 
 //Alg-based:
@@ -89,6 +90,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llSetFlag());
 	_batch->RegisterWorker(new llEcho());
 	_batch->RegisterWorker(new llSetPath());
+	_batch->RegisterWorker(new llMkDir());
 	_batch->RegisterWorker(new llFileIterator());
 
 	//Alg-based:

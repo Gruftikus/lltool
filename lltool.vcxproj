@@ -172,6 +172,7 @@
     <ClInclude Include="include\llmap.h" />
     <ClInclude Include="include\llmaplist.h" />
     <ClInclude Include="include\llmapworker.h" />
+    <ClInclude Include="include\llmkdir.h" />
     <ClInclude Include="include\llpanorama.h" />
     <ClInclude Include="include\llpointlist.h" />
     <ClInclude Include="include\llpolygonlist.h" />
@@ -331,6 +332,7 @@
     <ClCompile Include="src\llmap.cpp" />
     <ClCompile Include="src\llmaplist.cpp" />
     <ClCompile Include="src\llmapworker.cpp" />
+    <ClCompile Include="src\llmkdir.cpp" />
     <ClCompile Include="src\llpanorama.cpp" />
     <ClCompile Include="src\llpointlist.cpp" />
     <ClCompile Include="src\llpolygonlist.cpp" />

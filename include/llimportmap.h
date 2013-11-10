@@ -13,6 +13,8 @@ protected:
 	char *filename;
 	int   even;
 	int   rgb;
+	int   replacemap;
+	int   nogeometry;
 
 public:
 

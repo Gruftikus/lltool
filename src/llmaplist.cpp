@@ -120,11 +120,11 @@ int llMapList::DeleteMap(char *_name) {
 		}
 	}
 
-	if (!map) delete map;
-	if (!points) delete points;
-	if (!lines) delete lines;
+	if (!map)       delete map;
+	if (!points)    delete points;
+	if (!lines)     delete lines;
 	if (!triangles) delete triangles;
-	if (!poly) delete poly;
+	if (!poly)      delete poly;
 
 	for (int i=num; i<GetSize()-1; i++) {
 		map_name[i]      = map_name[i+1];

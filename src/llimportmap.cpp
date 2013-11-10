@@ -13,6 +13,7 @@ int llImportMap::Prepare(void) {
 	z        = 1.0;
 	even     = 0;
 	rgb      = 0;
+	nogeometry = 0;
 
 	return 1;
 }
@@ -28,8 +29,10 @@ int llImportMap::RegisterOptions(void) {
 	RegisterValue("-name",     &mapname);
 	RegisterValue("-filename", &filename, LLWORKER_OBL_OPTION);
 
-	RegisterFlag ("-even",     &even);
-	RegisterFlag ("-rgb",      &rgb);
+	RegisterFlag ("-even",       &even);
+	RegisterFlag ("-replacemap", &replacemap);
+	RegisterFlag ("-nogeometry", &nogeometry);
+	RegisterFlag ("-rgb",        &rgb);
 
 	return 1;
 }
@@ -39,10 +42,15 @@ int llImportMap::Exec(void) {
 
 	FILE *fptr;
 
-	llMap *newmap = _llMapList()->GetMap(mapname);
-	if (newmap) {
+	if (!Used("-name")) mapname = "_heightmap";
+
+	llMap *oldmap = _llMapList()->GetMap(mapname);
+	if (oldmap && !replacemap) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map %s existing", command_name, mapname);
 		return 0;
+	} else if (oldmap && replacemap) {
+		_llLogger()->WriteNextLine(-LOG_INFO, "%s: map %s existing, will be replaced", command_name, mapname);
+		_llMapList()->DeleteMap(mapname);
 	}
 
 	if (fopen_s(&fptr, filename," rb")) {
@@ -234,16 +242,21 @@ int llImportMap::Exec(void) {
 	_llUtils()->x11 = x2;
 	_llUtils()->y11 = y2;
 
-	llQuadList     *quads      = heightmap->GenerateQuadList();
-	llPointList    *points     = new llPointList(0, quads); 
-	llPolygonList  *polygons   = new llPolygonList(points, heightmap);
-	llLineList     *lines      = new llLineList(0, points, heightmap);
-	llTriangleList *triangles  = new llTriangleList(0, points);
+	llQuadList     *quads      = NULL;
+	llPointList    *points     = NULL; 
+	llPolygonList  *polygons   = NULL;
+	llLineList     *lines      = NULL;
+	llTriangleList *triangles  = NULL;
 
-	if (!Used("-name"))
-		_llMapList()->AddMap("_heightmap", heightmap, points, triangles, polygons, lines);
-	else
-		_llMapList()->AddMap(mapname, heightmap, points, triangles, polygons, lines);
+	if (!nogeometry) {
+		quads      = heightmap->GenerateQuadList();
+		points     = new llPointList(0, quads); 
+		polygons   = new llPolygonList(points, heightmap);
+		lines      = new llLineList(0, points, heightmap);
+		triangles  = new llTriangleList(0, points);
+	}
+
+	_llMapList()->AddMap(mapname, heightmap, points, triangles, polygons, lines);
 
 	return 1;
 }

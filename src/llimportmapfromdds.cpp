@@ -52,6 +52,7 @@ int llImportMapFromDDS::Prepare(void) {
 	z        = 1.0;
 	even     = 0;
 	rgb      = 1;
+	nogeometry = 0;
 
 	return 1;
 }
@@ -67,8 +68,9 @@ int llImportMapFromDDS::RegisterOptions(void) {
 	RegisterValue("-name",     &mapname);
 	RegisterValue("-filename", &filename, LLWORKER_OBL_OPTION);
 
-	RegisterFlag ("-even",     &even);
-	//RegisterFlag ("-rgb",      &rgb);
+	RegisterFlag ("-even",       &even);
+	RegisterFlag ("-replacemap", &replacemap);
+	RegisterFlag ("-nogeometry", &nogeometry);
 
 	return 1;
 }
@@ -76,10 +78,15 @@ int llImportMapFromDDS::RegisterOptions(void) {
 int llImportMapFromDDS::Exec(void) {
 	if (!llWorker::Exec()) return 0;
 
-	llMap *newmap = _llMapList()->GetMap(mapname);
-	if (newmap) {
+	if (!Used("-name")) mapname = "_heightmap";
+
+	llMap *oldmap = _llMapList()->GetMap(mapname);
+	if (oldmap && !replacemap) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map %s existing", command_name, mapname);
 		return 0;
+	} else if (oldmap && replacemap) {
+		_llLogger()->WriteNextLine(-LOG_INFO, "%s: map %s existing, will be replaced", command_name, mapname);
+		_llMapList()->DeleteMap(mapname);
 	}
 
 	crn_uint32 src_file_size;
@@ -125,9 +132,9 @@ int llImportMapFromDDS::Exec(void) {
 
 	//--> see also importmap.cpp
 	/* Read the image */
-	for (int y=widthy; y>=0; y--) {
+	for (int y=widthy-1; y>=0; y--) {
 		for (int x=0; x<widthx; x++) {
-
+			
 			r = unsigned char( *((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff);
 			g = unsigned char((*((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff00)     >> 8);
 			b = unsigned char((*((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff0000)   >> 16);
@@ -137,21 +144,29 @@ int llImportMapFromDDS::Exec(void) {
 		}
 	}
 
+	crn_free_all_images(pImages, tex_desc);
+	free(pSrc_file_data);
+
 	_llUtils()->x00 = x1;
 	_llUtils()->y00 = y1;
 	_llUtils()->x11 = x2;
 	_llUtils()->y11 = y2;
 
-	llQuadList     *quads      = heightmap->GenerateQuadList();
-	llPointList    *points     = new llPointList(0, quads); 
-	llPolygonList  *polygons   = new llPolygonList(points, heightmap);
-	llLineList     *lines      = new llLineList(0, points, heightmap);
-	llTriangleList *triangles  = new llTriangleList(0, points);
+	llQuadList     *quads      = NULL;
+	llPointList    *points     = NULL; 
+	llPolygonList  *polygons   = NULL;
+	llLineList     *lines      = NULL;
+	llTriangleList *triangles  = NULL;
 
-	if (!Used("-name"))
-		_llMapList()->AddMap("_heightmap", heightmap, points, triangles, polygons, lines);
-	else
-		_llMapList()->AddMap(mapname, heightmap, points, triangles, polygons, lines);
+	if (!nogeometry) {
+		quads      = heightmap->GenerateQuadList();
+		points     = new llPointList(0, quads); 
+		polygons   = new llPolygonList(points, heightmap);
+		lines      = new llLineList(0, points, heightmap);
+		triangles  = new llTriangleList(0, points);
+	}
+
+	_llMapList()->AddMap(mapname, heightmap, points, triangles, polygons, lines);
 
 	return 1;
 }

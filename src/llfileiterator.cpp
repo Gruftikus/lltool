@@ -47,7 +47,7 @@ void llFileIterator::FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePatter
 				// found a file; do something with it
 				PathCombine(szFullPattern, lpFolder, FindFileData.cFileName);
 				file_list.push_back(_llUtils()->NewString(szFullPattern));
-				_tprintf_s(_T("%s\n"), szFullPattern);
+				//_tprintf_s(_T("%s\n"), szFullPattern);
 			}
 		} while(FindNextFile(hFindFile, &FindFileData));
 		FindClose(hFindFile);
@@ -87,10 +87,10 @@ int llFileIterator::Exec(void) {
 	_llUtils()->SetValue("_filename", file_list[position]);
 	position++;
 
-	if (file_list.size() == position) {
+	if (file_list.size() == position) 
 		repeat_worker = false;
-		return 1;
-	}
+	else 
+		repeat_worker = true;
 
 	return 1;
 }

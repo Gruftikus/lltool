@@ -320,16 +320,16 @@ public:
 	int GetTupel(unsigned int _x, unsigned int _y, unsigned char *_x1, unsigned char *_x2, unsigned char *_x3, unsigned char *_x4) {
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
-			*_x1 = unsigned char(idata[_x+_y*widthx] & 0xff);
-			*_x2 = unsigned char((idata[_x+_y*widthx] & 0xff00)     >> 8);
-			*_x3 = unsigned char((idata[_x+_y*widthx] & 0xff0000)   >> 16);
-			*_x4 = unsigned char((idata[_x+_y*widthx] & 0xff000000) >> 24);
+			*_x1 = (unsigned char)(idata[_x+_y*widthx] & 0xff);
+			*_x2 = (unsigned char)((idata[_x+_y*widthx] & 0xff00)     >> 8);
+			*_x3 = (unsigned char)((idata[_x+_y*widthx] & 0xff0000)   >> 16);
+			*_x4 = (unsigned char)((idata[_x+_y*widthx] & 0xff000000) >> 24);
 			return 1;
 		}
-		*_x1 = unsigned char( unsigned int(GetElementRaw(_x, _y)) & 0xff);
-		*_x2 = unsigned char((unsigned int(GetElementRaw(_x, _y)) & 0xff00)     >> 8);
-		*_x3 = unsigned char((unsigned int(GetElementRaw(_x, _y)) & 0xff0000)   >> 16);
-		*_x4 = unsigned char((unsigned int(GetElementRaw(_x, _y)) & 0xff000000) >> 24);
+		*_x1 = (unsigned char)( (unsigned int)(GetElementRaw(_x, _y)) & 0xff);
+		*_x2 = (unsigned char)(((unsigned int)(GetElementRaw(_x, _y)) & 0xff00)     >> 8);
+		*_x3 = (unsigned char)(((unsigned int)(GetElementRaw(_x, _y)) & 0xff0000)   >> 16);
+		*_x4 = (unsigned char)(((unsigned int)(GetElementRaw(_x, _y)) & 0xff000000) >> 24);
 		return 1;
 	}
 
@@ -337,26 +337,26 @@ public:
 		int scale) {
 			if (_x>=widthx || _y>=widthy) return 0;
 			if (idata) {
-				*_x1 = unsigned char((idata[_x+_y*widthx] * scale)   & 0xff);
-				*_x2 = unsigned char(((idata[_x+_y*widthx] * scale)  & 0xff00)     >> 8);
-				*_x3 = unsigned char(((idata[_x+_y*widthx] * scale)  & 0xff0000)   >> 16);
-				*_x4 = unsigned char(((idata[_x+_y*widthx] * scale)  & 0xff000000) >> 24);
+				*_x1 = (unsigned char)((idata[_x+_y*widthx] * scale)   & 0xff);
+				*_x2 = (unsigned char)(((idata[_x+_y*widthx] * scale)  & 0xff00)     >> 8);
+				*_x3 = (unsigned char)(((idata[_x+_y*widthx] * scale)  & 0xff0000)   >> 16);
+				*_x4 = (unsigned char)(((idata[_x+_y*widthx] * scale)  & 0xff000000) >> 24);
 				return 1;
 			}
-			*_x1 = unsigned char(( unsigned int(GetElementRaw(_x, _y) * float(scale))) & 0xff);
-			*_x2 = unsigned char(((unsigned int(GetElementRaw(_x, _y) * float(scale))) & 0xff00)     >> 8);
-			*_x3 = unsigned char(((unsigned int(GetElementRaw(_x, _y) * float(scale))) & 0xff0000)   >> 16);
-			*_x4 = unsigned char(((unsigned int(GetElementRaw(_x, _y) * float(scale))) & 0xff000000) >> 24);
+			*_x1 = (unsigned char)(( (unsigned int)(GetElementRaw(_x, _y) * float(scale))) & 0xff);
+			*_x2 = (unsigned char)((((unsigned int)(GetElementRaw(_x, _y) * float(scale))) & 0xff00)     >> 8);
+			*_x3 = (unsigned char)((((unsigned int)(GetElementRaw(_x, _y) * float(scale))) & 0xff0000)   >> 16);
+			*_x4 = (unsigned char)((((unsigned int)(GetElementRaw(_x, _y) * float(scale))) & 0xff000000) >> 24);
 			return 1;
 	}
 
 	int SetTupel(unsigned int _x, unsigned int _y, unsigned char _x1, unsigned char _x2, unsigned char _x3, unsigned char _x4) {
 		if (_x>=widthx || _y>=widthy) return 0;
 		if (idata) {
-			idata[_x+_y*widthx] = unsigned int(_x1) | (unsigned int(_x2) << 8) | (unsigned int(_x3) << 16) | (unsigned int(_x4) << 24);
+			idata[_x+_y*widthx] = (unsigned int)(_x1) | ((unsigned int)(_x2) << 8) | ((unsigned int)(_x3) << 16) | ((unsigned int)(_x4) << 24);
 			return 1;
 		}
-		SetElementRaw(_x, _y, int(unsigned int(_x1) | (unsigned int(_x2) << 8) | (unsigned int(_x3) << 16) | (unsigned int(_x4) << 24)));
+		SetElementRaw(_x, _y, int((unsigned int)(_x1) | ((unsigned int)(_x2) << 8) | ((unsigned int)(_x3) << 16) | ((unsigned int)(_x4) << 24)));
 		return 1;
 	}
 

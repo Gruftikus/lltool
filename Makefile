@@ -1,9 +1,10 @@
 CXX           = g++
-CXXFLAGS      = -g -O0 -rdynamic -c -Wall -fexceptions -fPIC 
+CXXFLAGS      = -rdynamic -c -Wall -fexceptions -fPIC -O3 -fomit-frame-pointer -ffast-math -fno-math-errno -g -fno-strict-aliasing -Wall -Wno-unused-value -Wno-unused -march=core2
 #CXXFLAGS      = -O3 -rdynamic -c -Wall -fexceptions -fPIC 
 LD            = g++
 
 OBJS =  llactivatevisiblevertices.o \
+	lladddiscontinuityline.o \
 	lladdvertextopolygon.o \
 	llalg.o \
 	llalgconst.o \
@@ -23,17 +24,21 @@ OBJS =  llactivatevisiblevertices.o \
 	llecho.o \
 	llexit.o \
 	llexportmap.o \
+	llexportmaptodds.o \
 	llexportmeshtoobj.o \
 	llexportmeshtops.o \
 	llexportmeshtoVRML.o \
 	llfillcolormap.o \
 	llfilter.o \
+	llimportmap.o \
+	llimportmapfromdds.o \
 	llinactivateallvertices.o \
 	lllogger.o \
 	llmakederivatives.o \
 	llmap.o \
 	llmaplist.o \
 	llmapworker.o \
+	llmkdir.o \
 	llpanorama.o \
 	llpointlist.o \
 	llpolygonlist.o \
@@ -42,6 +47,7 @@ OBJS =  llactivatevisiblevertices.o \
 	llreaddatafile.o \
 	llreadpolygondatafile.o \
 	llremoveinactivetriangles.o \
+	llremoveinactivevertices.o \
 	llscalemap.o \
 	llselectall.o \
 	llselectrec.o \

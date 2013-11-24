@@ -12,7 +12,9 @@
 #include "../include/llecho.h"
 #include "../include/llsetpath.h"
 #include "../include/llmkdir.h"
+#ifdef _MSC_VER
 #include "../include/llfileiterator.h"
+#endif
 
 //Alg-based:
 #include "../include/llalg.h"
@@ -91,7 +93,9 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llEcho());
 	_batch->RegisterWorker(new llSetPath());
 	_batch->RegisterWorker(new llMkDir());
+#ifdef _MSC_VER	
 	_batch->RegisterWorker(new llFileIterator());
+#endif
 
 	//Alg-based:
 	_llAlgList()->AddAlgCollection("_heightmap_alg", new llAlgCollection());

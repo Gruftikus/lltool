@@ -9,18 +9,14 @@
 // .DDS file format definitions.
 #include "../externals/crunch/inc/dds_defs.h"
 
-
-// stb_image, for loading/saving image files.
 #ifdef _MSC_VER
 #pragma warning (disable: 4244) // conversion from 'int' to 'uint8', possible loss of data
 #pragma warning (disable: 4100) // unreferenced formal parameter
-#endif
-//#include "stb_image.h"
-
 // windows.h is only needed here for GetSystemInfo().
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include "windows.h"
+#endif
 
 const int cDefaultCRNQualityLevel = 128;
 

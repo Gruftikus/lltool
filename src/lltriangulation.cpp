@@ -116,15 +116,15 @@ int llTriangulation::Exec(void) {
 
 		for (int i=0; i<lines->GetN(); i++) {
 			char dummy[100];
-			sprintf_s(dummy, "%f", lines->GetLine(i)->GetX1());
+			sprintf_s(dummy, 100, "%f", lines->GetLine(i)->GetX1());
 			splitter->SetValue("-x1", dummy);
-			sprintf_s(dummy, "%f", lines->GetLine(i)->GetX2());
+			sprintf_s(dummy, 100, "%f", lines->GetLine(i)->GetX2());
 			splitter->SetValue("-x2", dummy);
-			sprintf_s(dummy, "%f", lines->GetLine(i)->GetY1());
+			sprintf_s(dummy, 100, "%f", lines->GetLine(i)->GetY1());
 			splitter->SetValue("-y1", dummy);
-			sprintf_s(dummy, "%f", lines->GetLine(i)->GetY2());
+			sprintf_s(dummy, 100, "%f", lines->GetLine(i)->GetY2());
 			splitter->SetValue("-y2", dummy);
-			sprintf_s(dummy, "%s", mapname);
+			sprintf_s(dummy, 100, "%s", mapname);
 			splitter->SetValue("-map", dummy);
 			splitter->Prepare();
 			splitter->ReplaceFlags();

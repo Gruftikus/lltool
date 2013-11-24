@@ -166,16 +166,16 @@ int llScaleMap::Exec(void) {
 					else {
 						int j = (int)(linear_to_srgb_table_size * pOutput_samples[0][xx] + .5f);
 						if (j < 0) j = 0; else if (j >= linear_to_srgb_table_size) j = linear_to_srgb_table_size - 1;
-						unsigned int byte1 = unsigned int(linear_to_srgb[j]);
+						unsigned int byte1 = (unsigned int)(linear_to_srgb[j]);
 						j = (int)(linear_to_srgb_table_size * pOutput_samples[1][xx] + .5f);
 						if (j < 0) j = 0; else if (j >= linear_to_srgb_table_size) j = linear_to_srgb_table_size - 1;
-						unsigned int byte2 = unsigned int(linear_to_srgb[j]);
+						unsigned int byte2 = (unsigned int)(linear_to_srgb[j]);
 						j = (int)(linear_to_srgb_table_size * pOutput_samples[2][xx] + .5f);
 						if (j < 0) j = 0; else if (j >= linear_to_srgb_table_size) j = linear_to_srgb_table_size - 1;
-						unsigned int byte3 = unsigned int(linear_to_srgb[j]);
+						unsigned int byte3 = (unsigned int)(linear_to_srgb[j]);
 						j = (int)(linear_to_srgb_table_size * pOutput_samples[3][xx] + .5f);
 						if (j < 0) j = 0; else if (j >= linear_to_srgb_table_size) j = linear_to_srgb_table_size - 1;
-						unsigned int byte4 = unsigned int(linear_to_srgb[j]);
+						unsigned int byte4 = (unsigned int)(linear_to_srgb[j]);
 						newmap->SetTupel(xx, running_y, byte1, byte2, byte3, byte4);
 					}
 				}

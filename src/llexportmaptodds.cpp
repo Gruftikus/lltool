@@ -5,6 +5,7 @@
 #include "../externals/crunch/inc/crnlib.h"
 
 // CRN transcoder library.
+#define CRND_HEADER_FILE_ONLY
 #include "../externals/crunch/inc/crn_decomp.h"
 // .DDS file format definitions.
 #include "../externals/crunch/inc/dds_defs.h"
@@ -145,7 +146,7 @@ int llExportMapToDDS::Exec(void) {
 	} else  {
 		int f;
 		for (f = 0; f < cCRNFmtTotal; f++) {
-			if (!_stricmp(fmt_string, crn_get_format_stringa(static_cast<crn_format>(f)))) {
+			if (!_stricmp(fmt_string, crn_get_format_string(static_cast<crn_format>(f)))) {
 				fmt = static_cast<crn_format>(f);
 				break;
 			}
@@ -197,7 +198,7 @@ int llExportMapToDDS::Exec(void) {
       float actual_bitrate;
       crn_uint32 output_file_size;
 
-      _llLogger()->WriteNextLine(-LOG_INFO, "Compressing to %s\n", crn_get_format_stringa(comp_params.m_format));
+      _llLogger()->WriteNextLine(-LOG_INFO, "Compressing to %s\n", crn_get_format_string(comp_params.m_format));
       
       // Now compress to DDS or CRN.
       void *pOutput_file_data = crn_compress(comp_params, mip_params, output_file_size, &actual_quality_level, &actual_bitrate);

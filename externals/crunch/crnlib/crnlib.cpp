@@ -1,4 +1,4 @@
-// File: crnlib.cpp 
+// File: crnlib.cpp
 // See Copyright Notice and license at the end of inc/crnlib.h
 #include "crn_core.h"
 #include "../inc/crnlib.h"
@@ -7,11 +7,12 @@
 #include "crn_dynamic_stream.h"
 #include "crn_buffer_stream.h"
 #include "crn_ryg_dxt.hpp"
-
-#include "crn_winhdr.h"
+#include "crn_etc.h"
 
 #define CRND_HEADER_FILE_ONLY
 #include "../inc/crn_decomp.h"
+
+#include "crn_rg_etc1.h"
 
 namespace crnlib
 {
@@ -32,33 +33,27 @@ namespace crnlib
    public:
       crnlib_global_initializer()
       {
-         ryg_dxt::sInitDXT();
-
-#ifdef CRNLIB_PLATFORM_PC
-         SYSTEM_INFO g_system_info;
-         GetSystemInfo(&g_system_info);
-
-         g_number_of_processors = math::maximum<uint>(1U, g_system_info.dwNumberOfProcessors);
-#endif
-
+         crn_threading_init();
+         
          crnlib_enable_fail_exceptions(true);
 
          // Redirect crn_decomp.h's memory allocations into crnlib, which may be further redirected by the outside caller.
          crnd::crnd_set_memory_callbacks(realloc_func, msize_func, NULL);
+
+         ryg_dxt::sInitDXT();
+
+         pack_etc1_block_init();
+
+         rg_etc1::pack_etc1_block_init();
       }
    };
 
    crnlib_global_initializer g_crnlib_initializer;
-}
+} // namespace crnlib
 
 using namespace crnlib;
 
-const char* crn_get_format_stringa(crn_format fmt)
-{
-   return pixel_format_helpers::get_crn_format_stringa(fmt);
-}
-
-const wchar_t* crn_get_format_string(crn_format fmt)
+const char* crn_get_format_string(crn_format fmt)
 {
    return pixel_format_helpers::get_crn_format_string(fmt);
 }
@@ -83,18 +78,7 @@ crn_format crn_get_fundamental_dxt_format(crn_format fmt)
    return crnd::crnd_get_fundamental_dxt_format(fmt);
 }
 
-const wchar_t* crn_get_file_type_ext(crn_file_type file_type)
-{
-   switch (file_type)
-   {
-      case cCRNFileTypeDDS: return L"dds";
-      case cCRNFileTypeCRN: return L"crn";
-      default: break;
-   }
-   return L"?";
-}
-
-const char* crn_get_file_type_exta(crn_file_type file_type)
+const char* crn_get_file_type_ext(crn_file_type file_type)
 {
    switch (file_type)
    {
@@ -105,30 +89,30 @@ const char* crn_get_file_type_exta(crn_file_type file_type)
    return "?";
 }
 
-const wchar_t* crn_get_mip_mode_desc(crn_mip_mode m)
+const char* crn_get_mip_mode_desc(crn_mip_mode m)
 {
    switch (m)
    {
-      case cCRNMipModeUseSourceOrGenerateMips:  return L"Use source/generate if none";
-      case cCRNMipModeUseSourceMips:            return L"Only use source MIP maps (if any)";
-      case cCRNMipModeGenerateMips:             return L"Always generate new MIP maps";
-      case cCRNMipModeNoMips:                   return L"No MIP maps";
+      case cCRNMipModeUseSourceOrGenerateMips:  return "Use source/generate if none";
+      case cCRNMipModeUseSourceMips:            return "Only use source MIP maps (if any)";
+      case cCRNMipModeGenerateMips:             return "Always generate new MIP maps";
+      case cCRNMipModeNoMips:                   return "No MIP maps";
       default: break;
    }
-   return L"?";
+   return "?";
 }
 
-const wchar_t* crn_get_mip_mode_name(crn_mip_mode m)
+const char* crn_get_mip_mode_name(crn_mip_mode m)
 {
    switch (m)
    {
-      case cCRNMipModeUseSourceOrGenerateMips:  return L"UseSourceOrGenerate";
-      case cCRNMipModeUseSourceMips:            return L"UseSource";
-      case cCRNMipModeGenerateMips:             return L"Generate";
-      case cCRNMipModeNoMips:                   return L"None";
+      case cCRNMipModeUseSourceOrGenerateMips:  return "UseSourceOrGenerate";
+      case cCRNMipModeUseSourceMips:            return "UseSource";
+      case cCRNMipModeGenerateMips:             return "Generate";
+      case cCRNMipModeNoMips:                   return "None";
       default: break;
    }
-   return L"?";
+   return "?";
 }
 
 const char* crn_get_mip_filter_name(crn_mip_filter f)
@@ -145,37 +129,22 @@ const char* crn_get_mip_filter_name(crn_mip_filter f)
    return "?";
 }
 
-const wchar_t* crn_get_scale_mode_desc(crn_scale_mode sm)
+const char* crn_get_scale_mode_desc(crn_scale_mode sm)
 {
    switch (sm)
    {
-      case cCRNSMDisabled:       return L"disabled";
-      case cCRNSMAbsolute:       return L"absolute";
-      case cCRNSMRelative:       return L"relative";
-      case cCRNSMLowerPow2:      return L"lowerpow2";
-      case cCRNSMNearestPow2:    return L"nearestpow2";
-      case cCRNSMNextPow2:       return L"nextpow2";
+      case cCRNSMDisabled:       return "disabled";
+      case cCRNSMAbsolute:       return "absolute";
+      case cCRNSMRelative:       return "relative";
+      case cCRNSMLowerPow2:      return "lowerpow2";
+      case cCRNSMNearestPow2:    return "nearestpow2";
+      case cCRNSMNextPow2:       return "nextpow2";
       default: break;
    }
-   return L"?";
+   return "?";
 }
 
-const wchar_t* crn_get_dxt_quality_string(crn_dxt_quality q)
-{
-   switch (q)
-   {
-      case cCRNDXTQualitySuperFast: return L"SuperFast";
-      case cCRNDXTQualityFast:      return L"Fast";
-      case cCRNDXTQualityNormal:    return L"Normal";
-      case cCRNDXTQualityBetter:    return L"Better";
-      case cCRNDXTQualityUber:      return L"Uber";
-      default: break;
-   }
-   CRNLIB_ASSERT(false);
-   return L"?";
-}
-
-const char* crn_get_dxt_quality_stringa(crn_dxt_quality q)
+const char* crn_get_dxt_quality_string(crn_dxt_quality q)
 {
    switch (q)
    {
@@ -232,8 +201,8 @@ void *crn_compress(const crn_comp_params &comp_params, const crn_mipmap_params &
 
 void *crn_decompress_crn_to_dds(const void *pCRN_file_data, crn_uint32 &file_size)
 {
-   dds_texture tex;
-   if (!tex.load_crn_from_memory(L"from_memory.crn", pCRN_file_data, file_size))
+   mipmapped_texture tex;
+   if (!tex.read_crn_from_memory(pCRN_file_data, file_size, "from_memory.crn"))
    {
       file_size = 0;
       return NULL;
@@ -256,7 +225,7 @@ bool crn_decompress_dds_to_images(const void *pDDS_file_data, crn_uint32 dds_fil
 {
    memset(&tex_desc, 0, sizeof(tex_desc));
 
-   dds_texture tex;
+   mipmapped_texture tex;
    buffer_stream in_stream(pDDS_file_data, dds_file_size);
    data_stream_serializer in_serializer(in_stream);
    if (!tex.read_dds(in_serializer))
@@ -277,9 +246,9 @@ bool crn_decompress_dds_to_images(const void *pDDS_file_data, crn_uint32 dds_fil
    tex_desc.m_levels = tex.get_num_levels();
    tex_desc.m_fmt_fourcc = (crn_uint32)tex.get_format();
 
-   for (uint f = 0; f < tex.get_num_faces(); f++)
+   for (uint32 f = 0; f < tex.get_num_faces(); f++)
    {
-      for (uint l = 0; l < tex.get_num_levels(); l++)
+      for (uint32 l = 0; l < tex.get_num_levels(); l++)
       {
          mip_level *pLevel = tex.get_level(f, l);
          image_u8 *pImg = pLevel->get_image();
@@ -292,8 +261,8 @@ bool crn_decompress_dds_to_images(const void *pDDS_file_data, crn_uint32 dds_fil
 
 void crn_free_all_images(crn_uint32 **ppImages, const crn_texture_desc &desc)
 {
-   for (uint f = 0; f < desc.m_faces; f++)
-      for (uint l = 0; l < desc.m_levels; l++)
+   for (uint32 f = 0; f < desc.m_faces; f++)
+      for (uint32 l = 0; l < desc.m_levels; l++)
          crn_free_block(ppImages[l + desc.m_levels * f]);
 }
 
@@ -333,7 +302,7 @@ namespace crnlib
       {
          if (m_image.is_valid())
          {
-            m_image.set_block_pixels(0, 0, reinterpret_cast<const color_quad_u8 *>(pPixels), m_pack_params, m_dxt1_optimizer, m_dxt5_optimizer);
+            m_image.set_block_pixels(0, 0, reinterpret_cast<const color_quad_u8 *>(pPixels), m_pack_params, m_set_block_pixels_context);
             memcpy(pDst_block, &m_image.get_element(0, 0, 0), m_image.get_bytes_per_block());
          }
       }
@@ -342,8 +311,7 @@ namespace crnlib
       dxt_image m_image;
       crn_comp_params m_comp_params;
       dxt_image::pack_params m_pack_params;
-      dxt1_endpoint_optimizer m_dxt1_optimizer;
-      dxt5_endpoint_optimizer m_dxt5_optimizer;
+      dxt_image::set_block_pixels_context m_set_block_pixels_context;
    };
 }
 
@@ -367,4 +335,125 @@ void crn_compress_block(crn_block_compressor_context_t pContext, const crn_uint3
 void crn_free_block_compressor(crn_block_compressor_context_t pContext)
 {
    crnlib_delete(static_cast<crn_block_compressor *>(pContext));
+}
+
+bool crn_decompress_block(const void *pSrc_block, crn_uint32 *pDst_pixels_u32, crn_format crn_fmt)
+{
+   color_quad_u8* pDst_pixels = reinterpret_cast<color_quad_u8*>(pDst_pixels_u32);
+
+   switch (crn_get_fundamental_dxt_format(crn_fmt))
+   {
+      case cCRNFmtETC1:
+      {
+         const etc1_block& block = *reinterpret_cast<const etc1_block*>(pSrc_block);
+         unpack_etc1(block, pDst_pixels, false);
+         break;
+      }
+      case cCRNFmtDXT1:
+      {
+         const dxt1_block* pDXT1_block = reinterpret_cast<const dxt1_block*>(pSrc_block);
+
+         color_quad_u8 colors[cDXT1SelectorValues];
+         pDXT1_block->get_block_colors(colors, static_cast<uint16>(pDXT1_block->get_low_color()), static_cast<uint16>(pDXT1_block->get_high_color()));
+
+         for (uint i = 0; i < cDXTBlockSize * cDXTBlockSize; i++)
+         {
+            const uint s = pDXT1_block->get_selector(i & 3, i >> 2);
+
+            pDst_pixels[i] = colors[s];
+         }
+
+         break;
+      }
+
+      case cCRNFmtDXT3:
+      {
+         const dxt3_block* pDXT3_block = reinterpret_cast<const dxt3_block*>(pSrc_block);
+         
+         const dxt1_block* pDXT1_block = reinterpret_cast<const dxt1_block*>(pSrc_block) + 1;
+         color_quad_u8 colors[cDXT1SelectorValues];
+         pDXT1_block->get_block_colors(colors, static_cast<uint16>(pDXT1_block->get_low_color()), static_cast<uint16>(pDXT1_block->get_high_color()));
+                  
+         for (uint i = 0; i < cDXTBlockSize * cDXTBlockSize; i++)
+         {
+            const uint s = pDXT1_block->get_selector(i & 3, i >> 2);
+            const uint a = pDXT3_block->get_alpha(i & 3, i >> 2, true);
+
+            pDst_pixels[i] = colors[s];
+            pDst_pixels[i].a = static_cast<uint8>(a);
+         }
+
+         break;
+      }
+
+      case cCRNFmtDXT5:
+      {
+         const dxt5_block* pDXT5_block = reinterpret_cast<const dxt5_block*>(pSrc_block);
+
+         const dxt1_block* pDXT1_block = reinterpret_cast<const dxt1_block*>(pSrc_block) + 1;
+         color_quad_u8 colors[cDXT1SelectorValues];
+         pDXT1_block->get_block_colors(colors, static_cast<uint16>(pDXT1_block->get_low_color()), static_cast<uint16>(pDXT1_block->get_high_color()));
+
+         uint values[cDXT5SelectorValues];
+         dxt5_block::get_block_values(values, pDXT5_block->get_low_alpha(), pDXT5_block->get_high_alpha());
+         
+         for (uint i = 0; i < cDXTBlockSize * cDXTBlockSize; i++)
+         {
+            const uint s = pDXT1_block->get_selector(i & 3, i >> 2);
+            const uint a = pDXT5_block->get_selector(i & 3, i >> 2);
+
+            pDst_pixels[i] = colors[s];
+            pDst_pixels[i].a = static_cast<uint8>(values[a]);
+         }
+      }
+
+      case cCRNFmtDXN_XY:
+      case cCRNFmtDXN_YX:
+      {
+         const dxt5_block* pDXT5_block0 = reinterpret_cast<const dxt5_block*>(pSrc_block);
+         const dxt5_block* pDXT5_block1 = reinterpret_cast<const dxt5_block*>(pSrc_block) + 1;
+
+         uint values0[cDXT5SelectorValues];
+         dxt5_block::get_block_values(values0, pDXT5_block0->get_low_alpha(), pDXT5_block0->get_high_alpha());
+
+         uint values1[cDXT5SelectorValues];
+         dxt5_block::get_block_values(values1, pDXT5_block1->get_low_alpha(), pDXT5_block1->get_high_alpha());
+
+         for (uint i = 0; i < cDXTBlockSize * cDXTBlockSize; i++)
+         {
+            const uint s0 = pDXT5_block0->get_selector(i & 3, i >> 2);
+            const uint s1 = pDXT5_block1->get_selector(i & 3, i >> 2);
+
+            if (crn_fmt == cCRNFmtDXN_XY)
+               pDst_pixels[i].set_noclamp_rgba(values0[s0], values1[s1], 255, 255);
+            else
+               pDst_pixels[i].set_noclamp_rgba(values1[s1], values0[s0], 255, 255);
+         }
+
+         break;
+      }
+      
+      case cCRNFmtDXT5A:
+      {
+         const dxt5_block* pDXT5_block = reinterpret_cast<const dxt5_block*>(pSrc_block);
+
+         uint values[cDXT5SelectorValues];
+         dxt5_block::get_block_values(values, pDXT5_block->get_low_alpha(), pDXT5_block->get_high_alpha());
+
+         for (uint i = 0; i < cDXTBlockSize * cDXTBlockSize; i++)
+         {
+            const uint s = pDXT5_block->get_selector(i & 3, i >> 2);
+
+            pDst_pixels[i].set_noclamp_rgba(255, 255, 255, values[s]);
+         }
+
+         break;
+      }
+      default:
+      {
+         return false;
+      }
+   }
+
+   return true;
 }

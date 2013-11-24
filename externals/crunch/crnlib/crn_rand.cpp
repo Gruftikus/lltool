@@ -174,6 +174,13 @@ namespace crnlib
       return m_kiss99.next() ^ (m_ranctx.next() + m_well512.next());
    }
 
+   uint64 random::urand64()
+   {
+      uint64 result = urand32();
+      result <<= 32ULL;
+      result |= urand32();
+      return result;
+   }
    uint32 random::fast_urand32()
    {
       return m_well512.next();
@@ -204,7 +211,7 @@ namespace crnlib
 
       return math::clamp<float>(r, l, h);
    }
-
+   
    int random::irand(int l, int h)
    {
       CRNLIB_ASSERT(l < h);
@@ -227,6 +234,12 @@ namespace crnlib
       int result = l + rnd_range;
       CRNLIB_ASSERT((result >= l) && (result < h));
       return result;
+   }
+
+   int random::irand_inclusive(int l, int h)
+   {
+      CRNLIB_ASSERT(h < cINT32_MAX);
+      return irand(l, h + 1);
    }
 
    /*
@@ -317,6 +330,13 @@ namespace crnlib
       return SHR3 ^ CONG;
    }
 
+   uint64 fast_random::urand64()
+   {
+      uint64 result = urand32();
+      result <<= 32ULL;
+      result |= urand32();
+      return result;
+   }
    int fast_random::irand(int l, int h)
    {
       CRNLIB_ASSERT(l < h);

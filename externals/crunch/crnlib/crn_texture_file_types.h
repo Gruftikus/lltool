@@ -13,7 +13,13 @@ namespace crnlib
       {
          cFormatInvalid = -1,
 
-         cFormatTGA = 0,
+         cFormatDDS,
+         cFormatCRN,
+         cFormatKTX,
+
+         cNumMipmappedFileFormats,
+
+         cFormatTGA = cNumMipmappedFileFormats,
          cFormatPNG,
          cFormatJPG,
          cFormatJPEG,
@@ -23,28 +29,28 @@ namespace crnlib
          cFormatTIFF,
          cFormatPPM,
          cFormatPGM,
-         cFormatDDS,
          cFormatPSD,
          cFormatJP2,
-         cFormatCRN,
          
          cNumRegularFileFormats,
          
-         // Not really a file format 
+         cNumImageFileFormats = cNumRegularFileFormats - cNumMipmappedFileFormats,
+
+         // Not really a file format
          cFormatClipboard = cNumRegularFileFormats,
          cFormatDragDrop,
 
          cNumFileFormats
       };
 
-      static const wchar_t* get_extension(format fmt);
+      static const char* get_extension(format fmt);
 
-      static format determine_file_format(const wchar_t* pFilename);
-      
+      static format determine_file_format(const char* pFilename);
+
       static bool supports_mipmaps(format fmt);
       static bool supports_alpha(format fmt);
-   };  
-   
+   };
+
    enum texture_type
    {
       cTextureTypeUnknown = 0,
@@ -55,8 +61,8 @@ namespace crnlib
 
       cNumTextureTypes
    };
-   
-   const wchar_t* get_texture_type_desc(texture_type t);
-               
+
+   const char* get_texture_type_desc(texture_type t);
+
 } // namespace crnlib
-   
+

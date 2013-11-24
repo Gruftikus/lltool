@@ -1,5 +1,7 @@
-COMPILE_OPTIONS = -O3 -fomit-frame-pointer -ffast-math -fno-math-errno -g -fno-strict-aliasing -Wall -Wno-unused-value -Wno-unused -march=core2
+COMPILE_OPTIONS = -O3 -fomit-frame-pointer -ffast-math -fno-math-errno -g -fno-strict-aliasing -Wall -Wno-unused-value -Wno-unused -Wuninitialized 
 LINKER_OPTIONS = -lpthread -g
+
+LIBCRUNCH = libcrunch.a
 
 OBJECTS = \
   crn_arealist.o \
@@ -77,10 +79,13 @@ OBJECTS = \
   lzma_LzmaEnc.o \
   lzma_LzmaLib.o
 
-all: crunch
+all: crunch $(LIBCRUNCH)
 
 %.o: %.cpp
 	g++ $< -o $@ -c $(COMPILE_OPTIONS)
+
+$(LIBCRUNCH): $(OBJECTS)
+	ar rcs $(LIBCRUNCH) $(OBJECTS)
 
 crunch.o: ../crunch/crunch.cpp
 	g++ $< -o $@ -c -I../inc -I../crnlib $(COMPILE_OPTIONS)

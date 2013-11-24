@@ -1,9 +1,11 @@
 CXX           = g++
-CXXFLAGS      = -rdynamic -c -Wall -fexceptions -fPIC -O3 -fomit-frame-pointer -ffast-math -fno-math-errno -g -fno-strict-aliasing -Wall -Wno-unused-value -Wno-unused -march=core2
+CXXFLAGS      = -rdynamic -c -Wall -O0 
 #CXXFLAGS      = -O3 -rdynamic -c -Wall -fexceptions -fPIC 
-LD            = g++
+LD            = g++ -pthread -g
 
-OBJS =  llactivatevisiblevertices.o \
+OBJS =  llactivatefractionofvertices.o \
+	llactivatevisiblevertices.o \
+	lladddiscontinuitygrid.o \
 	lladddiscontinuityline.o \
 	lladdvertextopolygon.o \
 	llalg.o \
@@ -33,6 +35,7 @@ OBJS =  llactivatevisiblevertices.o \
 	llimportmap.o \
 	llimportmapfromdds.o \
 	llinactivateallvertices.o \
+	lllinelist.o \
 	lllogger.o \
 	llmakederivatives.o \
 	llmap.o \
@@ -48,6 +51,7 @@ OBJS =  llactivatevisiblevertices.o \
 	llreadpolygondatafile.o \
 	llremoveinactivetriangles.o \
 	llremoveinactivevertices.o \
+	llremovetriangulation.o \
 	llscalemap.o \
 	llselectall.o \
 	llselectrec.o \
@@ -72,19 +76,24 @@ OBJS =  llactivatevisiblevertices.o \
 	llutils.o \
 	llworker.o \
 
-XOBJS = externals/triangle/triangle.o 
+XOBJST = externals/triangle/triangle.o 
 
-XOBJSC = externals/resampler/resampler.o
+XOBJSR = externals/resampler/resampler.o
+
+XOBJSC = externals/crunch/crnlib/libcrunch.a
 
 all: lltool
 
-$(XOBJS): %.o : %.cc %.h
+$(XOBJST): %.o : %.cc %.h
 	@echo Compiling $*
 	@$(CXX) $(CXXFLAGS) $< -o $@
 
 $(XOBJS2): %.o : %.cpp %.h
 	@echo Compiling $*
 	@$(CXX) $(CXXFLAGS) $< -o $@
+	
+$(XOBJSC): 
+	cd externals/crunch/crnlib/; make libcrunch.a
 
 $(OBJS): %.o : src/%.cpp include/%.h
 	@echo Compiling $*
@@ -94,11 +103,11 @@ lltool.o : src/lltool.cpp
 	@echo Compiling $*
 	@$(CXX) $(CXXFLAGS) $< -o $@
 
-lltool:	$(OBJS) $(XOBJS) $(XOBJSC) lltool.o
-	$(LD) -g -O0 $(OBJS) lltool.o $(XOBJS) $(XOBJSC) -o lltool
+lltool:	$(OBJS) $(XOBJST) $(XOBJSR) $(XOBJSC) lltool.o
+	$(LD) -g -O0 $(OBJS) lltool.o $(XOBJST) $(XOBJSR) $(XOBJSC) -o lltool
 
 clean:
-	rm *.o externals/triangle/*.o
+	rm $(OBJS) $(XOBJST) $(XOBJSR) $(XOBJSC) *.o externals/crunch/crnlib/*.o
 
 
 

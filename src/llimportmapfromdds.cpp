@@ -135,10 +135,10 @@ int llImportMapFromDDS::Exec(void) {
 	for (int y=widthy-1; y>=0; y--) {
 		for (int x=0; x<widthx; x++) {
 			
-			r = unsigned char( *((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff);
-			g = unsigned char((*((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff00)     >> 8);
-			b = unsigned char((*((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff0000)   >> 16);
-			a = unsigned char((*((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff000000) >> 24);
+			r = (unsigned char)( *((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff);
+			g = (unsigned char)((*((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff00)     >> 8);
+			b = (unsigned char)((*((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff0000)   >> 16);
+			a = (unsigned char)((*((pImages[level_index + face_index * tex_desc.m_levels]) + x + widthx*y) & 0xff000000) >> 24);
 			
 			heightmap->SetTupel(x, y, b, g, r, a);
 		}

@@ -182,11 +182,14 @@ int llExportMapToDDS::Exec(void) {
 	}
 
       // Determine the # of helper threads (in addition to the main thread) to use during compression. NumberOfCPU's-1 is reasonable.
+#ifdef _MSC_VER      
       SYSTEM_INFO g_system_info;
       GetSystemInfo(&g_system_info);  
       int num_helper_threads = std::max<int>(0, (int)g_system_info.dwNumberOfProcessors - 1);
       comp_params.m_num_helper_threads = num_helper_threads;
-
+#else
+      comp_params.m_num_helper_threads = 1;
+#endif
       comp_params.m_pProgress_func = progress_callback_func;
             
       // Fill in mipmap parameters struct.

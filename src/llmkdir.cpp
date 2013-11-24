@@ -1,14 +1,19 @@
 #include <stdlib.h>
+
+#ifdef _MSC_VER
 #include <direct.h>
+#else
+#include <sys/stat.h>
+#endif
 
 #include "../include/llmkdir.h"
 #include "../include/lllogger.h"
 
-#define MKDIR(a)	_mkdir(a)
-
 #ifdef _MSC_VER
+#define MKDIR(a)	_mkdir(a)
 #define DELIM '\\'
 #else
+#define MKDIR(a)	mkdir(a, 666)
 #define DELIM '/'
 #endif
 

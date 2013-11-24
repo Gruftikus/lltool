@@ -3,6 +3,7 @@
 #include "crn_core.h"
 #include "crn_console.h"
 #include "crn_data_stream.h"
+#include "crn_threading.h"
 
 namespace crnlib
 {
@@ -14,6 +15,7 @@ namespace crnlib
    data_stream*                              console::m_pLog_stream;
    mutex*                                    console::m_pMutex;
    uint                                      console::m_num_messages[cCMTTotal];
+   bool                                      console::m_at_beginning_of_line = true;
 
    const uint cConsoleBufSize = 4096;
 
@@ -48,7 +50,7 @@ namespace crnlib
       m_crlf = true;
    }
 
-   void console::vprintf(eConsoleMessageType type, const wchar_t* p, va_list args)
+   void console::vprintf(eConsoleMessageType type, const char* p, va_list args)
    {
       init();
 
@@ -56,12 +58,8 @@ namespace crnlib
 
       m_num_messages[type]++;
 
-      wchar_t buf[cConsoleBufSize];
-#ifdef _MSC_VER
-      vswprintf_s(buf, cConsoleBufSize, p, args);
-#else
-      vswprintf(buf, p, args);
-#endif
+      char buf[cConsoleBufSize];
+      vsprintf_s(buf, cConsoleBufSize, p, args);
 
       bool handled = false;
 
@@ -72,48 +70,41 @@ namespace crnlib
                handled = true;
       }
 
-      const wchar_t* pPrefix = NULL;
-      if (m_prefixes)
+      const char* pPrefix = NULL;
+      if ((m_prefixes) && (m_at_beginning_of_line))
       {
          switch (type)
          {
-            case cDebugConsoleMessage:    pPrefix = L"Debug: ";   break;
-            case cWarningConsoleMessage:  pPrefix = L"Warning: "; break;
-            case cErrorConsoleMessage:    pPrefix = L"Error: ";   break;
+            case cDebugConsoleMessage:    pPrefix = "Debug: ";   break;
+            case cWarningConsoleMessage:  pPrefix = "Warning: "; break;
+            case cErrorConsoleMessage:    pPrefix = "Error: ";   break;
             default: break;
          }
       }
 
       if ((!m_output_disabled) && (!handled))
       {
-#ifdef _XBOX
          if (pPrefix)
-            OutputDebugStringW(pPrefix);
-         OutputDebugStringW(buf);
-         if (m_crlf)
-            OutputDebugStringW(L"\n");
-#else
-         if (pPrefix)
-            ::wprintf(pPrefix);
-         ::wprintf(m_crlf ? L"%s\n" : L"%s", buf);
-#endif
+            ::printf("%s", pPrefix);
+         ::printf(m_crlf ? "%s\n" : "%s", buf);
       }
+
+      uint n = strlen(buf);
+      m_at_beginning_of_line = (m_crlf) || ((n) && (buf[n - 1] == '\n'));
 
       if ((type != cProgressConsoleMessage) && (m_pLog_stream))
       {
          // Yes this is bad.
-         dynamic_wstring utf16_buf(buf);
+         dynamic_string tmp_buf(buf);
 
-         dynamic_string ansi_buf;
-         utf16_buf.as_ansi(ansi_buf);
-         ansi_buf.translate_lf_to_crlf();
+         tmp_buf.translate_lf_to_crlf();
 
-         m_pLog_stream->printf(m_crlf ? "%s\r\n" : "%s", ansi_buf.get_ptr());
+         m_pLog_stream->printf(m_crlf ? "%s\r\n" : "%s", tmp_buf.get_ptr());
          m_pLog_stream->flush();
       }
    }
 
-   void console::printf(eConsoleMessageType type, const wchar_t* p, ...)
+   void console::printf(eConsoleMessageType type, const char* p, ...)
    {
       va_list args;
       va_start(args, p);
@@ -121,7 +112,7 @@ namespace crnlib
       va_end(args);
    }
 
-   void console::printf(const wchar_t* p, ...)
+   void console::printf(const char* p, ...)
    {
       va_list args;
       va_start(args, p);
@@ -172,7 +163,7 @@ namespace crnlib
       }
    }
 
-   void console::progress(const wchar_t* p, ...)
+   void console::progress(const char* p, ...)
    {
       va_list args;
       va_start(args, p);
@@ -180,7 +171,7 @@ namespace crnlib
       va_end(args);
    }
 
-   void console::info(const wchar_t* p, ...)
+   void console::info(const char* p, ...)
    {
       va_list args;
       va_start(args, p);
@@ -188,7 +179,7 @@ namespace crnlib
       va_end(args);
    }
 
-   void console::message(const wchar_t* p, ...)
+   void console::message(const char* p, ...)
    {
       va_list args;
       va_start(args, p);
@@ -196,7 +187,7 @@ namespace crnlib
       va_end(args);
    }
 
-   void console::cons(const wchar_t* p, ...)
+   void console::cons(const char* p, ...)
    {
       va_list args;
       va_start(args, p);
@@ -204,7 +195,7 @@ namespace crnlib
       va_end(args);
    }
 
-   void console::debug(const wchar_t* p, ...)
+   void console::debug(const char* p, ...)
    {
       va_list args;
       va_start(args, p);
@@ -212,7 +203,7 @@ namespace crnlib
       va_end(args);
    }
 
-   void console::warning(const wchar_t* p, ...)
+   void console::warning(const char* p, ...)
    {
       va_list args;
       va_start(args, p);
@@ -220,7 +211,7 @@ namespace crnlib
       va_end(args);
    }
 
-   void console::error(const wchar_t* p, ...)
+   void console::error(const char* p, ...)
    {
       va_list args;
       va_start(args, p);

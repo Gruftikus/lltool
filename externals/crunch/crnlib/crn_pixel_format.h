@@ -12,11 +12,9 @@ namespace crnlib
       uint get_num_formats();
       pixel_format get_pixel_format_by_index(uint index);
 
-      const wchar_t* get_pixel_format_string(pixel_format fmt);
-      const char* get_pixel_format_stringa(pixel_format fmt);
+      const char* get_pixel_format_string(pixel_format fmt);
 
-      const wchar_t* get_crn_format_string(crn_format fmt);
-      const char* get_crn_format_stringa(crn_format fmt);
+      const char* get_crn_format_string(crn_format fmt);
 
       inline bool is_grayscale(pixel_format fmt)
       {
@@ -101,6 +99,7 @@ namespace crnlib
             case PIXEL_FMT_DXT5_xGxR:
             case PIXEL_FMT_DXT5_xGBR:
             case PIXEL_FMT_DXT5_AGBR:
+            case PIXEL_FMT_ETC1:
                return true;
             default: break;
          }
@@ -140,6 +139,7 @@ namespace crnlib
             case PIXEL_FMT_DXT5_xGxR:    return cDXT5;
             case PIXEL_FMT_DXT5_xGBR:    return cDXT5;
             case PIXEL_FMT_DXT5_AGBR:    return cDXT5;
+            case PIXEL_FMT_ETC1:         return cETC1;
             default: break;
          }
          return cDXTInvalid;
@@ -163,6 +163,8 @@ namespace crnlib
                return PIXEL_FMT_3DC;
             case cDXT5A:
                return PIXEL_FMT_DXT5A;
+            case cETC1:
+               return PIXEL_FMT_ETC1;
             default: break;
          }
          CRNLIB_ASSERT(false);
@@ -209,6 +211,7 @@ namespace crnlib
          {
             case PIXEL_FMT_DXT1:      return 4;
             case PIXEL_FMT_DXT1A:     return 4;
+            case PIXEL_FMT_ETC1:      return 4;
             case PIXEL_FMT_DXT2:      return 8;
             case PIXEL_FMT_DXT3:      return 8;
             case PIXEL_FMT_DXT4:      return 8;
@@ -238,7 +241,7 @@ namespace crnlib
             case PIXEL_FMT_DXT1:      return 8;
             case PIXEL_FMT_DXT1A:     return 8;
             case PIXEL_FMT_DXT5A:     return 8;
-
+            case PIXEL_FMT_ETC1:      return 8;
             case PIXEL_FMT_DXT2:      return 16;
             case PIXEL_FMT_DXT3:      return 16;
             case PIXEL_FMT_DXT4:      return 16;

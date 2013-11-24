@@ -4,6 +4,15 @@
 
 namespace crnlib
 {
+   template<typename T> struct int_traits { enum { cMin = crnlib::cINT32_MIN, cMax = crnlib::cINT32_MAX, cSigned = true }; };
+
+   template<> struct int_traits<int8> { enum { cMin = crnlib::cINT8_MIN, cMax = crnlib::cINT8_MAX, cSigned = true }; };
+   template<> struct int_traits<int16> { enum { cMin = crnlib::cINT16_MIN, cMax = crnlib::cINT16_MAX, cSigned = true }; };
+   template<> struct int_traits<int32> { enum { cMin = crnlib::cINT32_MIN, cMax = crnlib::cINT32_MAX, cSigned = true }; };
+
+   template<> struct int_traits<uint8> { enum { cMin = 0, cMax = crnlib::cUINT8_MAX, cSigned = false }; };
+   template<> struct int_traits<uint16> { enum { cMin = 0, cMax = crnlib::cUINT16_MAX, cSigned = false }; };
+   template<> struct int_traits<uint32> { enum { cMin = 0, cMax = crnlib::cUINT32_MAX, cSigned = false }; };
    template<typename T>
    struct scalar_type
    {
@@ -43,8 +52,13 @@ namespace crnlib
    CRNLIB_DEFINE_BUILT_IN_TYPE(unsigned int)
    CRNLIB_DEFINE_BUILT_IN_TYPE(long)
    CRNLIB_DEFINE_BUILT_IN_TYPE(unsigned long)
+#ifdef __GNUC__
+   CRNLIB_DEFINE_BUILT_IN_TYPE(long long)
+   CRNLIB_DEFINE_BUILT_IN_TYPE(unsigned long long)
+#else
    CRNLIB_DEFINE_BUILT_IN_TYPE(__int64)
    CRNLIB_DEFINE_BUILT_IN_TYPE(unsigned __int64)
+#endif
    CRNLIB_DEFINE_BUILT_IN_TYPE(float)
    CRNLIB_DEFINE_BUILT_IN_TYPE(double)
    CRNLIB_DEFINE_BUILT_IN_TYPE(long double)
@@ -57,21 +71,25 @@ namespace crnlib
    struct bitwise_movable { enum { cFlag = false }; };
 
 // Defines type Q as bitwise movable.
+// Bitwise movable: type T may be safely moved to a new location via memcpy, without requiring the old copy to be destructed.
+// However, the final version of the object (wherever it winds up in memory) must be eventually destructed (a single time, of course).
+// Bitwise movable is a superset of bitwise copyable (all bitwise copyable types are also bitwise movable).
 #define CRNLIB_DEFINE_BITWISE_MOVABLE(Q) template<> struct bitwise_movable<Q> { enum { cFlag = true }; };
 
    template<typename T>
    struct bitwise_copyable { enum { cFlag = false }; };
 
-   // Defines type Q as bitwise copyable.
+// Defines type Q as bitwise copyable.
+// Bitwise copyable: type T may be safely and freely copied (duplicated) via memcpy, and *does not* require destruction.
 #define CRNLIB_DEFINE_BITWISE_COPYABLE(Q) template<> struct bitwise_copyable<Q> { enum { cFlag = true }; };
 
 #define CRNLIB_IS_POD(T) __is_pod(T)
 
 #define CRNLIB_IS_SCALAR_TYPE(T) (scalar_type<T>::cFlag)
 
-#define CRNLIB_IS_BITWISE_COPYABLE(T) ((scalar_type<T>::cFlag) || (bitwise_copyable<T>::cFlag) || CRNLIB_IS_POD(T))
+#define CRNLIB_IS_BITWISE_COPYABLE(T) (CRNLIB_IS_SCALAR_TYPE(T) || CRNLIB_IS_POD(T) || (bitwise_copyable<T>::cFlag))
 
-#define CRNLIB_IS_BITWISE_MOVABLE(T) (CRNLIB_IS_BITWISE_COPYABLE(T) || (bitwise_movable<T>::cFlag))
+#define CRNLIB_IS_BITWISE_COPYABLE_OR_MOVABLE(T) (CRNLIB_IS_BITWISE_COPYABLE(T) || (bitwise_movable<T>::cFlag))
 
 #define CRNLIB_HAS_DESTRUCTOR(T) ((!scalar_type<T>::cFlag) && (!__is_pod(T)))
 

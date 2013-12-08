@@ -166,7 +166,6 @@ pip-log.txt
 ## Local
 #############
 
-externals/triangle
 externals/mtparser
 sandbox/
 demo/*.bmp

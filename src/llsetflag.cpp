@@ -7,8 +7,9 @@ llSetFlag::llSetFlag() : llWorker() {
 int llSetFlag::Prepare(void) {
 	if (!llWorker::Prepare()) return 0;
 
-	value = NULL;
-	hidden = unselect = 0;
+	value   = NULL;
+	hidden  = unselect = 0;
+	replace = with     = NULL;
 
 	return 1;
 }
@@ -30,7 +31,7 @@ int llSetFlag::RegisterOptions(void) {
 
 int llSetFlag::Exec(void) {
 	llWorker::Exec();
-
+	
 	if (value) {
 		if (replace && with) value = _llUtils()->Replace(value, replace, with);
 		_llUtils()->SetValue(name, value);
@@ -40,5 +41,6 @@ int llSetFlag::Exec(void) {
 		if (hidden) _llUtils()->SetHidden(name);
 	} 
 	if (unselect) _llUtils()->DisableFlag(name);
+
 	return 1;
 }

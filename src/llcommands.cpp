@@ -201,6 +201,7 @@ repeat:
 
 					linex[i] = '\0';
 					char *delme = _llUtils()->NewString(linex);
+					
 					(worker_flags.back()).push_back(delme);
 
 					linex = linex + i + 1;
@@ -319,7 +320,7 @@ exit:
 }
 
 int llCommands::GetCommand(void) {
-	
+
 	CurrentCommand = NULL;
 
 	if (worker_pointer == worker_cache.size()) {
@@ -384,8 +385,7 @@ int llCommands::GetCommand(void) {
 		}
 		return 0;
 	}
-
-
+	
 	llWorker *worker = worker_cache[worker_pointer - 1];
 	if (skip_next_block == LLCOM_SKIP_BLOCK || (block_level && block_skip[block_level-1]==LLCOM_SKIP_BLOCK)) {
 		if (worker) {
@@ -396,7 +396,7 @@ int llCommands::GetCommand(void) {
 		}	
 		return 0;
 	}
-
+	
 	int com = -1;
 
 	if (worker) {
@@ -406,13 +406,13 @@ int llCommands::GetCommand(void) {
 		CurrentCommand = worker->GetCommandName();
 		worker->Prepare();
 	} else return 0;
-
+	
 	//afterburner	
 	worker->ReplaceFlags();
 	worker->Print();
-
+	
 	int retval = worker->Exec();
-
+	
 	if (worker->Repeat()) {
 		skip_next_block |= LLCOM_ITERATE_BLOCK;
 	} else if (worker->IsRepeatWorker() && !retval) {
@@ -451,11 +451,9 @@ int llCommands::Loop(void) {
 #ifdef USE_CATCH
 		try {
 #endif
-
 			com = GetCommand();
 			mesg->Dump();
-
-			//if (batch->CurrentCommand) std::cout << batch->CurrentCommand << std::endl;
+			//if (CurrentCommand) std::cout << CurrentCommand << std::endl;
 
 #ifdef USE_CATCH
 		} catch (char *str) {

@@ -57,6 +57,8 @@ void llFileIterator::FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePatter
 int llFileIterator::Prepare(void) {
 	if (!llWorker::Prepare()) return 0;
 
+	directory = pattern = NULL;
+
 	return 1;
 }
 
@@ -64,7 +66,7 @@ int llFileIterator::RegisterOptions(void) {
 	if (!llWorker::RegisterOptions()) return 0;
 
 	RegisterValue("-directory", &directory);
-	RegisterValue("-pattern",   &pattern  , LLWORKER_OBL_OPTION);
+	RegisterValue("-pattern",   &pattern, LLWORKER_OBL_OPTION);
 
 	return 1;
 }

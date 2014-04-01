@@ -56,8 +56,9 @@ namespace crnlib
 
       template<typename T> inline T square(T value) { return value * value; }
 
-      inline bool is_power_of_2(uint32 x) { return x && ((x & (x - 1U)) == 0U); }
-      inline bool is_power_of_2(uint64 x) { return x && ((x & (x - 1U)) == 0U); }
+      //      inline bool is_power_of_2(uint32 x) { return x && ((x & (x - 1U)) == 0U); }
+      //      inline bool is_power_of_2(uint64 x) { return x && ((x & (x - 1U)) == 0U); }
+      template<typename T> inline bool is_power_of_2(T x) { return x && ((x & (x - 1U)) == 0U); }
 
       template<typename T> inline T align_up_value(T x, uint alignment)
       {
@@ -80,10 +81,12 @@ namespace crnlib
          return align_up_value(x, alignment) - x;
       }
 		      
-		// From "Hackers Delight"
-      inline uint32 next_pow2(uint32 val)
+      // From "Hackers Delight"
+      //inline uint32 next_pow2(uint32 val)
+      template<typename T> inline T next_pow2(T val)
       {
          val--;
+	 val |= val >> 32;
          val |= val >> 16;
          val |= val >> 8;
          val |= val >> 4;
@@ -92,10 +95,11 @@ namespace crnlib
          return val + 1;
       }
 
-      inline uint64 next_pow2(uint64 val)
+      //inline uint64 next_pow2(uint64 val)
+      inline uint32 next_pow2(uint32 val)
       {
          val--;
-         val |= val >> 32;
+         //val |= val >> 32;
          val |= val >> 16;
          val |= val >> 8;
          val |= val >> 4;

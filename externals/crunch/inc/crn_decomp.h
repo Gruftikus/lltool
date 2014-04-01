@@ -13,6 +13,8 @@
 #ifndef CRND_INCLUDE_CRND_H
 #define CRND_INCLUDE_CRND_H
 
+#include <stdint.h>
+
 // Include crnlib.h (only to bring in some basic CRN-related types).
 #include "crnlib.h"
 
@@ -374,7 +376,9 @@ namespace crnd
 
    const uint32 cIntBits = 32U;
 
-#ifdef _WIN64
+#ifdef __GNUC__
+   typedef intptr_t ptr_bits;
+#elif defined _WIN64
    typedef uint64 ptr_bits;
 #else
    typedef uint32 ptr_bits;

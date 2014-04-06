@@ -11,6 +11,7 @@ class llFileIterator : public llWorker {
 protected:
 
 	char *directory, *pattern;
+	int   recursive;
 
 	int init_done;
 	int position;

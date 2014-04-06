@@ -24,7 +24,7 @@ void llFileIterator::FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePatter
 	hFindFile     = FindFirstFile(szFullPattern, &FindFileData);
 	if(hFindFile != INVALID_HANDLE_VALUE) {
 		do {
-			if(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && recursive) {
 				// found a subdirectory; recurse into it
 				//_tprintf_s(_T("dir: %s\n"), szFullPattern);
 				PathCombine(szFullPattern, lpFolder, FindFileData.cFileName);
@@ -58,6 +58,7 @@ int llFileIterator::Prepare(void) {
 	if (!llWorker::Prepare()) return 0;
 
 	directory = pattern = NULL;
+	recursive = 0;
 
 	return 1;
 }
@@ -67,6 +68,7 @@ int llFileIterator::RegisterOptions(void) {
 
 	RegisterValue("-directory", &directory);
 	RegisterValue("-pattern",   &pattern, LLWORKER_OBL_OPTION);
+	RegisterFlag("-recursive",  &recursive);
 
 	return 1;
 }

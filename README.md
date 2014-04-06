@@ -16,7 +16,9 @@ lltool provides several methods and algorithms for heightmap manipulation and te
 * Support for cells and quads (for game LODs)
 * Multiple algorithms for random Monte-Carlo vertex placement, e.g. based on first and second order, height, peak finding, and general purpose equations
 * Triangle manipulation: stencils and break lines
-* Output formats: obj- and VRML-files
+* Output formats for meshes: obj- and VRML-files
+* Texture map handling (import, export, scaling)
+* Formats for textures: bmp and dds
 
 ### Installation
 

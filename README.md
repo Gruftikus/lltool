@@ -12,9 +12,7 @@ lltool provides several methods and algorithms for heightmap manipulation and te
 
 ### Features
 
-...some are not yet done!
-
-* Map creation and manipulation: importers/exporters and terraforming
+* Map creation and manipulation: importers/exporters and basic terrain moddeling
 * Support for cells and quads (for game LODs)
 * Multiple algorithms for random Monte-Carlo vertex placement, e.g. based on first and second order, height, peak finding, and general purpose equations
 * Triangle manipulation: stencils and break lines
@@ -24,7 +22,7 @@ lltool provides several methods and algorithms for heightmap manipulation and te
 
 Go to the directory "externals". lltool needs:
 
-* [Triangle](http://www.cs.cmu.edu/~quake/triangle.html) by J. R. Shewchuk, download the code and put it into externals/triangle/
+* [Triangle](http://www.cs.cmu.edu/~quake/triangle.html) by J. R. Shewchuk, already included.
 * [MTParser](http://www.codeproject.com/Articles/7335/An-extensible-math-expression-parser-with-plug-ins) by Mathieu Jacques, download the code and put it into externals/mtparser (Windows only!!!)
 * [imageresampler](https://code.google.com/p/imageresampler/), a C++ class for separable filtering 2D image resampling by Rich Geldreich, already included.
 

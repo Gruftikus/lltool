@@ -586,7 +586,7 @@ check_again2:
 }
 
 //taken from http://coding.debuntu.org/c-implementing-str_replace-replace-all-occurrences-substring
-char *llUtils::Replace(const char *string, const char *substr, const char *replacement) {
+char *llUtils::Replace(const char *string, const char *substr, const char *replacement, int num) {
 
 	char *tok = NULL;
 	char *newstr = NULL;
@@ -597,7 +597,8 @@ char *llUtils::Replace(const char *string, const char *substr, const char *repla
 	if ( substr == NULL || replacement == NULL ) return NewString(string);
 	newstr = NewString(string);
 	head = newstr;
-	while ( (tok = stristr ( head, substr ))){
+	while ( (tok = stristr ( head, substr )) && num!=0 ) {
+		num--;
 		oldstr = newstr;
 		newstr = new char[ strlen ( oldstr ) - strlen ( substr ) + strlen ( replacement ) + 1 ];
 		/*failed to alloc mem, free old string and return NULL */

@@ -96,7 +96,7 @@ class llUtils {
 		return delme;
 	};
 
-	char *Replace(const char *string, const char *substr, const char *replacement);
+	char *Replace(const char *string, const char *substr, const char *replacement, int num = -1);
 
 	int   SeekNextSpace(char *_tmp);
 

@@ -1,0 +1,23 @@
+;; this batch file demonstrates the useage of:
+;; * ScaleMap via crunch
+;;   see https://github.com/Gruftikus/lltool/wiki/ScaleMap
+;; * FileIterator
+
+;; code starts here
+[lltool]
+
+FileIterator -directory="source" -pattern="*.dds" -recursive {
+	Echo -text=$_filename
+	ImportMapFromDDS -filename=$_filename -even -name=test -replacemap
+	
+	;; scale maps uses crunch lib
+	ScaleMap -sizeX=16 -sizeY=16 -map=test 
+	
+	SetFlag -name=newname -value=$_filename -replace=".dds" -with=".bmp"
+	SetFlag -name=newname -value=$newname -replace="source" -with="target" -num=1
+	
+	MkDir -path=$newname -hasfilename
+	Echo -text=$newname
+	ExportMap -filename=$newname -map=test
+}
+

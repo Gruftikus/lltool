@@ -172,4 +172,6 @@ demo/*.bmp
 demo/*.obj
 demo/*.wrl
 demo/*.mtl
+demo/source/
+demo/target/
 *.log

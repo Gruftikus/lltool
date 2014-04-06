@@ -10,6 +10,7 @@ int llSetFlag::Prepare(void) {
 	value   = NULL;
 	hidden  = unselect = 0;
 	replace = with     = NULL;
+	num     = -1;
 
 	return 1;
 }
@@ -22,6 +23,7 @@ int llSetFlag::RegisterOptions(void) {
 
 	RegisterValue("-replace",  &replace);
 	RegisterValue("-with",     &with);
+	RegisterValue("-num",      &num);
 
 	RegisterFlag ("-hidden",   &hidden);
 	RegisterFlag ("-unselect", &unselect);
@@ -33,7 +35,7 @@ int llSetFlag::Exec(void) {
 	llWorker::Exec();
 	
 	if (value) {
-		if (replace && with) value = _llUtils()->Replace(value, replace, with);
+		if (replace && with) value = _llUtils()->Replace(value, replace, with, num);
 		_llUtils()->SetValue(name, value);
 		if (hidden) _llUtils()->SetHidden(name);
 	} else {

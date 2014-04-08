@@ -88,6 +88,12 @@ int llFileIterator::Exec(void) {
 		position  = 0;
 	}
 
+	if (!file_list.size()) {
+		_llLogger()->WriteNextLine(-LOG_WARNING, "No file found which matches the pattern");
+		repeat_worker = false;
+		return 0;
+	}
+
 	_llUtils()->SetValue("_filename", file_list[position]);
 	position++;
 

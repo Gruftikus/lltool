@@ -46,15 +46,27 @@ The last option might be the filename. If no filename is given, stdin is used, i
 
     lltool flag1 flag2 ... [section] filename.mpb
 
-### References and applications
+## References
+
+### Software
+
+[An extensible math expression parser with plug-ins (MTParser)](http://www.codeproject.com/Articles/7335/An-extensible-math-expression-parser-with-plug-ins) by Mathieu Jacques
+
+[Triangle](http://www.cs.cmu.edu/~quake/triangle.html): "Engineering a 2D Quality Mesh Generator and Delaunay Triangulator", in "Applied Computational Geometry: Towards Geometric Engineering" (Ming C. Lin and Dinesh Manocha, editors), volume 1148 of Lecture Notes in Computer Science, pages 203-222, Springer-Verlag, Berlin, May 1996" by J. R. Shewchuk
+
+[imageresampler](https://code.google.com/p/imageresampler/), a C++ class for separable filtering 2D image resampling by Rich Geldreich.
+
+[crunch/crnlib](https://code.google.com/p/crunch/), for dds file generation.
+
+### Applications
 
 * [tes4ll](http://oblivion.nexusmods.com/mods/40549/)
 * [Immersive Interiors Landscape AddOn](http://oblivion.nexusmods.com/mods/43072/)
 * [Realistic Normal Maps with Faked Terrain Shadows](http://oblivion.nexusmods.com/mods/41243/)
 
-### Licence
+## Licence
 
-Copyright (C) 2011-2013
+Copyright (C) 2011-2014
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

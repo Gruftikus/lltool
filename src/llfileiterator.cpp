@@ -6,14 +6,18 @@
 #include <tchar.h>
 #pragma comment (lib, "shlwapi.lib")
 
+#include <regex>
+
 llFileIterator::llFileIterator() : llWorker() {
 	SetCommandName("FileIterator");
 	init_done = 0;
 }
 
-void llFileIterator::FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePattern) {
+void llFileIterator::FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePattern, char *regexp) {
 
 	//_tprintf_s(_T("%s\n"), lpFolder);
+
+	const std::tr1::regex pattern(regexp);
 
 	TCHAR szFullPattern[MAX_PATH];
 	WIN32_FIND_DATA FindFileData;
@@ -31,7 +35,7 @@ void llFileIterator::FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePatter
 				//if (strcmp(lpFolder, szFullPattern) != 0 && strlen(szFullPattern)>strlen(lpFolder)) {
 				if ((lstrcmp(FindFileData.cFileName, TEXT(".")) != 0) && (lstrcmp(FindFileData.cFileName, TEXT("..")) != 0)) {
 					//skip "back-directory"
-					FindFilesRecursively(szFullPattern, lpFilePattern);
+					FindFilesRecursively(szFullPattern, lpFilePattern, regexp);
 				}
 			}
 		} while(FindNextFile(hFindFile, &FindFileData));
@@ -45,8 +49,12 @@ void llFileIterator::FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePatter
 		do {
 			if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 				// found a file; do something with it
-				PathCombine(szFullPattern, lpFolder, FindFileData.cFileName);
-				file_list.push_back(_llUtils()->NewString(szFullPattern));
+
+				//check regexp in addition
+				if (std::tr1::regex_match(FindFileData.cFileName, pattern)) {
+					PathCombine(szFullPattern, lpFolder, FindFileData.cFileName);
+					file_list.push_back(_llUtils()->NewString(szFullPattern));
+				}
 				//_tprintf_s(_T("%s\n"), szFullPattern);
 			}
 		} while(FindNextFile(hFindFile, &FindFileData));
@@ -67,7 +75,8 @@ int llFileIterator::RegisterOptions(void) {
 	if (!llWorker::RegisterOptions()) return 0;
 
 	RegisterValue("-directory", &directory);
-	RegisterValue("-pattern",   &pattern, LLWORKER_OBL_OPTION);
+	RegisterValue("-pattern",   &pattern);
+	RegisterValue("-regexp",    &regexp);
 	RegisterFlag("-recursive",  &recursive);
 
 	return 1;
@@ -76,13 +85,16 @@ int llFileIterator::RegisterOptions(void) {
 int llFileIterator::Exec(void) {
 	if (!llWorker::Exec()) return 0;
 
+	if (!Used("-pattern")) pattern="*";
+	if (!Used("-regexp"))  regexp=".*";
+
 	if (!init_done) {
 		if (!Used("-directory")) {
 			TCHAR NPath[MAX_PATH];
 			GetCurrentDirectory(MAX_PATH, NPath);
-			FindFilesRecursively(NPath, _T(pattern));
+			FindFilesRecursively(NPath, _T(pattern), regexp);
 		} else {
-			FindFilesRecursively(_T(directory), _T(pattern));
+			FindFilesRecursively(_T(directory), _T(pattern), regexp);
 		}
 		init_done = 1;
 		position  = 0;

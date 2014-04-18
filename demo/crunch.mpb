@@ -6,8 +6,9 @@
 ;; code starts here
 [lltool]
 
-FileIterator -directory="source" -pattern="*.dds" -recursive {
-	Echo -text=$_filename
+;;FileIterator -directory="source" -pattern="*.dds" -recursive {
+FileIterator -directory="source" -pattern="*" -regexp=".*\.dds" -recursive {
+	Echo -text="******** $_filename"
 	ImportMapFromDDS -filename=$_filename -even -name=test -replacemap
 	
 	;; scale maps uses crunch lib

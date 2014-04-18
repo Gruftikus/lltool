@@ -2,7 +2,7 @@
 
 ![panorama](https://lh6.googleusercontent.com/-Q4p5qHEUWps/UXVzhYw-YgI/AAAAAAAAAdw/MTd5Gd1_TuM/s971/lltool.jpg)
 
-## Landscape and Heightmap Editing Tool and Library
+## Landscape and Heightmap Triangulation Tool and Library
 
 For details take a look to the [full manual](https://github.com/Gruftikus/lltool/wiki/).
 

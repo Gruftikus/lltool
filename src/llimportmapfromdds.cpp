@@ -66,7 +66,7 @@ int llImportMapFromDDS::RegisterOptions(void) {
 	RegisterValue("-y2",       &y2);
 	RegisterValue("-zscale",   &z);
 	RegisterValue("-name",     &mapname);
-	RegisterValue("-filename", &filename, LLWORKER_OBL_OPTION);
+	RegisterValue("-filename", &filename);
 
 	RegisterFlag ("-even",       &even);
 	RegisterFlag ("-replacemap", &replacemap);
@@ -79,6 +79,10 @@ int llImportMapFromDDS::Exec(void) {
 	if (!llWorker::Exec()) return 0;
 
 	if (!Used("-name")) mapname = "_heightmap";
+	if (!Used("-filename") && !_llUtils()->size) {
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: no filename given, but no data in memory", command_name);
+		return 0;
+	}
 
 	llMap *oldmap = _llMapList()->GetMap(mapname);
 	if (oldmap && !replacemap) {
@@ -89,8 +93,10 @@ int llImportMapFromDDS::Exec(void) {
 		_llMapList()->DeleteMap(mapname);
 	}
 
-	crn_uint32 src_file_size;
-	crn_uint8 *pSrc_file_data = read_file_into_buffer(filename, src_file_size);
+	crn_uint32 src_file_size  = _llUtils()->size;
+	crn_uint8 *pSrc_file_data = _llUtils()->data;
+	if (filename)
+		pSrc_file_data = read_file_into_buffer(filename, src_file_size);
 	if (!pSrc_file_data) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "Unable to read DDS file \"%s\"", filename);
 		return 0;
@@ -145,7 +151,7 @@ int llImportMapFromDDS::Exec(void) {
 	}
 
 	crn_free_all_images(pImages, tex_desc);
-	free(pSrc_file_data);
+	if (filename) free(pSrc_file_data);
 
 	_llUtils()->x00 = x1;
 	_llUtils()->y00 = y1;

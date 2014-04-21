@@ -337,6 +337,9 @@ llUtils::llUtils() {
 	x11 = 1;
 	y00 = 0;
 	y11 = 1;
+
+	size = 0;
+	data = NULL;
 }
 
 
@@ -578,7 +581,7 @@ check_again2:
 			for (unsigned int j=i; j<strlen(tmp); j++) {
 				tmp[j]=tmp[j+1];
 			}
-			i--;
+			//i--;
 		}
 	}
 

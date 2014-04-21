@@ -109,9 +109,10 @@ int llFileIterator::Exec(void) {
 	_llUtils()->SetValue("_filename", file_list[position]);
 	position++;
 
-	if (file_list.size() == position) 
+	if (file_list.size() == position) {
 		repeat_worker = false;
-	else 
+		init_done     = 0;
+	} else 
 		repeat_worker = true;
 
 	return 1;

@@ -76,7 +76,7 @@ int llFileIterator::RegisterOptions(void) {
 
 	RegisterValue("-directory", &directory);
 	RegisterValue("-pattern",   &pattern);
-	RegisterValue("-regexp",    &regexp);
+	RegisterValue("-regex",     &regexp);
 	RegisterFlag("-recursive",  &recursive);
 
 	return 1;
@@ -86,7 +86,7 @@ int llFileIterator::Exec(void) {
 	if (!llWorker::Exec()) return 0;
 
 	if (!Used("-pattern")) pattern="*";
-	if (!Used("-regexp"))  regexp=".*";
+	if (!Used("-regex"))   regexp=".*";
 
 	if (!init_done) {
 		if (!Used("-directory")) {

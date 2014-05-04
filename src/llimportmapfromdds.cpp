@@ -1,6 +1,7 @@
 #include "../include/llimportmapfromdds.h"
 #include "../include/llmaplist.h"
 
+#include <algorithm>
 
 // Public crnlib header.
 #include "../externals/crunch/inc/crnlib.h"

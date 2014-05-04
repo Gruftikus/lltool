@@ -130,6 +130,36 @@ int llSetAlgVertices::Exec(void) {
 		map->GetRawX(x2), map->GetRawY(y2));
 
 	double mean=0, num=0, num_real=0, empty=0;
+	double ceiling = 0;
+
+	_llLogger()->WriteNextLine(-LOG_INFO, "Generating cache....");
+	int widthx = map->GetRawX(x2) - map->GetRawX(x1) + 1;
+	int widthy = map->GetRawY(y2) - map->GetRawY(y1) + 1;
+	llMap *tmpmap = new llMap(widthx, widthy);
+	tmpmap->SetCoordSystem(x1, y1, x2, y2, 1);
+	for (unsigned int x=0; x<widthx; x++) {
+		for (unsigned int y=0; y<widthy; y++) {
+			double value   = 1;
+			alg->GetValue(tmpmap->GetCoordX(x), tmpmap->GetCoordY(y), &value);
+			value *= value;
+			tmpmap->SetElementRaw(x, y, value);
+			if (value) {
+				num++;
+				mean += value;
+				if (value > ceiling) ceiling = value;
+			}
+		}
+	}
+	_llLogger()->WriteNextLine(-LOG_INFO, "....done");
+
+	if (!mean || !num) {
+		_llLogger()->WriteNextLine(LOG_WARNING, "This selection seems to be empty, skipped");
+		goto end;
+	} 
+
+	mean /= num;
+	if (ceiling > (cutoff*mean)) 
+		ceiling = (cutoff*mean);  
 
 	for (int num_point=0; num_point<nmax; num_point++) {	    
 		int maxtry       = 0, 
@@ -143,14 +173,7 @@ loop:
 		float y = map->GetCoordRndY();
 		float z = map->GetZ(x,y);
 
-		double ceiling = 0;
-		double value   = 1;
-		
-		alg->GetValue(x, y, &value, &ceiling);
-		value   *= value;
-		ceiling *= ceiling;
-
-		//std::cout << "ceiling=" << ceiling << std::endl;
+		double value   = tmpmap->GetZ(x, y);
 
 		if (empty > 1000) {
 			_llLogger()->WriteNextLine(LOG_WARNING, "This selection seems to be empty, skipped after %i vertices", num_point);
@@ -162,30 +185,21 @@ loop:
 
 		empty = 0;
 
-		if (num && value > (cutoff*mean/num)) 
-			value = (cutoff*mean/num);  
-
-		num++;
-		mean+=value;
-
 		float idealdist = minab;
 		if (cellsize_m)
 			idealdist = cellsize_m - (((cellsize_m-minab)/float(mean/num)) * float(value));
 
 		if (idealdist < minab) idealdist = minab;
 
-		//std::cout << "mean=" << mean << ", num=" << num << std::endl;
-
-		//if (mean>1) {int *t=0;*t=0;}
-
-		if (ceiling > (cutoff*mean/num)) 
-			ceiling = (cutoff*mean/num);  
-
 		double test = double(rand())/double(RAND_MAX) * ceiling;
 		if (test > value) { 
 			//std::cout << "repeat, value=" << value << ", ceiling=" << ceiling << std::endl;
 			goto loop; 
 		}
+
+		//points->AddPoint(x, y, z);
+		//num_real++;
+#if 1
 		float mingrid_x = minab + 1.0f;
 		float mingrid_y = minab + 1.0f;
 		if (cellsize_x)
@@ -218,6 +232,7 @@ loop:
 					goto loop;
 				} else {
 					_llLogger()->WriteNextLine(-LOG_WARNING, "Mesh is too dense:selection aborted after %i vertices", num_point);
+					delete tmpmap;
 					delete seek;
 					return 1;
 				}
@@ -229,11 +244,16 @@ loop:
 				goto loop;
 			} else {
 				_llLogger()->WriteNextLine(-LOG_WARNING, "Mesh is too dense:selection aborted after %i vertices", num_point);
+				delete tmpmap;
 				delete seek;
 				return 1;
 			}
 		}
+		#endif
 	}
+
+
+
 end:
 
 #if 0
@@ -244,6 +264,7 @@ end:
 	}
 #endif
 
+	delete tmpmap;
 	delete seek;
 	return 1;
 }

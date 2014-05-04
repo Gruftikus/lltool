@@ -62,9 +62,11 @@ float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuad *_qu
 	} else if (!quads || _radius < 0.f) {
 		//slow method
 		for (unsigned int i=0; i<counter; i++) {
-			float minnew = (_x - GetX(i))*(_x - GetX(i)) + (_y - GetY(i))*(_y - GetY(i));
-			if (minnew < min) 
-				min = minnew;
+			if (fabs(_x - GetX(i)) < min && fabs(_y - GetY(i)) < min) {
+				float minnew = (_x - GetX(i))*(_x - GetX(i)) + (_y - GetY(i))*(_y - GetY(i));
+				if (minnew < min) 
+					min = minnew;
+			}
 		}
 	} else {
 		//quadtree nearest neighbor search

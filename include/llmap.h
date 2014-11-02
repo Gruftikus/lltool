@@ -149,9 +149,9 @@ protected:
 	llShortarray *sdata;
 	unsigned int *idata;
 	float defaultheight;
+	double integral;
 	int makeshort, is_color_map;
 	llLogger *mesg;
-
 
 public:
 
@@ -316,6 +316,9 @@ public:
 	float GetCoordRndY() {
 		return GetCoordY(GetRndY());
 	}
+
+	double MakeIntegral(void);
+	float CutCircle(float _x, float _y, float _radius);
 
 	int GetTupel(unsigned int _x, unsigned int _y, unsigned char *_x1, unsigned char *_x2, unsigned char *_x3, unsigned char *_x4) {
 		if (_x>=widthx || _y>=widthy) return 0;

@@ -10,6 +10,7 @@ llMap::llMap(unsigned int _x, unsigned int _y, int _makeshort, float _default) {
 	mesg     = _llLogger();
 	sdata    = NULL;
 	idata    = NULL;
+	integral = NULL;
 
 	is_color_map = 0;
 	makeshort    = _makeshort;
@@ -38,6 +39,7 @@ llMap::llMap(unsigned int _x, unsigned int _y, llShortarray *_data, float _defau
 	makeshort = 0;
 	sdata     = _data;
 	idata     = NULL;
+	integral  = NULL;
 
 	scaling = 1;
 	uneven  = 1;
@@ -55,8 +57,38 @@ llMap * llMap::Clone(int _expand, int _makeshort) {
 }
 
 llMap::~llMap() {
-    if (sdata) delete sdata; 
-	if (idata) delete idata; 
+    if (sdata)    delete sdata; 
+	if (idata)    delete idata; 
+}
+
+double llMap::MakeIntegral(void) {
+	for (unsigned int x=0; x<widthx; x++) {
+		for (unsigned int y=0; y<widthy; y++) {
+			integral += GetElementRaw(x, y);
+		}
+	}
+
+	return integral;
+}
+
+float llMap::CutCircle(float _x, float _y, float _radius) {
+	unsigned int x1 = GetRawX(_x - _radius);
+	unsigned int x2 = GetRawX(_x + _radius);
+	unsigned int y1 = GetRawY(_y - _radius);
+	unsigned int y2 = GetRawY(_y + _radius);
+
+	float result = 0.f;
+	_radius *= _radius;
+	for (unsigned int x = x1; x<=x2; x++) {
+		for (unsigned int y = y1; y<=y2; y++) {
+			float dist = (GetCoordX(x) - _x) * (GetCoordY(y) - _y);
+			if (dist <= _radius) {
+				result += GetElementRaw(x, y);
+				SetElementRaw(x, y, 0);
+			}
+		}
+	}
+	return result;
 }
 
 void llMap::InitRnd(unsigned int _x1, unsigned int _y1, unsigned int _x2, unsigned int _y2) {

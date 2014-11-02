@@ -46,6 +46,9 @@ int llSetAlgVertices::Exec(void) {
 	float minab = 0;
 	if (_llUtils()->GetValueF("_mindistance"))
 		minab = (float)(*_llUtils()->GetValueF("_mindistance"));
+	float minab_grid = minab;
+	if (_llUtils()->GetValueF("_mindistancegrid"))
+		minab_grid = (float)(*_llUtils()->GetValueF("_mindistancegrid"));
 	float cellsize_x = 0;
 	if (_llUtils()->GetValueF("_cellsize_x"))
 		cellsize_x = (float)(*_llUtils()->GetValueF("_cellsize_x"));
@@ -53,6 +56,11 @@ int llSetAlgVertices::Exec(void) {
 	if (_llUtils()->GetValueF("_cellsize_y"))
 		cellsize_y = (float)(*_llUtils()->GetValueF("_cellsize_y"));
 	float cellsize_m = cellsize_x > cellsize_y ? cellsize_x : cellsize_y;
+
+	float threshold = 0;
+	if (_llUtils()->GetValueF("_density_threshold"))
+		threshold = (float)(*_llUtils()->GetValueF("_density_threshold"));
+	threshold = 1.0 - (threshold / 100.0);
 
 	int points_done = 0;
 	double fraction = 1.0;
@@ -132,6 +140,12 @@ int llSetAlgVertices::Exec(void) {
 	double mean=0, num=0, num_real=0, empty=0;
 	double ceiling = 0;
 
+	float mingrid_x = minab_grid + 1.0f;
+	float mingrid_y = minab_grid + 1.0f;
+	float mingrid = mingrid_x > mingrid_y ? mingrid_y : mingrid_x;
+	float maxradius = cellsize_m;
+	if (maxradius <= (minab+1.0f)) maxradius = minab + 1.0f;
+
 	_llLogger()->WriteNextLine(-LOG_INFO, "Generating cache....");
 	int widthx = map->GetRawX(x2) - map->GetRawX(x1) + 1;
 	int widthy = map->GetRawY(y2) - map->GetRawY(y1) + 1;
@@ -148,11 +162,33 @@ int llSetAlgVertices::Exec(void) {
 				mean += value;
 				if (value > ceiling) ceiling = value;
 			}
+
+			if (cellsize_x)
+				mingrid_x = points->GetMinDistanceGrid(map->GetCoordX(x), map->GetCoordY(y), cellsize_x, 1);
+			if (cellsize_y)
+				mingrid_y = points->GetMinDistanceGrid(map->GetCoordX(x), map->GetCoordY(y), cellsize_y, 2);
+
+			if (mingrid_x <= minab_grid || mingrid_y <= minab_grid) {
+				tmpmap->SetElementRaw(x, y, 0);
+			}
+
 		}
 	}
+
+	int n = points->GetN();
+
+	for (int i=0; i<n; i++) {
+		if (points->GetX(i) >= x1 && points->GetX(i) <= x2 && points->GetY(i) >= y1 && points->GetY(i) <= y2) {
+			tmpmap->CutCircle(points->GetX(i), points->GetY(i), minab);
+		}
+	}
+
+	double integral = tmpmap->MakeIntegral();
+	double running_integral = integral;
+
 	_llLogger()->WriteNextLine(-LOG_INFO, "....done");
 
-	if (!mean || !num) {
+	if (!mean || !num || !integral) {
 		_llLogger()->WriteNextLine(LOG_WARNING, "This selection seems to be empty, skipped");
 		goto end;
 	} 
@@ -169,14 +205,17 @@ int llSetAlgVertices::Exec(void) {
 			_llLogger()->WriteNextLine(-LOG_INFO, "[%i]", num_point);
 
 loop:	    
-		float x = map->GetCoordRndX();
-		float y = map->GetCoordRndY();
-		float z = map->GetZ(x,y);
+		unsigned int xpos = map->GetRndX();
+		unsigned int ypos = map->GetRndY();
+		double value = tmpmap->GetZ(xpos, ypos);
 
-		double value   = tmpmap->GetZ(x, y);
+		if ((running_integral / integral) < threshold) {
+			_llLogger()->WriteNextLine(LOG_WARNING, "Density reached %.2f percent, skipped", (1.0 - running_integral/integral) * 100);
+			goto end;
+		} 
 
 		if (empty > 1000) {
-			_llLogger()->WriteNextLine(LOG_WARNING, "This selection seems to be empty, skipped after %i vertices", num_point);
+			_llLogger()->WriteNextLine(LOG_WARNING, "Endless loop? Skipped after %i vertices", num_point);
 			goto end;
 		} else if (value < 0.0000001) { //filter very small
 			empty++;
@@ -185,86 +224,54 @@ loop:
 
 		empty = 0;
 
-		float idealdist = minab;
-		if (cellsize_m)
-			idealdist = cellsize_m - (((cellsize_m-minab)/float(mean/num)) * float(value));
-
-		if (idealdist < minab) idealdist = minab;
-
-		double test = double(rand())/double(RAND_MAX) * ceiling;
+		double test;
+#if 1
+		test = double(rand())/double(RAND_MAX) * ceiling;
 		if (test > value) { 
 			//std::cout << "repeat, value=" << value << ", ceiling=" << ceiling << std::endl;
 			goto loop; 
 		}
+#endif
 
-		//points->AddPoint(x, y, z);
-		//num_real++;
-#if 1
-		float mingrid_x = minab + 1.0f;
-		float mingrid_y = minab + 1.0f;
-		if (cellsize_x)
-			mingrid_x = points->GetMinDistanceGrid(x, y, cellsize_x, 1);
-		if (cellsize_y)
-			mingrid_y = points->GetMinDistanceGrid(x, y, cellsize_y, 2);
-		float mingrid = mingrid_x > mingrid_y ? mingrid_y : mingrid_x;
-		float maxradius = cellsize_m;
-		if (maxradius <= (minab+1.0f)) maxradius = minab + 1.0f;
+#if 0
+		float idealdist = minab;
+		if (cellsize_m)
+			idealdist = cellsize_m - (((cellsize_m-minab)/float(mean)) * float(value));
+		if (idealdist < minab) idealdist = minab;
+#endif
 
-		if (mingrid_x > minab && mingrid_y > minab) {
-			float mindist = points->GetMinDistance(x, y, maxradius, seek); //time consuming!!!
-			//std::cout << mindist << std::endl;
+		float x = map->GetCoordX(xpos);
+		float y = map->GetCoordY(ypos);
+		float z = map->GetZ(x, y);
 
-			if (mindist > minab || mindist < 0) {
-				//if (mindist >= 0) {
+#if 0
+		test = 2 * float(rand())/float(RAND_MAX) * idealdist;
+		if (test> (mindist + mingrid))
+			goto loop; 
+#endif
 
-				test = 2 * float(rand())/float(RAND_MAX) * idealdist;
-				if (test> (mindist + mingrid))
-					goto loop; 
+		//all conditions fulfilled
+		points->AddPoint(x, y, z);
 
-				maxtry = 0;
-				//all conditions fulfilled
-				points->AddPoint(x, y, z);
-				num_real++;
-			} else { //1 -> see below
-				if (maxtry<(nmax / 10) && maxtry_total<100*nmax) {
-					maxtry++;
-					maxtry_total++;
-					goto loop;
-				} else {
-					_llLogger()->WriteNextLine(-LOG_WARNING, "Mesh is too dense:selection aborted after %i vertices", num_point);
-					delete tmpmap;
-					delete seek;
-					return 1;
-				}
-			}
-		} else { //2 -> this was done 2x on purpose to save time
-			if (maxtry<(nmax / 10) && maxtry_total<100*nmax) {
-				maxtry++;
-				maxtry_total++;
-				goto loop;
-			} else {
-				_llLogger()->WriteNextLine(-LOG_WARNING, "Mesh is too dense:selection aborted after %i vertices", num_point);
-				delete tmpmap;
-				delete seek;
-				return 1;
-			}
-		}
-		#endif
+		//hole-shooting algorithm
+		running_integral -= tmpmap->CutCircle(x, y, minab);
+
+		num_real++;
+
 	}
-
 
 
 end:
 
 #if 0
-	if (!map->IsInMap(x, y)) {
-		_llLogger()->WriteNextLine(LOG_ERROR,"Point (%f, %f) not in map", x, y);
-	} else {
-		points->AddPoint(x, y, map->GetZ(x, y));	
-	}
+		if (!map->IsInMap(x, y)) {
+			_llLogger()->WriteNextLine(LOG_ERROR,"Point (%f, %f) not in map", x, y);
+		} else {
+			points->AddPoint(x, y, map->GetZ(x, y));	
+		}
 #endif
 
-	delete tmpmap;
-	delete seek;
-	return 1;
-}
+		delete tmpmap;
+		delete seek;
+		return 1;
+	}

@@ -1163,20 +1163,20 @@ void llTriangleList::DivideBetween(float _xx1, float _yy1, float _xx2, float _yy
 void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all triangles at x (or y)
 
 	unsigned old_counter = counter;
-	for (unsigned int i=0;i<old_counter;i++) {
+	for (unsigned int i=0; i<old_counter; i++) {
 
 		//we have to see if not all points are either
 		//on the right or left side
 		//int myloop=0;
-		float x1 =  points->GetX(GetPoint1(i));
-		float x2 =  points->GetX(GetPoint2(i));
-		float x3 =  points->GetX(GetPoint3(i));
-		float y1 =  points->GetY(GetPoint1(i));
-		float y2 =  points->GetY(GetPoint2(i));
-		float y3 =  points->GetY(GetPoint3(i));
+		float x1 = points->GetX(GetPoint1(i));
+		float x2 = points->GetX(GetPoint2(i));
+		float x3 = points->GetX(GetPoint3(i));
+		float y1 = points->GetY(GetPoint1(i));
+		float y2 = points->GetY(GetPoint2(i));
+		float y3 = points->GetY(GetPoint3(i));
 
-		int left=0;
-		int right =0;
+		int left  = 0;
+		int right = 0;
 		//int nearpoint =0;
 		//float mindist=150;
 

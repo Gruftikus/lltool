@@ -7,6 +7,7 @@ llPointList::llPointList(int n, llQuadList * _quads) {
 	Resize(n + 1);
 	counter = 0;
 	quads   = _quads;
+	kdTree  = NULL;
 } 
 
 int llPointList::AddPoint(float _x, float _y, float _z) {
@@ -54,9 +55,39 @@ int llPointList::GetPoint(float _x, float _y, float _z) {
 	return -1;
 }
 
+int llPointList::UseANN(void) {
+	if (kdTree) return 0;
+
+	queryPt = annAllocPt(2);        // allocate query point
+	dataPts = annAllocPts(v.size(), 2);	// allocate data points
+	nnIdx = new ANNidx[1];						// allocate near neigh indices
+	dists = new ANNdist[1];						// allocate near neighbor dists
+
+
+	for (int i=0; i<v.size(); i++) {
+		(dataPts[i])[0] = GetX(i);
+		(dataPts[i])[1] = GetY(i);
+	}
+
+	kdTree = new ANNkd_tree(		// build search structure
+		dataPts,					// the data points
+		v.size(),					// number of points
+		2);						    // dimension of space
+
+	return 1;
+}
 
 float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuad *_quad) {
 	float min = 1E10;
+
+	if (kdTree) {
+		int i = GetClosestPoint(_x, _y);
+		if (i>=0) {
+			min = (_x - GetX(i))*(_x - GetX(i)) + (_y - GetY(i))*(_y - GetY(i));
+		}
+		return sqrt(min);
+	}
+
 	if (_quad) {
 		_quad->GetMinDistance(&min, _x, _y, _radius);
 	} else if (!quads || _radius < 0.f) {
@@ -82,6 +113,15 @@ float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuad *_qu
 
 float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuadList *_quads) {
 	float min = (_radius + 2.0f) * (_radius + 2.0f);
+
+	if (kdTree) {
+		int i = GetClosestPoint(_x, _y);
+		if (i>=0) {
+			min = (_x - GetX(i))*(_x - GetX(i)) + (_y - GetY(i))*(_y - GetY(i));
+		}
+		return sqrt(min);
+	}
+
 	//quadtree nearest neighbor search
 	for (unsigned int i=0; i<_quads->GetNumQuads(); i++) {
 		llQuad *quad = _quads->GetQuad(i);
@@ -94,6 +134,20 @@ float llPointList::GetMinDistance(float _x, float _y, float _radius, llQuadList 
 
 int  llPointList::GetClosestPoint(float _x, float _y) {
 	float min=1E10;
+
+	if (kdTree) {
+		queryPt[0] = _x;
+		queryPt[1] = _y;
+		double eps = 0;			// error bound
+		kdTree->annkSearch(					// search
+			queryPt,						// query point
+			1,								// number of near neighbors
+			nnIdx,							// nearest neighbors (returned)
+			dists,							// distance (returned)
+			eps);							// error bound
+		return nnIdx[0];
+	}
+
 	int num=-1;
 	for (unsigned int i=0; i<counter;i++) {
 		float minnew = (_x - GetX(i))*(_x - GetX(i)) + (_y - GetY(i))*(_y - GetY(i));

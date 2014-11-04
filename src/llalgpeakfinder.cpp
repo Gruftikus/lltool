@@ -80,6 +80,8 @@ int llAlgPeakFinder::Exec(void) {
 		}   
 	}
 
+	points->UseANN();
+
 	_llLogger()->WriteNextLine(-LOG_INFO, "AlgPeakFinder identified %i peaks", numfound);
 
 	return 1;

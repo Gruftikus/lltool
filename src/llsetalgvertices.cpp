@@ -197,6 +197,8 @@ int llSetAlgVertices::Exec(void) {
 	if (ceiling > (cutoff*mean)) 
 		ceiling = (cutoff*mean);  
 
+	//std::cout << integral << ":" << ceiling << std::endl;
+
 	for (int num_point=0; num_point<nmax; num_point++) {	    
 		int maxtry       = 0, 
 			maxtry_total = 0;
@@ -205,9 +207,11 @@ int llSetAlgVertices::Exec(void) {
 			_llLogger()->WriteNextLine(-LOG_INFO, "[%i]", num_point);
 
 loop:	    
-		unsigned int xpos = map->GetRndX();
-		unsigned int ypos = map->GetRndY();
+		unsigned int xpos = tmpmap->GetRndX();
+		unsigned int ypos = tmpmap->GetRndY();
 		double value = tmpmap->GetZ(xpos, ypos);
+
+		//std::cout << xpos << ":" << ypos << ":" <<  value << std::endl;
 
 		if ((running_integral / integral) < threshold) {
 			_llLogger()->WriteNextLine(LOG_WARNING, "Density reached %.2f percent, skipped", (1.0 - running_integral/integral) * 100);
@@ -240,8 +244,8 @@ loop:
 		if (idealdist < minab) idealdist = minab;
 #endif
 
-		float x = map->GetCoordX(xpos);
-		float y = map->GetCoordY(ypos);
+		float x = tmpmap->GetCoordX(xpos);
+		float y = tmpmap->GetCoordY(ypos);
 		float z = map->GetZ(x, y);
 
 #if 0

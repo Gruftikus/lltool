@@ -106,11 +106,13 @@ double llAlgPeakFinder::GetValue(float _x, float _y, double *_value) {
 
 	double z = double(map->GetZ(_x, _y));
 
-	if (points->GetMinDistance(_x, _y) < radius && z > lowest) {
+	float mindist = points->GetMinDistance(_x, _y, radius);
+
+	if (mindist < radius && z > lowest) {
 		loc_value = value_at_highest; 
 		if (linear) 
 			loc_value = value_at_lowest + 
-			((radius - points->GetMinDistance(_x, _y))/radius)*
+			((radius - mindist)/radius)*
 			(value_at_highest - value_at_lowest);
 	}
 

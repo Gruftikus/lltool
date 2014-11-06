@@ -24,7 +24,7 @@ DiamondSquare -range=20   -alg=ds
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-CreateMap -name=colormap -widthx=1024 -widthy=1024 -x1=-10000.0 -y1=-10000.0 -x2=10000.0 -y2=10000.0 -zscale=1
+CreateMap -name=colormap -rgb -widthx=1024 -widthy=1024 -x1=-10000.0 -y1=-10000.0 -x2=10000.0 -y2=10000.0 -zscale=1
 CreateAlgCollection -name=red
 CreateAlgCollection -name=blue
 CreateAlgCollection -name=green
@@ -73,9 +73,9 @@ MakeTriangulation
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-::ExportMeshToObj -filename="map.obj" -texname="color.bmp"
-ExportMeshToVRML  -filename="map.wrl" -texname="color.bmp"
+ExportMeshToVRML     -filename="map.wrl" -texname="color.bmp"
 ExportMap -depth=24  -filename="color.bmp" -map="colormap" 
+ExportMapToDDS       -filename="color.dds" -map="colormap" 
 
 @writequads { SetFlag -name=level -value={0,1} {
 		QuadIterator -level=$level {

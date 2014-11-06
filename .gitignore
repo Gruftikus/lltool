@@ -43,7 +43,8 @@ local.properties
 
 # Build results
 [Dd]ebug/
-[Rr]elease/
+[Rr]elease/*
+![Rr]elease/lltool.exe
 *_i.c
 *_p.c
 *.ilk
@@ -172,4 +173,6 @@ demo/*.bmp
 demo/*.obj
 demo/*.wrl
 demo/*.mtl
+demo/source/
+demo/target/
 *.log

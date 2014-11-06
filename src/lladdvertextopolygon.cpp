@@ -13,8 +13,8 @@ int llAddVertexToPolygon::Prepare(void) {
 int llAddVertexToPolygon::RegisterOptions(void) {
 	if (!llSet::RegisterOptions()) return 0;
 
-	RegisterValue("-x",   &x1,           LLWORKER_OBL_OPTION);
-	RegisterValue("-y",   &y1,           LLWORKER_OBL_OPTION);
+	RegisterValue("-x",   &x1,            LLWORKER_OBL_OPTION);
+	RegisterValue("-y",   &y1,            LLWORKER_OBL_OPTION);
 	RegisterValue("-name", &polygon_name, LLWORKER_OBL_OPTION);
 
 	return 1;

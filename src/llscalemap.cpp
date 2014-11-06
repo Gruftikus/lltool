@@ -4,6 +4,7 @@
 
 #include "../externals/resampler/resampler.h"
 
+#include <algorithm>
 
 llScaleMap::llScaleMap() : llMapWorker() {
 	SetCommandName("ScaleMap");

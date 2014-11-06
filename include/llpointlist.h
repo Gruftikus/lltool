@@ -2,6 +2,7 @@
 #define _PLLPOINTLIST_H_
 
 #include <math.h>
+#include <ANN/ANN.h>
 
 #ifndef M_PI
 #define M_PI           3.14159265358979323846
@@ -67,6 +68,13 @@ private:
 	float tex00x, tex00y, tex11x, tex11y; //coords for the tex 
 	llQuadList * quads;
 
+	ANNkd_tree         *kdTree;
+	ANNpointArray		dataPts;				// data points
+	ANNpoint			queryPt;				// query point
+	ANNidxArray			nnIdx;					// near neighbor indices
+	ANNdistArray		dists;					// near neighbor distances
+
+
 public:
 
 	//constructor
@@ -75,8 +83,7 @@ public:
 	int  AddPoint(float _x, float _y, float _z);
 	int  GetPoint(float _x, float _y);
 	int  GetPoint(float _x, float _y, float _z);
-	int  GetClosestPoint(float _x, float _y);
-
+	
 	llQuadList *GetQuadList() {
 		return quads;
 	};
@@ -232,6 +239,8 @@ public:
 	int GetOverlap(int _p1, int _p2, int _p3, int _p4); //is p1->p2 crossing p3->p4?
 	int GetIntersection(int _p1, int _p2, int _p3, int _p4, float *_x, float *_y);
 
+	int   UseANN(void);
+	int   GetClosestPoint(float _x, float _y);
 	float GetMinDistance(float _x, float _y, float _radius = -1.0f, llQuad *_quad = NULL);
 	float GetMinDistance(float _x, float _y, float _radius, llQuadList *_quads);
 	float GetMinDistanceGrid(float _x, float _y, float _grid, int _flag = 0);

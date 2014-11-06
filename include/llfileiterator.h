@@ -10,12 +10,13 @@ class llFileIterator : public llWorker {
 
 protected:
 
-	char *directory, *pattern;
+	char *directory, *pattern, *regexp;
+	int   recursive;
 
 	int init_done;
 	int position;
 	std::vector<char*> file_list;
-	void FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePattern);
+	void FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePattern, char *regexp);
 
 public:
 

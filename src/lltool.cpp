@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
 
 	std::cout << "Landscape and Heightmap Editing Tool" << std::endl;
 	std::cout << "Written by gruftikus@github" << std::endl;
-	std::cout << "V0.10 (alpha!), 17.05.2013" << std::endl;
+	std::cout << "V0.20 (alpha!), 18.04.2014" << std::endl;
 	std::cout << "***********************" << std::endl;
 
 	//******************
@@ -102,12 +102,14 @@ int main(int argc, char **argv) {
 	_llUtils()->SetValue("_dds_tool", "s3tc.exe");
 
 	_llUtils()->SetValue("_mindistance", "50");
-	_llUtils()->SetValue("_cellsize_x",  "1000");
-	_llUtils()->SetValue("_cellsize_y",  "1000");
+	//_llUtils()->SetValue("_cellsize_x",  "1000");
+	//_llUtils()->SetValue("_cellsize_y",  "1000");
 
 	_llUtils()->SetValue("_quadsize_x",  "5000");
 	_llUtils()->SetValue("_quadsize_y",  "5000");
 	_llUtils()->SetValue("_quad_levels", "1");
+
+	_llUtils()->SetValue("_density_threshold",  "95");
 
 	_llUtils()->x00 = -10000.f;
 	_llUtils()->y00 = -10000.f;

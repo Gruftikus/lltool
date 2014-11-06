@@ -12,6 +12,7 @@
 #include <iostream>
 #include <stdarg.h>
 #include <vector>
+#include <stdint.h>
 
 #include "../include/lllogger.h"
 
@@ -96,7 +97,7 @@ class llUtils {
 		return delme;
 	};
 
-	char *Replace(const char *string, const char *substr, const char *replacement);
+	char *Replace(const char *string, const char *substr, const char *replacement, int num = -1);
 
 	int   SeekNextSpace(char *_tmp);
 
@@ -131,12 +132,6 @@ class llUtils {
 		return ((ch >= 'A' && ch <= 'Z') || (ch >= 0xC0 && ch <= 0xDD));
 	}
 
-	//********************
-	//Global variables
-	//********************
-
-	float x00, y00, x11, y11; //focus
-
 	void  AddMod(char *_mod) {
 		mod_list.resize(mod_list.size()+1);
 		mod_list[mod_list.size()-1] = _mod;
@@ -147,6 +142,17 @@ class llUtils {
 	int   GetNumMods() {
 		return mod_list.size();
 	};
+
+
+	//********************
+	//Global variables
+	//********************
+
+	float x00, y00, x11, y11; //focus
+
+	uint8_t* data;
+	size_t   size;
+
 
 
 

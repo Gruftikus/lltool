@@ -11,6 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="externals\ann\include\ANN\ANN.h" />
+    <ClInclude Include="externals\ann\include\ANN\ANNperf.h" />
+    <ClInclude Include="externals\ann\include\ANN\ANNx.h" />
+    <ClInclude Include="externals\ann\src\bd_tree.h" />
+    <ClInclude Include="externals\ann\src\kd_fix_rad_search.h" />
+    <ClInclude Include="externals\ann\src\kd_pr_search.h" />
+    <ClInclude Include="externals\ann\src\kd_search.h" />
+    <ClInclude Include="externals\ann\src\kd_split.h" />
+    <ClInclude Include="externals\ann\src\kd_tree.h" />
+    <ClInclude Include="externals\ann\src\kd_util.h" />
+    <ClInclude Include="externals\ann\src\pr_queue.h" />
+    <ClInclude Include="externals\ann\src\pr_queue_k.h" />
     <ClInclude Include="externals\crunch\crnlib\crn_arealist.h" />
     <ClInclude Include="externals\crunch\crnlib\crn_assert.h" />
     <ClInclude Include="externals\crunch\crnlib\crn_atomics.h" />
@@ -212,6 +224,20 @@
     <ClInclude Include="include\llworker.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="externals\ann\src\ANN.cpp" />
+    <ClCompile Include="externals\ann\src\bd_fix_rad_search.cpp" />
+    <ClCompile Include="externals\ann\src\bd_pr_search.cpp" />
+    <ClCompile Include="externals\ann\src\bd_search.cpp" />
+    <ClCompile Include="externals\ann\src\bd_tree.cpp" />
+    <ClCompile Include="externals\ann\src\brute.cpp" />
+    <ClCompile Include="externals\ann\src\kd_dump.cpp" />
+    <ClCompile Include="externals\ann\src\kd_fix_rad_search.cpp" />
+    <ClCompile Include="externals\ann\src\kd_pr_search.cpp" />
+    <ClCompile Include="externals\ann\src\kd_search.cpp" />
+    <ClCompile Include="externals\ann\src\kd_split.cpp" />
+    <ClCompile Include="externals\ann\src\kd_tree.cpp" />
+    <ClCompile Include="externals\ann\src\kd_util.cpp" />
+    <ClCompile Include="externals\ann\src\perf.cpp" />
     <ClCompile Include="externals\crunch\crnlib\crnlib.cpp" />
     <ClCompile Include="externals\crunch\crnlib\crn_arealist.cpp" />
     <ClCompile Include="externals\crunch\crnlib\crn_assert.cpp" />
@@ -426,12 +452,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <ExceptionHandling>Async</ExceptionHandling>
+      <AdditionalIncludeDirectories>externals\ann\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>

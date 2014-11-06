@@ -1,5 +1,5 @@
 CXX           = g++
-CXXFLAGS      = -rdynamic -c -Wall -O0 
+CXXFLAGS      = -rdynamic -c -Wall -O0 -Iexternals/ann/include/
 #CXXFLAGS      = -O3 -rdynamic -c -Wall -fexceptions -fPIC 
 LD            = g++ -pthread -g
 
@@ -82,6 +82,22 @@ XOBJSR = externals/resampler/resampler.o
 
 XOBJSC = externals/crunch/crnlib/libcrunch.a
 
+XOBJSA = externals/ann/src/ANN.o \
+	 externals/ann/src/bd_fix_rad_search.o \
+	 externals/ann/src/bd_pr_search.o \
+	 externals/ann/src/bd_search.o \
+	 externals/ann/src/bd_tree.o \
+	 externals/ann/src/brute.o \
+	 externals/ann/src/kd_dump.o \
+	 externals/ann/src/kd_fix_rad_search.o \
+	 externals/ann/src/kd_pr_search.o \
+	 externals/ann/src/kd_search.o \
+	 externals/ann/src/kd_split.o \
+	 externals/ann/src/kd_tree.o \
+	 externals/ann/src/kd_util.o \
+	 externals/ann/src/perf.o
+
+
 all: lltool
 
 $(XOBJST): %.o : %.cc %.h
@@ -91,9 +107,13 @@ $(XOBJST): %.o : %.cc %.h
 $(XOBJS2): %.o : %.cpp %.h
 	@echo Compiling $*
 	@$(CXX) $(CXXFLAGS) $< -o $@
-	
+
 $(XOBJSC): 
 	cd externals/crunch/crnlib/; make libcrunch.a
+
+$(XOBJSA): %.o : %.cpp 
+	@echo Compiling $*
+	@$(CXX) $(CXXFLAGS) $< -o $@
 
 $(OBJS): %.o : src/%.cpp include/%.h
 	@echo Compiling $*
@@ -103,8 +123,8 @@ lltool.o : src/lltool.cpp
 	@echo Compiling $*
 	@$(CXX) $(CXXFLAGS) $< -o $@
 
-lltool:	$(OBJS) $(XOBJST) $(XOBJSR) $(XOBJSC) lltool.o
-	$(LD) -g -O0 $(OBJS) lltool.o $(XOBJST) $(XOBJSR) $(XOBJSC) -o lltool
+lltool:	$(OBJS) $(XOBJST) $(XOBJSR) $(XOBJSC) $(XOBJSA) lltool.o
+	$(LD) -g -O0 $(OBJS) lltool.o $(XOBJST) $(XOBJSR) $(XOBJSC) $(XOBJSA) -o lltool
 
 clean:
 	rm $(OBJS) $(XOBJST) $(XOBJSR) $(XOBJSC) *.o externals/crunch/crnlib/*.o

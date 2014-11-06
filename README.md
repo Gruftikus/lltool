@@ -2,7 +2,7 @@
 
 ![panorama](https://lh6.googleusercontent.com/-Q4p5qHEUWps/UXVzhYw-YgI/AAAAAAAAAdw/MTd5Gd1_TuM/s971/lltool.jpg)
 
-## Landscape and Heightmap Editing Tool and Library
+## Landscape and Heightmap Triangulation Tool and Library
 
 For details take a look to the [full manual](https://github.com/Gruftikus/lltool/wiki/).
 
@@ -12,19 +12,19 @@ lltool provides several methods and algorithms for heightmap manipulation and te
 
 ### Features
 
-...some are not yet done!
-
-* Map creation and manipulation: importers/exporters and terraforming
+* Map creation and manipulation: importers/exporters and basic terrain moddeling
 * Support for cells and quads (for game LODs)
 * Multiple algorithms for random Monte-Carlo vertex placement, e.g. based on first and second order, height, peak finding, and general purpose equations
 * Triangle manipulation: stencils and break lines
-* Output formats: obj- and VRML-files
+* Output formats for meshes: obj- and VRML-files
+* Texture map handling (import, export, scaling)
+* Formats for textures: bmp and dds
 
 ### Installation
 
 Go to the directory "externals". lltool needs:
 
-* [Triangle](http://www.cs.cmu.edu/~quake/triangle.html) by J. R. Shewchuk, download the code and put it into externals/triangle/
+* [Triangle](http://www.cs.cmu.edu/~quake/triangle.html) by J. R. Shewchuk, already included.
 * [MTParser](http://www.codeproject.com/Articles/7335/An-extensible-math-expression-parser-with-plug-ins) by Mathieu Jacques, download the code and put it into externals/mtparser (Windows only!!!)
 * [imageresampler](https://code.google.com/p/imageresampler/), a C++ class for separable filtering 2D image resampling by Rich Geldreich, already included.
 
@@ -46,15 +46,27 @@ The last option might be the filename. If no filename is given, stdin is used, i
 
     lltool flag1 flag2 ... [section] filename.mpb
 
-### References and applications
+## References
+
+### Software
+
+[An extensible math expression parser with plug-ins (MTParser)](http://www.codeproject.com/Articles/7335/An-extensible-math-expression-parser-with-plug-ins) by Mathieu Jacques
+
+[Triangle](http://www.cs.cmu.edu/~quake/triangle.html): "Engineering a 2D Quality Mesh Generator and Delaunay Triangulator", in "Applied Computational Geometry: Towards Geometric Engineering" (Ming C. Lin and Dinesh Manocha, editors), volume 1148 of Lecture Notes in Computer Science, pages 203-222, Springer-Verlag, Berlin, May 1996" by J. R. Shewchuk
+
+[imageresampler](https://code.google.com/p/imageresampler/), a C++ class for separable filtering 2D image resampling by Rich Geldreich.
+
+[crunch/crnlib](https://code.google.com/p/crunch/), for dds file generation.
+
+### Applications
 
 * [tes4ll](http://oblivion.nexusmods.com/mods/40549/)
 * [Immersive Interiors Landscape AddOn](http://oblivion.nexusmods.com/mods/43072/)
 * [Realistic Normal Maps with Faked Terrain Shadows](http://oblivion.nexusmods.com/mods/41243/)
 
-### Licence
+## Licence
 
-Copyright (C) 2011-2013
+Copyright (C) 2011-2014
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

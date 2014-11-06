@@ -10,6 +10,8 @@
 // .DDS file format definitions.
 #include "../externals/crunch/inc/dds_defs.h"
 
+#include <algorithm>
+
 #ifdef _MSC_VER
 #pragma warning (disable: 4244) // conversion from 'int' to 'uint8', possible loss of data
 #pragma warning (disable: 4100) // unreferenced formal parameter

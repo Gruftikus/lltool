@@ -22,9 +22,9 @@ DiamondSquare -range=80   -alg=ds
 DiamondSquare -range=40   -alg=ds
 DiamondSquare -range=20   -alg=ds
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 CreateMap -name=colormap -rgb -widthx=1024 -widthy=1024 -x1=-10000.0 -y1=-10000.0 -x2=10000.0 -y2=10000.0 -zscale=1
+
 CreateAlgCollection -name=red
 CreateAlgCollection -name=blue
 CreateAlgCollection -name=green

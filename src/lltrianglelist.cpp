@@ -1226,8 +1226,8 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 					//divide triangle #i
 
 					//which point is the soliton?
-					int soliton=0;
-					float x1s,x2s,x3s,y1s,y2s,y3s;
+					int soliton = 0;
+					float x1s, x2s, x3s, y1s, y2s, y3s;
 
 					if (_atx) {
 						if (left==1 && right ==2) {
@@ -1261,102 +1261,92 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 
 					if (soliton == 0) std::cout << "[Warning] DivideAt: Soliton not found, left=" << left << ", right=" << right <<  std::endl;
 
-					if (soliton<0) { //one point (1) on the line
-						float slope1,new1;
+					if (soliton < 0) { //one point (1) on the line
+						float slope1, new1;
 						if (_atx) {
-							slope1=(y3s-y2s)/(x3s-x2s);
-							new1=y2s+slope1*(_n-x2s);
+							slope1 = (y3s-y2s)/(x3s-x2s);
+							new1   = y2s+slope1*(_n-x2s);
 						} else {
-							slope1=(x3s-x2s)/(y3s-y2s);
-							new1=x2s+slope1*(_n-y2s);
+							slope1 = (x3s-x2s)/(y3s-y2s);
+							new1   = x2s+slope1*(_n-y2s);
 						}
 						int point1;
 
-						//std::cout << "Seeking for " << _n << ":" << new1 << std::endl;
-
 						if (_atx) {
-							point1=points->GetPoint(_n,new1);
-							if (point1<0)
-								point1=points->AddPoint(_n, new1, _map->GetZ(_n,new1));
+							point1 = points->GetPoint(_n,new1);
+							if (point1 < 0)
+								point1 = points->AddPoint(_n, new1, _map->GetZ(_n,new1));
 						} else {
-							point1=points->GetPoint(new1,_n);
-							if (point1<0)
-								point1=points->AddPoint(new1, _n, _map->GetZ(new1,_n));
+							point1 = points->GetPoint(new1,_n);
+							if (point1 < 0)
+								point1 = points->AddPoint(new1, _n, _map->GetZ(new1,_n));
 						}
 
-						//std::cout << "Point is " << point1 << std::endl;
-
-						int orig1,orig2;
-						if (soliton==-1) {
+						int orig1, orig2;
+						if (soliton == -1) {
 							orig1=v[i].GetPoint1();
 							orig2=v[i].GetPoint2();
 							v[i].SetPoint2(point1);
 							AddTriangle(orig1, orig2, point1);
-						} else if (soliton==-2) {
+						} else if (soliton == -2) {
 							orig1=v[i].GetPoint2();
 							orig2=v[i].GetPoint3();
 							v[i].SetPoint3(point1);
 							AddTriangle(orig1, orig2, point1);
-						} else if (soliton==-3) {
+						} else if (soliton == -3) {
 							orig1=v[i].GetPoint3();
 							orig2=v[i].GetPoint1();
 							v[i].SetPoint1(point1);
 							AddTriangle(orig1, orig2, point1);
 						}
 						v[i].SetCorrectParity();
-					} else if (soliton>0) {
 
-						float slope1,slope2,new1,new2;
+					} else if (soliton > 0) {
 
-						if (_atx) {
-
-							//std::cout << "y1 " << y1s << " y2 " << y2s << " y3 " << y3s << std::endl;
-
-							slope1=(y2s-y1s)/(x2s-x1s);
-							slope2=(y3s-y1s)/(x3s-x1s);
-							new1=y1s+slope1*(_n-x1s);
-							new2=y1s+slope2*(_n-x1s);
-						} else {
-							slope1=(x2s-x1s)/(y2s-y1s);
-							slope2=(x3s-x1s)/(y3s-y1s);
-							new1=x1s+slope1*(_n-y1s);
-							new2=x1s+slope2*(_n-y1s);
-						}
-
-						int point1,point2;
-
-						//std::cout << "Seeking for " << _n << ":" << new1 << ":" << new2 << std::endl;
+						float slope1, slope2, new1, new2;
 
 						if (_atx) {
-							point1=points->GetPoint(_n,new1);
-							point2=points->GetPoint(_n,new2);
-							if (point1<0)
-								point1=points->AddPoint(_n, new1, _map->GetZ(_n,new1));
-							if (point2<0)
-								point2=points->AddPoint(_n, new2, _map->GetZ(_n,new2));
+							slope1 = (y2s-y1s)/(x2s-x1s);
+							slope2 = (y3s-y1s)/(x3s-x1s);
+							new1   = y1s+slope1*(_n-x1s);
+							new2   = y1s+slope2*(_n-x1s);
 						} else {
-							point1=points->GetPoint(new1,_n);
-							point2=points->GetPoint(new2,_n);
-							if (point1<0)
-								point1=points->AddPoint(new1, _n, _map->GetZ(new1,_n));
-							if (point2<0)
-								point2=points->AddPoint(new2, _n, _map->GetZ(new2,_n));
+							slope1 = (x2s-x1s)/(y2s-y1s);
+							slope2 = (x3s-x1s)/(y3s-y1s);
+							new1   = x1s+slope1*(_n-y1s);
+							new2   = x1s+slope2*(_n-y1s);
 						}
 
-						//std::cout << "Point is " << point1 << ":" << point2 << std::endl;
+						int point1, point2;
 
-						int orig1,orig2;
-						if (soliton==1) {
+						if (_atx) {
+							point1 = points->GetPoint(_n, new1);
+							point2 = points->GetPoint(_n, new2);
+							if (point1 < 0)
+								point1 = points->AddPoint(_n, new1, _map->GetZ(_n,new1));
+							if (point2 < 0)
+								point2 = points->AddPoint(_n, new2, _map->GetZ(_n,new2));
+						} else {
+							point1 = points->GetPoint(new1, _n);
+							point2 = points->GetPoint(new2, _n);
+							if (point1 < 0)
+								point1 = points->AddPoint(new1, _n, _map->GetZ(new1,_n));
+							if (point2 < 0)
+								point2 = points->AddPoint(new2, _n, _map->GetZ(new2,_n));
+						}
+
+						int orig1, orig2;
+						if (soliton == 1) {
 							orig1=v[i].GetPoint2();
 							orig2=v[i].GetPoint3();
 							v[i].SetPoint2(point1);
 							v[i].SetPoint3(point2);
-						} else if (soliton==2) {
+						} else if (soliton == 2) {
 							orig1=v[i].GetPoint1();
 							orig2=v[i].GetPoint3();
 							v[i].SetPoint1(point1);
 							v[i].SetPoint3(point2);
-						} else if (soliton==3) {
+						} else if (soliton == 3) {
 							orig1=v[i].GetPoint1();
 							orig2=v[i].GetPoint2();
 							v[i].SetPoint1(point1);
@@ -1365,9 +1355,9 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 						v[i].SetCorrectParity();
 
 						if (point1 != point2)
-							Add2Triangles(point1,point2,orig1,orig2);
+							Add2Triangles(point1, point2, orig1, orig2);
 						else {
-							int t = AddTriangle(point1,orig1,orig2);
+							int t = AddTriangle(point1, orig1, orig2);
 							if (t>=0) v[t].SetCorrectParity();
 						}
 					}

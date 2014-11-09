@@ -35,13 +35,14 @@ int llPointList::AddPoint(float _x, float _y, float _z) {
 	return counter-1;
 }
 
-int llPointList::GetPoint(float _x, float _y) {
+int llPointList::GetPoint(float _x, float _y) { 
 	if (quads) {
 		llQuad *quad = quads->GetQuad(_x, _y);
 		if (quad) return quad->GetPoint(_x, _y);
 		return -1;
 	} else {
-		for (unsigned int i=0; i<counter;i++) {
+		if (!counter) return -1;
+		for (int i=counter-1; i>=0; i--) {
 			if (fabs(GetX(i) - _x)<1.f && fabs(GetY(i) - _y)<1.f) return i;
 		}
 	}
@@ -49,7 +50,7 @@ int llPointList::GetPoint(float _x, float _y) {
 }
 
 int llPointList::GetPoint(float _x, float _y, float _z) {
-	for (unsigned int i=0; i<counter;i++) {
+	for (unsigned int i=0; i<counter; i++) {
 		if (fabs(GetX(i)-_x) < 1.f && fabs(GetY(i)-_y) < 1.f && fabs(GetZ(i)-_z) < 1.f) return i;
 	}
 	return -1;

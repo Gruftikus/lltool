@@ -8,6 +8,7 @@ int llSetContour::Prepare(void) {
 	if (!llSet::Prepare()) return 0;
 
 	findmin = findmax = linear = onlyintracell = setmin = setmax = 0;
+	minmaxgrid = 1;
 
 	return 1;
 }
@@ -20,6 +21,7 @@ int llSetContour::RegisterOptions(void) {
 	RegisterValue("-z",       &z,     LLWORKER_OBL_OPTION);
 	RegisterValue("-offsetx", &offsetx);
 	RegisterValue("-offsety", &offsety);
+	RegisterValue("-minmaxgrid", &minmaxgrid);
 
 	RegisterFlag("-findmin",       &findmin);
 	RegisterFlag("-findmax",       &findmax);
@@ -66,7 +68,7 @@ int llSetContour::Exec(void) {
 		float maxz   = -999999;
 		for (float x=_llUtils()->x00+offsetx+gridx; x<=(_llUtils()->x11); x+=gridx) {
 			if (lastflag==-1 && findmin) {
-				for (float x1=x-gridx; x1<=x; x1++) {
+				for (float x1=x-gridx; x1<=x; x1+=map->GetWidthXPerRaw()*minmaxgrid) {
 					if (map->GetZ(x1,y) < minz) {
 						minz = map->GetZ(x1, y);
 						minx = x1;
@@ -78,7 +80,7 @@ int llSetContour::Exec(void) {
 				}
 			}
 			if (lastflag==1 && findmax) {
-				for (float x1=x-gridx; x1<=x; x1++) {
+				for (float x1=x-gridx; x1<=x; x1+=map->GetWidthXPerRaw()*minmaxgrid) {
 					if (map->GetZ(x1,y) > maxz) {
 						maxz = map->GetZ(x1, y);
 						maxx = x1;
@@ -176,7 +178,7 @@ int llSetContour::Exec(void) {
 		for (float y=_llUtils()->y00+offsety+gridy; y<=(_llUtils()->y11-1); y+=gridy) {
 
 			if (lastflag==-1 && findmin) {
-				for (float y1=y-gridy; y1<=y; y1++) {
+				for (float y1=y-gridy; y1<=y; y1+=map->GetWidthYPerRaw()*minmaxgrid) {
 					if (map->GetZ(x,y1) < minz) {
 						minz = map->GetZ(x, y1);
 						miny = y1;
@@ -188,7 +190,7 @@ int llSetContour::Exec(void) {
 				}
 			}
 			if (lastflag==1 && findmax) {
-				for (float y1=y-gridy; y1<=y; y1++) {
+				for (float y1=y-gridy; y1<=y; y1+=map->GetWidthYPerRaw()*minmaxgrid) {
 					if (map->GetZ(x,y1) > maxz) {
 						maxz = map->GetZ(x, y1);
 						maxy = y1;

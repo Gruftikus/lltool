@@ -16,17 +16,44 @@ llTriangle::llTriangle(int _n1, int _n2, int _n3, llPointList *_r) {
 	// tri_neighbor[0]=NULL;
 	// tri_neighbor[1]=NULL;
 	// tri_neighbor[2]=NULL;
-	edge_flag[0]=-1;
-	edge_flag[1]=-1;
-	edge_flag[2]=-1;
-	is_terminal=0;
-	neighbor_pos=0;
-	draw_flag=0;
-	done_flag=0;write_flag=1;touched_flag=0;
+	edge_flag[0] =-1;
+	edge_flag[1] =-1;
+	edge_flag[2] =-1;
+	is_terminal  = 0;
+	neighbor_pos = 0;
+	draw_flag    = 0;
+	done_flag    = 0;
+	write_flag   = 1;
+	touched_flag = 0;
 
 	if ((p1 == p2) ||  (p3 == p2) || (p3 == p1))
 		std::cout << "[Warning] Double points in triangle ctor" << std::endl;
 	SetCorrectParity();
+
+	x_min = _r->GetX(_n1);
+	if (_r->GetX(_n2) < x_min)
+		x_min = _r->GetX(_n2);
+	if (_r->GetX(_n3) < x_min)
+		x_min = _r->GetX(_n3);
+
+	y_min = _r->GetY(_n1);
+	if (_r->GetY(_n2) < y_min)
+		y_min = _r->GetY(_n2);
+	if (_r->GetY(_n3) < y_min)
+		y_min = _r->GetY(_n3);
+
+	x_max = _r->GetX(_n1);
+	if (_r->GetX(_n2) > x_max)
+		x_max = _r->GetX(_n2);
+	if (_r->GetX(_n3) > x_max)
+		x_max = _r->GetX(_n3);
+
+	y_max = _r->GetY(_n1);
+	if (_r->GetY(_n2) > y_max)
+		y_max = _r->GetY(_n2);
+	if (_r->GetY(_n3) > y_max)
+		y_max = _r->GetY(_n3);
+
 }
 
 llTriangle::llTriangle() {
@@ -1167,179 +1194,184 @@ void llTriangleList::DivideAt(bool _atx, float _n, llMap *_map) { //divide all t
 
 		//we have to see if not all points are either
 		//on the right or left side
-		//int myloop=0;
-		float x1 = points->GetX(GetPoint1(i));
-		float x2 = points->GetX(GetPoint2(i));
-		float x3 = points->GetX(GetPoint3(i));
-		float y1 = points->GetY(GetPoint1(i));
-		float y2 = points->GetY(GetPoint2(i));
-		float y3 = points->GetY(GetPoint3(i));
 
-		int left  = 0;
-		int right = 0;
-		//int nearpoint =0;
-		//float mindist=150;
+		if ((_atx  && _n > v[i].x_min && _n < v[i].x_max) ||
+			(!_atx && _n > v[i].y_min && _n < v[i].y_max)) {
 
-		if (_atx) {
-			if (x1<(_n-1.f)) left++; else if (x1>(_n+1.f)) right++;
-			if (x2<(_n-1.f)) left++; else if (x2>(_n+1.f)) right++;
-			if (x3<(_n-1.f)) left++; else if (x3>(_n+1.f)) right++;
-		} else {
-			if (y1<(_n-1.f)) left++; else if (y1>(_n+1.f)) right++;
-			if (y2<(_n-1.f)) left++; else if (y2>(_n+1.f)) right++;
-			if (y3<(_n-1.f)) left++; else if (y3>(_n+1.f)) right++;
-		}
+				//int myloop=0;
+				float x1 = points->GetX(GetPoint1(i));
+				float x2 = points->GetX(GetPoint2(i));
+				float x3 = points->GetX(GetPoint3(i));
+				float y1 = points->GetY(GetPoint1(i));
+				float y2 = points->GetY(GetPoint2(i));
+				float y3 = points->GetY(GetPoint3(i));
 
-
-		if (left!=3 && right!=3 && (left && right)) {
-			//divide triangle #i
-
-			//which point is the soliton?
-			int soliton=0;
-			float x1s,x2s,x3s,y1s,y2s,y3s;
-
-			if (_atx) {
-				if (left==1 && right ==2) {
-					if (x1<_n) {soliton=1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
-					if (x2<_n) {soliton=2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
-					if (x3<_n) {soliton=3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
-				} else if (right==1 && left == 2) {
-					if (x1>_n) {soliton=1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
-					if (x2>_n) {soliton=2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
-					if (x3>_n) {soliton=3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
-				} else if (left==1 && right==1) { //one point is on the line
-					if (fabs(x1-_n)<1.f) {soliton=-1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
-					if (fabs(x2-_n)<1.f) {soliton=-2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
-					if (fabs(x3-_n)<1.f) {soliton=-3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
-				}
-			} else {
-				if (left==1 && right ==2) {
-					if (y1<_n) {soliton=1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
-					if (y2<_n) {soliton=2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
-					if (y3<_n) {soliton=3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
-				} else if (right==1 && left == 2) {
-					if (y1>_n) {soliton=1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
-					if (y2>_n) {soliton=2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
-					if (y3>_n) {soliton=3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
-				} else if (left==1 && right==1) { //one point is on the line
-					if (fabs(y1-_n)<1.f) {soliton=-1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
-					if (fabs(y2-_n)<1.f) {soliton=-2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
-					if (fabs(y3-_n)<1.f) {soliton=-3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
-				}
-			}
-
-			if (soliton == 0) std::cout << "[Warning] DivideAt: Soliton not found, left=" << left << ", right=" << right <<  std::endl;
-
-			if (soliton<0) { //one point (1) on the line
-				float slope1,new1;
-				if (_atx) {
-					slope1=(y3s-y2s)/(x3s-x2s);
-					new1=y2s+slope1*(_n-x2s);
-				} else {
-					slope1=(x3s-x2s)/(y3s-y2s);
-					new1=x2s+slope1*(_n-y2s);
-				}
-				int point1;
-
-				//std::cout << "Seeking for " << _n << ":" << new1 << std::endl;
+				int left  = 0;
+				int right = 0;
+				//int nearpoint =0;
+				//float mindist=150;
 
 				if (_atx) {
-					point1=points->GetPoint(_n,new1);
-					if (point1<0)
-						point1=points->AddPoint(_n, new1, _map->GetZ(_n,new1));
+					if (x1<(_n-1.f)) left++; else if (x1>(_n+1.f)) right++;
+					if (x2<(_n-1.f)) left++; else if (x2>(_n+1.f)) right++;
+					if (x3<(_n-1.f)) left++; else if (x3>(_n+1.f)) right++;
 				} else {
-					point1=points->GetPoint(new1,_n);
-					if (point1<0)
-						point1=points->AddPoint(new1, _n, _map->GetZ(new1,_n));
+					if (y1<(_n-1.f)) left++; else if (y1>(_n+1.f)) right++;
+					if (y2<(_n-1.f)) left++; else if (y2>(_n+1.f)) right++;
+					if (y3<(_n-1.f)) left++; else if (y3>(_n+1.f)) right++;
 				}
 
-				//std::cout << "Point is " << point1 << std::endl;
 
-				int orig1,orig2;
-				if (soliton==-1) {
-					orig1=v[i].GetPoint1();
-					orig2=v[i].GetPoint2();
-					v[i].SetPoint2(point1);
-					AddTriangle(orig1, orig2, point1);
-				} else if (soliton==-2) {
-					orig1=v[i].GetPoint2();
-					orig2=v[i].GetPoint3();
-					v[i].SetPoint3(point1);
-					AddTriangle(orig1, orig2, point1);
-				} else if (soliton==-3) {
-					orig1=v[i].GetPoint3();
-					orig2=v[i].GetPoint1();
-					v[i].SetPoint1(point1);
-					AddTriangle(orig1, orig2, point1);
+				if (left!=3 && right!=3 && (left && right)) {
+					//divide triangle #i
+
+					//which point is the soliton?
+					int soliton=0;
+					float x1s,x2s,x3s,y1s,y2s,y3s;
+
+					if (_atx) {
+						if (left==1 && right ==2) {
+							if (x1<_n) {soliton=1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
+							if (x2<_n) {soliton=2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
+							if (x3<_n) {soliton=3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
+						} else if (right==1 && left == 2) {
+							if (x1>_n) {soliton=1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
+							if (x2>_n) {soliton=2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
+							if (x3>_n) {soliton=3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
+						} else if (left==1 && right==1) { //one point is on the line
+							if (fabs(x1-_n)<1.f) {soliton=-1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
+							if (fabs(x2-_n)<1.f) {soliton=-2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
+							if (fabs(x3-_n)<1.f) {soliton=-3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
+						}
+					} else {
+						if (left==1 && right ==2) {
+							if (y1<_n) {soliton=1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
+							if (y2<_n) {soliton=2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
+							if (y3<_n) {soliton=3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
+						} else if (right==1 && left == 2) {
+							if (y1>_n) {soliton=1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
+							if (y2>_n) {soliton=2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
+							if (y3>_n) {soliton=3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
+						} else if (left==1 && right==1) { //one point is on the line
+							if (fabs(y1-_n)<1.f) {soliton=-1;x1s=x1;x2s=x2;x3s=x3;y1s=y1;y2s=y2;y3s=y3;}
+							if (fabs(y2-_n)<1.f) {soliton=-2;x1s=x2;x2s=x1;x3s=x3;y1s=y2;y2s=y1;y3s=y3;}
+							if (fabs(y3-_n)<1.f) {soliton=-3;x1s=x3;x2s=x2;x3s=x1;y1s=y3;y2s=y2;y3s=y1;}
+						}
+					}
+
+					if (soliton == 0) std::cout << "[Warning] DivideAt: Soliton not found, left=" << left << ", right=" << right <<  std::endl;
+
+					if (soliton<0) { //one point (1) on the line
+						float slope1,new1;
+						if (_atx) {
+							slope1=(y3s-y2s)/(x3s-x2s);
+							new1=y2s+slope1*(_n-x2s);
+						} else {
+							slope1=(x3s-x2s)/(y3s-y2s);
+							new1=x2s+slope1*(_n-y2s);
+						}
+						int point1;
+
+						//std::cout << "Seeking for " << _n << ":" << new1 << std::endl;
+
+						if (_atx) {
+							point1=points->GetPoint(_n,new1);
+							if (point1<0)
+								point1=points->AddPoint(_n, new1, _map->GetZ(_n,new1));
+						} else {
+							point1=points->GetPoint(new1,_n);
+							if (point1<0)
+								point1=points->AddPoint(new1, _n, _map->GetZ(new1,_n));
+						}
+
+						//std::cout << "Point is " << point1 << std::endl;
+
+						int orig1,orig2;
+						if (soliton==-1) {
+							orig1=v[i].GetPoint1();
+							orig2=v[i].GetPoint2();
+							v[i].SetPoint2(point1);
+							AddTriangle(orig1, orig2, point1);
+						} else if (soliton==-2) {
+							orig1=v[i].GetPoint2();
+							orig2=v[i].GetPoint3();
+							v[i].SetPoint3(point1);
+							AddTriangle(orig1, orig2, point1);
+						} else if (soliton==-3) {
+							orig1=v[i].GetPoint3();
+							orig2=v[i].GetPoint1();
+							v[i].SetPoint1(point1);
+							AddTriangle(orig1, orig2, point1);
+						}
+						v[i].SetCorrectParity();
+					} else if (soliton>0) {
+
+						float slope1,slope2,new1,new2;
+
+						if (_atx) {
+
+							//std::cout << "y1 " << y1s << " y2 " << y2s << " y3 " << y3s << std::endl;
+
+							slope1=(y2s-y1s)/(x2s-x1s);
+							slope2=(y3s-y1s)/(x3s-x1s);
+							new1=y1s+slope1*(_n-x1s);
+							new2=y1s+slope2*(_n-x1s);
+						} else {
+							slope1=(x2s-x1s)/(y2s-y1s);
+							slope2=(x3s-x1s)/(y3s-y1s);
+							new1=x1s+slope1*(_n-y1s);
+							new2=x1s+slope2*(_n-y1s);
+						}
+
+						int point1,point2;
+
+						//std::cout << "Seeking for " << _n << ":" << new1 << ":" << new2 << std::endl;
+
+						if (_atx) {
+							point1=points->GetPoint(_n,new1);
+							point2=points->GetPoint(_n,new2);
+							if (point1<0)
+								point1=points->AddPoint(_n, new1, _map->GetZ(_n,new1));
+							if (point2<0)
+								point2=points->AddPoint(_n, new2, _map->GetZ(_n,new2));
+						} else {
+							point1=points->GetPoint(new1,_n);
+							point2=points->GetPoint(new2,_n);
+							if (point1<0)
+								point1=points->AddPoint(new1, _n, _map->GetZ(new1,_n));
+							if (point2<0)
+								point2=points->AddPoint(new2, _n, _map->GetZ(new2,_n));
+						}
+
+						//std::cout << "Point is " << point1 << ":" << point2 << std::endl;
+
+						int orig1,orig2;
+						if (soliton==1) {
+							orig1=v[i].GetPoint2();
+							orig2=v[i].GetPoint3();
+							v[i].SetPoint2(point1);
+							v[i].SetPoint3(point2);
+						} else if (soliton==2) {
+							orig1=v[i].GetPoint1();
+							orig2=v[i].GetPoint3();
+							v[i].SetPoint1(point1);
+							v[i].SetPoint3(point2);
+						} else if (soliton==3) {
+							orig1=v[i].GetPoint1();
+							orig2=v[i].GetPoint2();
+							v[i].SetPoint1(point1);
+							v[i].SetPoint2(point2);
+						}
+						v[i].SetCorrectParity();
+
+						if (point1 != point2)
+							Add2Triangles(point1,point2,orig1,orig2);
+						else {
+							int t = AddTriangle(point1,orig1,orig2);
+							if (t>=0) v[t].SetCorrectParity();
+						}
+					}
 				}
-				v[i].SetCorrectParity();
-			} else if (soliton>0) {
-
-				float slope1,slope2,new1,new2;
-
-				if (_atx) {
-
-					//std::cout << "y1 " << y1s << " y2 " << y2s << " y3 " << y3s << std::endl;
-
-					slope1=(y2s-y1s)/(x2s-x1s);
-					slope2=(y3s-y1s)/(x3s-x1s);
-					new1=y1s+slope1*(_n-x1s);
-					new2=y1s+slope2*(_n-x1s);
-				} else {
-					slope1=(x2s-x1s)/(y2s-y1s);
-					slope2=(x3s-x1s)/(y3s-y1s);
-					new1=x1s+slope1*(_n-y1s);
-					new2=x1s+slope2*(_n-y1s);
-				}
-
-				int point1,point2;
-
-				//std::cout << "Seeking for " << _n << ":" << new1 << ":" << new2 << std::endl;
-
-				if (_atx) {
-					point1=points->GetPoint(_n,new1);
-					point2=points->GetPoint(_n,new2);
-					if (point1<0)
-						point1=points->AddPoint(_n, new1, _map->GetZ(_n,new1));
-					if (point2<0)
-						point2=points->AddPoint(_n, new2, _map->GetZ(_n,new2));
-				} else {
-					point1=points->GetPoint(new1,_n);
-					point2=points->GetPoint(new2,_n);
-					if (point1<0)
-						point1=points->AddPoint(new1, _n, _map->GetZ(new1,_n));
-					if (point2<0)
-						point2=points->AddPoint(new2, _n, _map->GetZ(new2,_n));
-				}
-
-				//std::cout << "Point is " << point1 << ":" << point2 << std::endl;
-
-				int orig1,orig2;
-				if (soliton==1) {
-					orig1=v[i].GetPoint2();
-					orig2=v[i].GetPoint3();
-					v[i].SetPoint2(point1);
-					v[i].SetPoint3(point2);
-				} else if (soliton==2) {
-					orig1=v[i].GetPoint1();
-					orig2=v[i].GetPoint3();
-					v[i].SetPoint1(point1);
-					v[i].SetPoint3(point2);
-				} else if (soliton==3) {
-					orig1=v[i].GetPoint1();
-					orig2=v[i].GetPoint2();
-					v[i].SetPoint1(point1);
-					v[i].SetPoint2(point2);
-				}
-				v[i].SetCorrectParity();
-
-				if (point1 != point2)
-					Add2Triangles(point1,point2,orig1,orig2);
-				else {
-					int t = AddTriangle(point1,orig1,orig2);
-					if (t>=0) v[t].SetCorrectParity();
-				}
-			}
 		}
 	}
 }

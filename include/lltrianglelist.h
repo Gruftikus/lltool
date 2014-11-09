@@ -40,6 +40,8 @@ public:
 	llTriangle(int _n1, int _n2, int _n3, llPointList *_r);
 	llTriangle();
 	
+	float x_min, x_max, y_min, y_max;
+
 	int write_flag;
 	int touched_flag;
 	void SetCorrectParity(void);

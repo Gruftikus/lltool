@@ -7,7 +7,7 @@ class llSetContour : public llSet {
 
 private:
 
-	float gridx, gridy, z, offsetx, offsety;
+	float gridx, gridy, z, offsetx, offsety, minmaxgrid;
 	int   findmin, findmax, linear, onlyintracell;
 	int   setmin, setmax;
 

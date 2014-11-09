@@ -22,11 +22,9 @@ lltool provides several methods and algorithms for heightmap manipulation and te
 
 ### Installation
 
-Go to the directory "externals". lltool needs:
+Go to the directory "externals". lltool needs (in addition to the included packages):
 
-* [Triangle](http://www.cs.cmu.edu/~quake/triangle.html) by J. R. Shewchuk, already included.
 * [MTParser](http://www.codeproject.com/Articles/7335/An-extensible-math-expression-parser-with-plug-ins) by Mathieu Jacques, download the code and put it into externals/mtparser (Windows only!!!)
-* [imageresampler](https://code.google.com/p/imageresampler/), a C++ class for separable filtering 2D image resampling by Rich Geldreich, already included.
 
 Windows:
 
@@ -57,6 +55,8 @@ The last option might be the filename. If no filename is given, stdin is used, i
 [imageresampler](https://code.google.com/p/imageresampler/), a C++ class for separable filtering 2D image resampling by Rich Geldreich.
 
 [crunch/crnlib](https://code.google.com/p/crunch/), for dds file generation.
+
+[ANN](http://www.cs.umd.edu/~mount/ANN/), Approximate Nearest Neighbor Searching by David M. Mount and Sunil Arya
 
 ### Applications
 

@@ -8,7 +8,7 @@ class llSetFlag : public llWorker {
 
 protected:
 
-	int   hidden, unselect;
+	int   hidden, unselect, zerosuppression;
 	char *name, *value;
 	char *replace, *with;
 	int   num;

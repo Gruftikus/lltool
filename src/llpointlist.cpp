@@ -10,7 +10,20 @@ llPointList::llPointList(int n, llQuadList * _quads) {
 	kdTree  = NULL;
 } 
 
+//destructor
+llPointList::~llPointList() {
+	if (kdTree) {
+		delete [] nnIdx;							// clean things up
+		delete [] dists;
+		delete kdTree;
+	}
+}
+
 int llPointList::AddPoint(float _x, float _y, float _z) {
+
+	if (kdTree) {
+		return -1;
+	}
 
 	if (quads) { 
 		if (!quads->AddPoint(_x, _y, counter)) return -1;

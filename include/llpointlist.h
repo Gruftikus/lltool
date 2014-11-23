@@ -79,6 +79,8 @@ public:
 
 	//constructor
 	llPointList(int _n, llQuadList *_quads);
+	//destructor
+	~llPointList();
 
 	int  AddPoint(float _x, float _y, float _z);
 	int  GetPoint(float _x, float _y);

@@ -205,6 +205,13 @@ int llExportMapToDDS::Exec(void) {
 
       _llLogger()->WriteNextLine(-LOG_INFO, "Compressing to %s\n", crn_get_format_string(comp_params.m_format));
       
+	  //Check some of the parameters
+	  if (comp_params.m_width > cCRNMaxLevelResolution || comp_params.m_height > cCRNMaxLevelResolution) {
+		  _llLogger()->WriteNextLine(-LOG_ERROR, "Size too large");
+		 return 0;
+	  }
+
+
       // Now compress to DDS or CRN.
       void *pOutput_file_data = crn_compress(comp_params, mip_params, output_file_size, &actual_quality_level, &actual_bitrate);
       

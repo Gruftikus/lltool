@@ -16,6 +16,7 @@ int llExportMeshToObj::Prepare(void) {
 
 	filename        = NULL;
 	texname         = NULL;
+	texmap          = NULL;
 	mtlname         = NULL;
 	createpedestals = 0;
 	trans_x = trans_y = trans_z = 0;
@@ -30,6 +31,7 @@ int llExportMeshToObj::RegisterOptions(void) {
 	RegisterValue("-filename",        &filename);
 	RegisterValue("-mtlfilename",     &mtlname);
 	RegisterValue("-texname",         &texname);
+	RegisterValue("-texmap",          &texmap);
 	RegisterValue("-transx",          &trans_x);
 	RegisterValue("-transy",          &trans_y);
 	RegisterValue("-transz",          &trans_z);
@@ -60,6 +62,10 @@ int llExportMeshToObj::MakeSelection() {
 	newpoints = new llPointList(points->GetN(), NULL);
 	
 	newpoints->SetTexAnchor(x00, y00, x11, y11);
+	if (texmap) {
+		llMap *texmap_obj = _llMapList()->GetMap(texmap);
+		newpoints->SetTexAnchor(texmap_obj->GetX1(), texmap_obj->GetY1(), texmap_obj->GetX2(), texmap_obj->GetY2());
+	}
 	newpoints->ClearSecondaryList();
 
 	for (int i=0; i<points->GetN(); i++) {

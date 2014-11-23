@@ -10,6 +10,7 @@ protected:
 
 	char *filename;
 	char *texname;
+	char *texmap;
 	char *mtlname;
 	int   createpedestals;
 	float trans_x, trans_y, trans_z, scale;

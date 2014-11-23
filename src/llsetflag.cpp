@@ -8,7 +8,7 @@ int llSetFlag::Prepare(void) {
 	if (!llWorker::Prepare()) return 0;
 
 	value   = NULL;
-	hidden  = unselect = 0;
+	hidden  = unselect = zerosuppression = 0;
 	replace = with     = NULL;
 	num     = -1;
 
@@ -28,6 +28,8 @@ int llSetFlag::RegisterOptions(void) {
 	RegisterFlag ("-hidden",   &hidden);
 	RegisterFlag ("-unselect", &unselect);
 
+	RegisterFlag ("-zerosuppression", &zerosuppression);
+
 	return 1;
 }
 
@@ -43,6 +45,7 @@ int llSetFlag::Exec(void) {
 		if (hidden) _llUtils()->SetHidden(name);
 	} 
 	if (unselect) _llUtils()->DisableFlag(name);
+	if (zerosuppression && !*(_llUtils()->GetValueF(name))) _llUtils()->DisableFlag(name);
 
 	return 1;
 }

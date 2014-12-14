@@ -64,7 +64,10 @@ int llExportMeshToObj::MakeSelection() {
 	newpoints->SetTexAnchor(x00, y00, x11, y11);
 	if (texmap) {
 		llMap *texmap_obj = _llMapList()->GetMap(texmap);
-		newpoints->SetTexAnchor(texmap_obj->GetX1(), texmap_obj->GetY1(), texmap_obj->GetX2(), texmap_obj->GetY2());
+		if (texmap_obj)
+			newpoints->SetTexAnchor(texmap_obj->GetX1(), texmap_obj->GetY1(), texmap_obj->GetX2(), texmap_obj->GetY2());
+		else
+			_llLogger()->WriteNextLine(LOG_WARNING, "Texture map used, but not present in memory. I use the heightmap coordinates. If this is wrong, I cannot help you");
 	}
 	newpoints->ClearSecondaryList();
 

@@ -36,19 +36,21 @@ int llCreateNormalMap::Exec(void) {
 		sprintf_s(targetname, strlen(mapname)+10, "%s_normal", mapname);
 	}
 
-	llMap *newmap = _llMapList()->GetMap(targetname);
-
-	if (newmap) {
-		_llLogger()->WriteNextLine(-LOG_WARNING,"%s: map %s existing, going to delete it", command_name, targetname);
-		_llMapList()->DeleteMap(targetname);
-	}
-
 	int widthx = map->GetWidthX();
 	int widthy = map->GetWidthY();
-	newmap = new llMap(widthx-1, widthy-1, MAP_COLOR);
-	newmap->SetEven();
-	newmap->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale());
 
+	llMap *newmap = _llMapList()->GetMap(targetname);
+
+	int hasnewmap = 0;
+	if (newmap) {
+		_llLogger()->WriteNextLine(-LOG_WARNING,"%s: map %s existing, going to re-use it", command_name, targetname);
+		//_llMapList()->DeleteMap(targetname);
+	} else {	
+		hasnewmap = 1;
+		newmap = new llMap(widthx-1, widthy-1, MAP_COLOR);
+		newmap->SetEven();
+		newmap->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale());
+	}
 
 	if (lodshadows) 
 		_llLogger()->WriteNextLine(-LOG_INFO, "Adding fake LOD shadows, 'north flip boost=%f'", northboost);
@@ -116,8 +118,6 @@ int llCreateNormalMap::Exec(void) {
 			float n_x = (n_x00 + n_x11)/2.f;
 			float n_y = (n_y00 + n_y11)/2.f;
 
-			
-
 			if (lodshadows) {
 				tilt = tilt_morning + tilt_evening;
 				n_x += tilt;
@@ -138,13 +138,19 @@ int llCreateNormalMap::Exec(void) {
 			unsigned char n_y1 = (unsigned char)(n_y1a*cos(angle) + n_z1a*sin(angle));
 			unsigned char n_z1 = (unsigned char)(-sin(angle)*n_y1a + n_z1a*cos(angle));
 
-			newmap->SetBlue (x, y, n_z1);
-			newmap->SetGreen(x, y, n_y1);
-			newmap->SetRed  (x, y, n_x1);
+			unsigned int xn = x;
+			unsigned int yn = y;
+			if (!hasnewmap) {
+				xn = newmap->GetRawX(map->GetCoordX(x));
+				yn = newmap->GetRawY(map->GetCoordY(y));
+			}
+			newmap->SetBlue (xn, yn, n_z1);
+			newmap->SetGreen(xn, yn, n_y1);
+			newmap->SetRed  (xn, yn, n_x1);
 		}
 	}
 	
-	_llMapList()->AddMap(targetname, newmap, NULL, NULL, NULL, NULL);
+	if (hasnewmap) _llMapList()->AddMap(targetname, newmap, NULL, NULL, NULL, NULL);
 
 	return 1;
 }

@@ -147,6 +147,7 @@ int llCreateNormalMap::Exec(void) {
 			newmap->SetBlue (xn, yn, n_z1);
 			newmap->SetGreen(xn, yn, n_y1);
 			newmap->SetRed  (xn, yn, n_x1);
+			newmap->SetAlpha(xn, yn, 255);
 		}
 	}
 	

@@ -62,8 +62,14 @@ int llScaleMap::Exec(void) {
 	int newwidthy = (int)sizey;
 
 	if (Used("-factor")) {
-		newwidthx = int(float(map->GetWidthX())*factor);
-		newwidthy = int(float(map->GetWidthY())*factor);
+		if (map->IsUneven()) {
+			newwidthx = int(float(map->GetWidthX()-1)*factor)+1;
+			newwidthy = int(float(map->GetWidthY()-1)*factor)+1;
+		} else {
+			newwidthx = int(float(map->GetWidthX())*factor);
+			newwidthy = int(float(map->GetWidthY())*factor);
+		}
+		_llLogger()->WriteNextLine(-LOG_INFO, "%s: new width (%i, %i)", command_name, newwidthx, newwidthx);
 	}
 
 	float defaultheight = map->GetDefaultHeight();

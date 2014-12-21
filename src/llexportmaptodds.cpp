@@ -203,7 +203,7 @@ int llExportMapToDDS::Exec(void) {
       float actual_bitrate;
       crn_uint32 output_file_size;
 
-      _llLogger()->WriteNextLine(-LOG_INFO, "Compressing to %s\n", crn_get_format_string(comp_params.m_format));
+      _llLogger()->WriteNextLine(-LOG_INFO, "Compressing to %s", crn_get_format_string(comp_params.m_format));
       
 	  //Check some of the parameters
 	  if (comp_params.m_width > cCRNMaxLevelResolution || comp_params.m_height > cCRNMaxLevelResolution) {
@@ -221,11 +221,11 @@ int llExportMapToDDS::Exec(void) {
 		 return 0;
 	  }
 
-	  _llLogger()->WriteNextLine(-LOG_INFO, "Compressed to %u bytes, quality level: %u, effective bitrate: %f\n", output_file_size, 
+	  _llLogger()->WriteNextLine(-LOG_INFO, "Compressed to %u bytes, quality level: %u, effective bitrate: %f", output_file_size, 
 		  actual_quality_level, actual_bitrate);
 
 	  // Write the output file.
-	  _llLogger()->WriteNextLine(-LOG_INFO, "Writing %s file: %s\n", output_crn ? "CRN" : "DDS", filename);
+	  _llLogger()->WriteNextLine(-LOG_INFO, "Writing %s file: %s", output_crn ? "CRN" : "DDS", filename);
 	  FILE *pFile = fopen(filename, "wb");
 	  if ((!pFile) || (fwrite(pOutput_file_data, output_file_size, 1, pFile) != 1) || (fclose(pFile) == EOF)) {
 		  crn_free_block(pOutput_file_data);

@@ -278,7 +278,7 @@ int llSetContour::Exec(void) {
 		}
 	}
 
-	_llLogger()->WriteNextLine(-LOG_COMMAND,"%s: %i vertices set", command_name, con_points);
+	_llLogger()->WriteNextLine(-LOG_COMMAND, "%s: %i vertices set", command_name, con_points);
 
 
 	return 1;

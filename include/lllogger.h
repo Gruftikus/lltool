@@ -44,7 +44,7 @@ public:
 	};
 
 	void Log(const char *_log) {
-		if (logfile) fprintf(logfile,"%s", _log);
+		if (logfile) fprintf(logfile, "%s", _log);
 	};
 
 	void AddToLine(const char *_add) {
@@ -88,6 +88,12 @@ public:
 		const char *x = ReadNextLine();
 		while (x) {
 			std::cout << x << std::endl;
+
+			if (logfile) {
+				fprintf(logfile, x); 
+				fprintf(logfile, "\n");
+			}
+
 			x = ReadNextLine();
 		}			
 	}

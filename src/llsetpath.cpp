@@ -19,7 +19,7 @@ int llSetPath::RegisterOptions(void) {
 int llSetPath::Exec(void) {
 	llWorker::Exec();
 
-	_llLogger()->WriteNextLine(LOG_COMMAND,"%s: change directory path to %s", command_name, path);
+	_llLogger()->WriteNextLine(LOG_COMMAND, "%s: change directory path to %s", command_name, path);
 	_chdir(path);
 
 	return 1;

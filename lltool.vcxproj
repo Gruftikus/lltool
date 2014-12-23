@@ -183,6 +183,7 @@
     <ClInclude Include="include\llimportmapfromdds.h" />
     <ClInclude Include="include\llinactivateallvertices.h" />
     <ClInclude Include="include\lllinelist.h" />
+    <ClInclude Include="include\lllogfile.h" />
     <ClInclude Include="include\lllogger.h" />
     <ClInclude Include="include\llmakederivatives.h" />
     <ClInclude Include="include\llmap.h" />
@@ -362,6 +363,7 @@
     <ClCompile Include="src\llimportmapfromdds.cpp" />
     <ClCompile Include="src\llinactivateallvertices.cpp" />
     <ClCompile Include="src\lllinelist.cpp" />
+    <ClCompile Include="src\lllogfile.cpp" />
     <ClCompile Include="src\lllogger.cpp" />
     <ClCompile Include="src\llmakederivatives.cpp" />
     <ClCompile Include="src\llmap.cpp" />

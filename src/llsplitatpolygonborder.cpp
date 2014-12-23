@@ -42,7 +42,7 @@ int llSplitAtPolygonBorder::Exec(void) {
 				}
 			}				
 		} else {
-			_llLogger()->WriteNextLine(-LOG_ERROR,"%s: Polygon not found.", command_name);
+			_llLogger()->WriteNextLine(-LOG_ERROR, "%s: Polygon not found.", command_name);
 		}
 	} else {
 		for (int i=0;i<polygons->GetSize();i++) {
@@ -57,7 +57,7 @@ int llSplitAtPolygonBorder::Exec(void) {
 		}
 	}
 
-	_llLogger()->WriteNextLine(LOG_COMMAND,"%s: done", command_name);
+	_llLogger()->WriteNextLine(LOG_COMMAND, "%s: done", command_name);
 
 	return 1;
 }

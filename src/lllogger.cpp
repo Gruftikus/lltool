@@ -92,7 +92,7 @@ int llLogger::WriteNextLine(int _level, const char *_format, ...) {
 		sprintf_s(tmp2,LOG_MAX_LENGTH,"%i [Algorithm] %s",counter,tmp);
 	else sprintf_s(tmp2,LOG_MAX_LENGTH,"%i: %s",counter,tmp); 
 	
-#if 1
+#if 0
 	if (logfile) {
 		if (_level == LOG_DEBUG)
 			fprintf(logfile,"%i [Debug] %s\n",counter,tmp); 

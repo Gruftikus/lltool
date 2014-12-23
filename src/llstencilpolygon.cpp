@@ -107,7 +107,7 @@ int llStencilPolygon::Exec(void) {
 		}
 	}
 	 
-	_llLogger()->WriteNextLine(-LOG_COMMAND,"%s: done", command_name);
+	_llLogger()->WriteNextLine(-LOG_COMMAND, "%s: done", command_name);
 
 	return 1;
 }

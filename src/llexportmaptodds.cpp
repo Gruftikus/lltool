@@ -62,7 +62,7 @@ int llExportMapToDDS::RegisterOptions(void) {
 	RegisterValue("-format",   &fmt_string);
 
 	RegisterFlag("-noAdaptiveBlocks",  &noAdaptiveBlocks);
-	RegisterFlag("-MakeMips",  &makemips);
+	RegisterFlag("-MakeMips", &makemips);
 	RegisterFlag("-FlipX",    &flipx);
 	RegisterFlag("-FlipY",    &flipy);
 	

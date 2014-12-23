@@ -8,6 +8,7 @@
 #include "../include/llcreatemap.h"
 #include "../include/llselectrec.h"
 #include "../include/llexit.h"
+#include "../include/lllogfile.h"
 #include "../include/llsetflag.h"
 #include "../include/llecho.h"
 #include "../include/llsetpath.h"
@@ -89,6 +90,7 @@ void CreateWorkers(llCommands *_batch) {
 	//Workers:
 	_batch->RegisterWorker(new llSelectRec());
 	_batch->RegisterWorker(new llExit());
+	_batch->RegisterWorker(new llLogFile());
 	_batch->RegisterWorker(new llSetFlag());
 	_batch->RegisterWorker(new llEcho());
 	_batch->RegisterWorker(new llSetPath());

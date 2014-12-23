@@ -23,7 +23,7 @@ int llSplitAtGrid::Exec(void) {
 	if (!llTriMod::Exec()) return 0;
 
 	if (!Used("-x") && !Used("-y")) {
-		_llLogger()->WriteNextLine(-LOG_ERROR,"%s: either -x or -y has to be defined", command_name);
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: either -x or -y has to be defined", command_name);
 		return 0;
 	}
 
@@ -39,7 +39,7 @@ int llSplitAtGrid::Exec(void) {
 		}
 	}
 
-	_llLogger()->WriteNextLine(LOG_COMMAND,"%s: done", command_name);
+	_llLogger()->WriteNextLine(LOG_COMMAND, "%s: done", command_name);
 
 	return 1;
 }

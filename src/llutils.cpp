@@ -652,11 +652,11 @@ int llUtils::CrunchNext(void) {
 }
 
 int llUtils::AddFlag(const char *_name) {
-	if (EnableFlag(_name)) return 0; //already there
+	
 	char * tmp = new char[strlen(_name)+2];
 	strcpy_s(tmp,strlen(_name)+1,_name);
 	if (num_flags == MAX_FLAGS) {
-		mesg->WriteNextLine(LOG_ERROR,"Maximal number of flags (%i) reached, flag %s not added", MAX_FLAGS, _name);
+		mesg->WriteNextLine(LOG_ERROR, "Maximal number of flags (%i) reached, flag %s not added", MAX_FLAGS, _name);
 		return 0;
 	}
 	char *val = NULL;
@@ -667,6 +667,11 @@ int llUtils::AddFlag(const char *_name) {
 			break;
 		}
 	}
+
+	if (EnableFlag(tmp) && val) { //already there
+		SetValue(tmp, val);
+	}
+
 	flag_list[num_flags]        = tmp;
 	flag_value[num_flags]       = val;
 	flag_value_f[num_flags]     = 0.0;

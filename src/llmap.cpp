@@ -19,6 +19,7 @@ llMap::llMap(unsigned int _x, unsigned int _y, int _makeshort, float _default) {
 	else {
 		is_color_map = 1;
 		idata = new unsigned int[widthx*widthy];
+		for (int i=0; i<widthx*widthy; i++) idata[i]=0;
 	}
 
 	scaling = 1;

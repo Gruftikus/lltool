@@ -19,7 +19,5 @@ int llExit::Exec(void) {
 	_llLogger()->Dump();
 	_llLogger()->WriteNextLine(-LOG_COMMAND,"%s: Bye...", command_name);
 
-	exit(1);
-
-	return 1;
+	return -1;
 }

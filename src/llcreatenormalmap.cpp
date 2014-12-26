@@ -14,6 +14,10 @@ int llCreateNormalMap::Prepare(void) {
 	northboost = boost = 1.0f;
 	lodshadows = 0;
 
+	resolution  = 4; 
+	range       = 32;
+	total_range = 1024;
+
 	return 1;
 }
 
@@ -23,6 +27,11 @@ int llCreateNormalMap::RegisterOptions(void) {
 	RegisterValue("-name",       &targetname);
 	RegisterValue("-northboost", &northboost);
 	RegisterValue("-boost",      &boost);
+
+	RegisterValue("-resolution",  &resolution);
+	RegisterValue("-range",       &range);
+	RegisterValue("-total_range", &total_range);
+
 	RegisterFlag ("-shadows",    &lodshadows);
 
 	return 1;
@@ -62,14 +71,14 @@ int llCreateNormalMap::Exec(void) {
 	unsigned int x2 = map->GetRawX(_llUtils()->x11);
 	unsigned int y2 = map->GetRawY(_llUtils()->y11);
 
+	float st_array[3] = {0, 0, 0};
+
 	for (unsigned int y=y1; y<=y2; y++) {
 		for (unsigned int x=x1; x<=x2; x++) {
 			float height = map->GetZ(x,y);
 
-			float st_array[3];
 			/*************************************/
-
-			if (lodshadows) {
+			if (lodshadows) {		
 				for (int v=0; v<3; v++) {  //loop over direction vectors
 					int directx = -1;
 					int directy = 0;
@@ -79,33 +88,42 @@ int llCreateNormalMap::Exec(void) {
 						directx = 0;
 						directy = -1;
 					}
-					int resolution = 1; //BUGBUG
-					unsigned int cur_x = (unsigned int)(x + directx * resolution);  
-					unsigned int cur_y = (unsigned int)(y + directy * resolution);
+					
+					unsigned int cur_x = x + directx * resolution;  
+					unsigned int cur_y = y + directy * resolution;
 					float slope = 0.f;
 
-					while( (directx*(cur_x-x) + directy*(cur_y-y)) < 1024  && map->IsInMap(cur_x,cur_y) ) {
+					int xx = int(cur_x)-int(x);
+					int yy = int(cur_y)-int(y);
+					int xxyy = xx + yy;
+					if (xxyy<0) xxyy = -xxyy;
+
+					while(xxyy < total_range && map->IsInMap(cur_x,cur_y) ) {
 						float cur_slope = 0; 
 						if (v<2) 
-							cur_slope = directx * (map->GetZ(cur_x,cur_y)-height) / (map->GetWidthXPerRaw() * float(cur_x-x));
+							cur_slope = directx * (map->GetZ(cur_x,cur_y)-height) / (map->GetWidthXPerRaw() * float(xx));
 						else
-							cur_slope = directy * (map->GetZ(cur_x,cur_y)-height) / (map->GetWidthYPerRaw() * float(cur_y-y));
-
+							cur_slope = directy * (map->GetZ(cur_x,cur_y)-height) / (map->GetWidthYPerRaw() * float(yy));
+						
 						if (cur_slope > slope) slope = cur_slope;
-
-						int stepsize = resolution * 8;
-						unsigned int range = 128;
-						if ((directx*(cur_x-x) + directy*(cur_y-y))<range) stepsize = resolution;
-						else if ((directx*(cur_x-x) + directy*(cur_y-y))<2*range) stepsize = resolution * 2;
-						else if ((directx*(cur_x-x) + directy*(cur_y-y))<4*range) stepsize = resolution * 4;
+						
+						int                      stepsize = resolution * 8;
+						if (xxyy < range)        stepsize = resolution;
+						else if (xxyy < 2*range) stepsize = resolution * 2;
+						else if (xxyy < 4*range) stepsize = resolution * 4;
 						
 						cur_x += stepsize*directx;
 						cur_y += stepsize*directy;
+						xx = int(cur_x)-int(x);
+						yy = int(cur_y)-int(y);
+						xxyy = xx + yy;
+						if (xxyy<0) xxyy = -xxyy;
 					}
 					st_array[v] = slope;
 				}
-			}
-
+			}			
+			/*************************************/
+		
 			float tilt         =  0.;
 			float tilt_morning =  st_array[1];
 			float tilt_evening = -st_array[0];
@@ -132,22 +150,24 @@ int llCreateNormalMap::Exec(void) {
 
 			//std::cout << n_x << ":" << n_x1a << std::endl;
 
-			float angle=0.;
+			float angle = 0.;
 
 			unsigned char n_x1 = (unsigned char)(n_x1a);
 			unsigned char n_y1 = (unsigned char)(n_y1a*cos(angle) + n_z1a*sin(angle));
 			unsigned char n_z1 = (unsigned char)(-sin(angle)*n_y1a + n_z1a*cos(angle));
-
+				
 			unsigned int xn = x;
 			unsigned int yn = y;
 			if (!hasnewmap) {
 				xn = newmap->GetRawX(map->GetCoordX(x));
 				yn = newmap->GetRawY(map->GetCoordY(y));
 			}
-			newmap->SetBlue (xn, yn, n_z1);
-			newmap->SetGreen(xn, yn, n_y1);
-			newmap->SetRed  (xn, yn, n_x1);
-			newmap->SetAlpha(xn, yn, 255);
+			newmap->SetTupel(xn, yn, n_z1, n_y1, n_x1, 255);
+			//newmap->SetBlue (xn, yn, n_z1);
+			//newmap->SetGreen(xn, yn, n_y1);
+			//newmap->SetRed  (xn, yn, n_x1);
+			//newmap->SetAlpha(xn, yn, 255);
+			
 		}
 	}
 	

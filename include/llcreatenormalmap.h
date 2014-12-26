@@ -11,6 +11,7 @@ protected:
 	char *targetname;
 	int   lodshadows;
 	float northboost, boost;
+	int   resolution, range, total_range;
 	
 public:
 

@@ -7,7 +7,7 @@
 #include "../include/def.h"
 #else
 #include <windows.h>
-//#define USE_CATCH 
+#define USE_CATCH 
 #endif
 
 
@@ -419,6 +419,8 @@ int llCommands::GetCommand(void) {
 		skip_next_block |= LLCOM_SKIP_BLOCK;
 	}
 
+	if (retval == -1) return -2;
+
 	return com;
 }
 
@@ -457,23 +459,20 @@ int llCommands::Loop(void) {
 
 #ifdef USE_CATCH
 		} catch (char *str) {
-			if (batch->CurrentCommand)
-				mesg->WriteNextLine(LOG_FATAL, "Catched exception [%s] in [%s]", str, batch->CurrentCommand);
+			if (CurrentCommand)
+				mesg->WriteNextLine(-LOG_FATAL, "Catched exception [%s] in [%s]", str, CurrentCommand);
 			else 
-				mesg->WriteNextLine(LOG_FATAL, "Catched exception [%s]", str);
-			DumpExit();
+				mesg->WriteNextLine(-LOG_FATAL, "Catched exception [%s]", str);
 		} catch (int str) {
-			if (batch->CurrentCommand)
-				mesg->WriteNextLine(LOG_FATAL, "Catched exception [%i] in [%s]", str, batch->CurrentCommand);
+			if (CurrentCommand)
+				mesg->WriteNextLine(LOG_FATAL, "Catched exception [%i] in [%s]", str, CurrentCommand);
 			else
 				mesg->WriteNextLine(LOG_FATAL, "Catched exception [%i]", str);
-			DumpExit();
 		} catch (...) {
-			if (batch->CurrentCommand)
-				mesg->WriteNextLine(LOG_FATAL, "Catched exception in [%s]", batch->CurrentCommand);
+			if (CurrentCommand)
+				mesg->WriteNextLine(LOG_FATAL, "Catched exception in [%s]", CurrentCommand);
 			else
 				mesg->WriteNextLine(LOG_FATAL, "Catched exception");
-			DumpExit();
 		}
 #endif
 

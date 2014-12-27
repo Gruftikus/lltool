@@ -175,6 +175,7 @@ llQuadList *llMap::GenerateQuadList(void) {
 		llQuadList *quads= new llQuadList();
 		if (!master) {
 			_llLogger()->WriteNextLine(-LOG_INFO, "The map covers %i quads at %i level(s)", nquads, levels);
+			_llUtils()->SetValue("_nquads", nquads);
 			master = quads;
 		}
 

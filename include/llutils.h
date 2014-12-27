@@ -108,6 +108,7 @@ class llUtils {
 	int   IsEnabled(const char *_name);
 
 	int   SetValue(const char *_name, const char *_value);
+	int   SetValue(const char *_name, double _value);
 	const char* GetValue(const char *_name);
 	double *GetValueF(const char *_name);
 	

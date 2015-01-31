@@ -109,6 +109,7 @@ class llUtils {
 
 	int   SetValue(const char *_name, const char *_value);
 	int   SetValue(const char *_name, double _value);
+	int   DeleteValue(const char *_name);
 	const char* GetValue(const char *_name);
 	double *GetValueF(const char *_name);
 	

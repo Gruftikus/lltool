@@ -454,8 +454,6 @@ int llCommands::Loop(void) {
 		try {
 #endif
 			com = GetCommand();
-			mesg->Dump();
-			//if (CurrentCommand) std::cout << CurrentCommand << std::endl;
 
 #ifdef USE_CATCH
 		} catch (char *str) {
@@ -475,6 +473,8 @@ int llCommands::Loop(void) {
 				mesg->WriteNextLine(LOG_FATAL, "Catched exception");
 		}
 #endif
+
+		mesg->Dump();
 
 #ifdef _MSC_VER
 		FILETIME userTime_old = userTime;

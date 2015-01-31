@@ -753,9 +753,24 @@ int llUtils::SetValue(const char *_name, double _value) {
 		if (_stricmp(_name, flag_list[i]) == 0) {
 			char delme[1000];
 			sprintf(delme, "%f", _value);
+			DeleteValue(_name);
 			flag_value[i] = _llUtils()->NewString(delme);
 			flag_value_f[i] = _value;
 			return 1;
+		}
+	}
+	return 0;
+}
+
+int llUtils::DeleteValue(const char *_name) {
+	AddFlag(_name);
+	for (unsigned int i=0; i<num_flags; i++) {
+		if (_stricmp(_name, flag_list[i]) == 0) {
+			if (flag_value[i]) {
+				delete (flag_value[i]);
+				flag_value[i] = NULL;
+				return 1;
+			}
 		}
 	}
 	return 0;

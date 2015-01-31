@@ -49,6 +49,12 @@ int llQuadIterator::Exec(void) {
 		level--;
 	}
 
+	if (quads->GetNumQuads() == 0) {
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: map [%s] has no quads", command_name, mapname);
+		repeat_worker = false;
+		return 0;
+	}
+
 	if (num_done >= quads->GetNumQuads()) {
 		num_done = 0;
 		repeat_worker = false;
@@ -71,11 +77,8 @@ int llQuadIterator::Exec(void) {
 	_llUtils()->y11 = quad->y2;
 
 	
-	sprintf_s(myquadx, 1000, "%i", quad->x);
-	_llUtils()->SetValue("_quad_x", myquadx);
-
-	sprintf_s(myquady, 1000, "%i", quad->y);
-	_llUtils()->SetValue("_quad_y", myquady);
+	_llUtils()->SetValue("_quad_x", double(quad->x));
+	_llUtils()->SetValue("_quad_y", double(quad->y));
 
 	repeat_worker = true;
 

@@ -21,7 +21,7 @@ int llEcho::RegisterOptions(void) {
 }
 
 int llEcho::Exec(void) {
-	llWorker::Exec();
+	if (!llWorker::Exec()) return 0;
 
 	std::cout << text << std::endl;
 

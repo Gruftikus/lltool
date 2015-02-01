@@ -652,14 +652,10 @@ int llUtils::CrunchNext(void) {
 }
 
 int llUtils::AddFlag(const char *_name) {
-	
-	char * tmp = new char[strlen(_name)+2];
-	strcpy_s(tmp,strlen(_name)+1,_name);
-	if (num_flags == MAX_FLAGS) {
-		mesg->WriteNextLine(LOG_ERROR, "Maximal number of flags (%i) reached, flag %s not added", MAX_FLAGS, _name);
-		return 0;
-	}
+		
 	char *val = NULL;
+	char *tmp = _llUtils()->NewString(_name);
+	
 	for (unsigned int i = 0; i < strlen(tmp); i++) {
 		if (tmp[i] == '=') {
 			tmp[i] = '\0';
@@ -668,12 +664,24 @@ int llUtils::AddFlag(const char *_name) {
 		}
 	}
 
-	if (EnableFlag(tmp) && val) { //already there
-		SetValue(tmp, val);
+	if (EnableFlag(tmp)) { //already there
+		if (val)
+			SetValue(tmp, _llUtils()->NewString(val));
+		delete tmp;
+		return 1;
 	}
 
-	flag_list[num_flags]        = tmp;
-	flag_value[num_flags]       = val;
+	if (num_flags == MAX_FLAGS) {
+		mesg->WriteNextLine(LOG_FATAL, "Maximal number of flags (%i) reached, flag %s not added", MAX_FLAGS, _name);
+		return 0;
+	}
+
+	flag_list[num_flags] = _llUtils()->NewString(tmp);
+	delete tmp;
+	if (val) 
+		flag_value[num_flags] = _llUtils()->NewString(val);
+	else
+		flag_value[num_flags] = NULL;
 	flag_value_f[num_flags]     = 0.0;
 	if (val && strlen(val))
 		sscanf_s(val, "%lf", &(flag_value_f[num_flags]));
@@ -739,7 +747,8 @@ int llUtils::SetValue(const char *_name, const char *_value) {
 	AddFlag(_name);
 	for (unsigned int i=0; i<num_flags; i++) {
 		if (_stricmp(_name, flag_list[i]) == 0) {
-			flag_value[i] = _value;
+			if (flag_value[i]) delete (flag_value[i]);
+			flag_value[i] = _llUtils()->NewString(_value);
 			sscanf_s(_value, "%lf", &(flag_value_f[i]));
 			return 1;
 		}
@@ -753,7 +762,7 @@ int llUtils::SetValue(const char *_name, double _value) {
 		if (_stricmp(_name, flag_list[i]) == 0) {
 			char delme[1000];
 			sprintf(delme, "%f", _value);
-			DeleteValue(_name);
+			if (flag_value[i]) delete (flag_value[i]);
 			flag_value[i] = _llUtils()->NewString(delme);
 			flag_value_f[i] = _value;
 			return 1;

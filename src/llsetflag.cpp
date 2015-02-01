@@ -45,7 +45,13 @@ int llSetFlag::Exec(void) {
 		if (hidden) _llUtils()->SetHidden(name);
 	} 
 	if (unselect) _llUtils()->DisableFlag(name);
-	if (zerosuppression && !*(_llUtils()->GetValueF(name))) _llUtils()->DisableFlag(name);
+	if (zerosuppression) {
+		if (!(_llUtils()->GetValueF(name))) {
+			_llLogger()->WriteNextLine(-LOG_FATAL, "Flag %s has zero supression but no value was set", name);
+		} else if (!*(_llUtils()->GetValueF(name))) {
+			_llUtils()->DisableFlag(name);
+		}
+	}
 
 	return 1;
 }

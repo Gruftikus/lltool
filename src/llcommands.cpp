@@ -7,7 +7,7 @@
 #include "../include/def.h"
 #else
 #include <windows.h>
-#define USE_CATCH 
+//#define USE_CATCH 
 #endif
 
 

@@ -7,7 +7,7 @@ class llSetGrid : public llSet {
 
 private:
 
-	float gridx, gridy;
+	float gridx, gridy, stepx, stepy;
 
 public:
 

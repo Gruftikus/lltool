@@ -8,6 +8,7 @@ class llReadDataFile : public llSet {
 private:
 
 	char *filename;
+	int   keepdistancegrid;
 
 public:
 

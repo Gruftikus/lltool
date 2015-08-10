@@ -132,7 +132,7 @@ int llSetAtGridLine::Exec(void) {
 		}
 	}
 	
-	_llLogger()->WriteNextLine(-LOG_INFO,"%i break vertices set", gb_points);
+	_llLogger()->WriteNextLine(-LOG_INFO, "%i break vertices set", gb_points);
 
 
 	return 1;

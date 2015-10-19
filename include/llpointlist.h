@@ -211,6 +211,14 @@ public:
 		return uv[_n].v;
 	}
 
+	void SetU(int _n, float _u) {
+		uv[_n].u = _u;
+	}
+
+	void SetV(int _n, float _v) {
+		uv[_n].v = _v;
+	}
+
 	void SetX(int _n, float _x) {
 		v[_n].x = _x;
 	}

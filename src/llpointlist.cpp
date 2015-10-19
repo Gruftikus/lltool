@@ -32,7 +32,7 @@ int llPointList::AddPoint(float _x, float _y, float _z) {
 	v[counter]  = llVector3(floor(_x+.5f), floor(_y+.5f), _z);
 	float tex_x = (_x-tex00x)/(tex11x-tex00x);
 	float tex_y = (_y-tex00y)/(tex11y-tex00y);
-	uv[counter] = llCoord(tex_x,tex_y);
+	uv[counter] = llCoord(tex_x, tex_y);
 	active[counter]     = 1;
 	tmp_active[counter] = 1;
 	flag[counter]       = 0;

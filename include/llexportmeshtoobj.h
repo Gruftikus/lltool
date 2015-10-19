@@ -12,12 +12,14 @@ protected:
 	char *texname;
 	char *texmap;
 	char *mtlname;
-	int   createpedestals;
+	int   createpedestals, flipu, flipv;
 	float trans_x, trans_y, trans_z, scale;
 
 	llPointList    *newpoints;
 	llTriangleList *newtriangles;
 	int MakeSelection();
+
+	float xmin, xmax, ymin, ymax, zmin, zmax;
 
 public:
 

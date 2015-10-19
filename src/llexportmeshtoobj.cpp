@@ -19,8 +19,11 @@ int llExportMeshToObj::Prepare(void) {
 	texmap          = NULL;
 	mtlname         = NULL;
 	createpedestals = 0;
+
 	trans_x = trans_y = trans_z = 0;
 	scale   = 1.0f;
+	flipu = 0;
+	flipv = 0;
 
 	return 1;
 }
@@ -36,7 +39,10 @@ int llExportMeshToObj::RegisterOptions(void) {
 	RegisterValue("-transy",          &trans_y);
 	RegisterValue("-transz",          &trans_z);
 	RegisterValue("-scale",           &scale);
+
 	RegisterFlag ("-createpedestals", &createpedestals);
+	RegisterFlag ("-flipu",           &flipu);
+	RegisterFlag ("-flipv",           &flipv);
 	
 	return 1;
 }
@@ -71,21 +77,38 @@ int llExportMeshToObj::MakeSelection() {
 	}
 	newpoints->ClearSecondaryList();
 
+	int nope = 0;
 	for (int i=0; i<points->GetN(); i++) {
 		if (points->GetX(i) >= x00 && points->GetX(i)<= x11 &&
 			points->GetY(i) >= y00 && points->GetY(i)<= y11) {
 
-				float z = map->GetZ(points->GetX(i), points->GetY(i));
+				float x = points->GetX(i);
+				float y = points->GetY(i);
+				float z = map->GetZ(x, y);
 				if (z < lowestz) 
 					lowestz = z;
+
+				if (nope == 0) {
+					nope = 1;
+					xmin = xmax = x;
+					ymin = ymax = y;
+					zmin = zmax = z;
+				} else {
+					if (x < xmin) xmin = x;
+					if (x > xmax) xmax = x;
+					if (y < ymin) ymin = y;
+					if (y > ymax) ymax = y;
+					if (z < zmin) zmin = z;
+					if (z > zmax) zmax = z;
+				}
 
 				double angles[MAX_ANGLES];
 				float az[MAX_ANGLES];
 
-				int num = _llMapList()->GetNumHeights(mapname, points->GetX(i), points->GetY(i), angles, az, MAX_ANGLES);
+				int num = _llMapList()->GetNumHeights(mapname, x, y, angles, az, MAX_ANGLES);
 				if (num > 1) {
 					//std::cout << "multiple height at " << points->GetX(i) << ":" << points->GetY(i) << std::endl;
-					int newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), az[0]);
+					int newp = newpoints->AddPoint(x, y, az[0]);
 					newpoints->SetAngle1(newp, angles[num-1]);
 					newpoints->SetAngle2(newp, angles[0]);
 					points->SetSecondary(i, newp);
@@ -94,7 +117,7 @@ int llExportMeshToObj::MakeSelection() {
 					for (int j=1; j<num; j++) {
 						if (fabs(az[j] - oldheight) > 1.f) {
 							int oldp = newp;
-							newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), az[j]);
+							newp = newpoints->AddPoint(x, y, az[j]);
 							newpoints->SetAngle1(newp, angles[j-1]);
 							newpoints->SetAngle2(newp, angles[j]);
 							newpoints->SetSecondary(oldp, newp);
@@ -110,7 +133,7 @@ int llExportMeshToObj::MakeSelection() {
 						newpoints->SetAngle2(newp, 0.0);
 					}
 				} else {
-					int newp = newpoints->AddPoint(points->GetX(i), points->GetY(i), z);
+					int newp = newpoints->AddPoint(x, y, z);
 					newpoints->SetAngle1(newp, 0.0);
 					newpoints->SetAngle2(newp, 0.0);
 					points->SetSecondary(i, newp);
@@ -288,6 +311,18 @@ int llExportMeshToObj::MakeSelection() {
 	newpoints->Resize();
 	if (Used("-scale")) newpoints->Scale(scale);
 	newpoints->Translation(trans_x, trans_y, trans_z);
+
+	if (flipu) {
+		for (int i=0; i<newpoints->GetN(); i++) {
+			newpoints->SetU(i, 1-newpoints->GetU(i));
+		}
+	}
+
+	if (flipv) {
+		for (int i=0; i<newpoints->GetN(); i++) {
+			newpoints->SetV(i, 1-newpoints->GetV(i));
+		}
+	}
 
 	return 1;
 }

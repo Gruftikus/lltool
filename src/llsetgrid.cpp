@@ -34,14 +34,14 @@ int llSetGrid::Exec(void) {
 			if (x >= _llUtils()->x11) x1 = _llUtils()->x11;
 			if (y >= _llUtils()->y11) y1 = _llUtils()->y11;
 
-			if (map->IsInMap(x1,y1) && points->GetMinDistance(x1,y1) > minab) {
+			if (map->IsInMap(x1,y1) && points->IsNotTooClose(x1,y1,minab)) {
 				points->AddPoint(x1, y1, map->GetZ(x1,y1));	
 				//gen_npoints++;
 			}
 
 			if (stepx > 0) {
 				for (float xx=x1; xx<(x1+gridx); xx+=stepx) {
-					if (map->IsInMap(xx,y1) && points->GetMinDistance(xx,y1) > minab) {
+					if (map->IsInMap(xx,y1) && points->IsNotTooClose(xx,y1,minab)) {
 						points->AddPoint(xx, y1, map->GetZ(xx,y1));	
 					}
 				}
@@ -49,7 +49,7 @@ int llSetGrid::Exec(void) {
 
 			if (stepy > 0) {
 				for (float yy=y1; yy<(y1+gridy); yy+=stepy) {
-					if (map->IsInMap(x1,yy) && points->GetMinDistance(x1,yy) > minab) {
+					if (map->IsInMap(x1,yy) && points->IsNotTooClose(x1,yy,minab)) {
 						points->AddPoint(x1, yy, map->GetZ(x1,yy));	
 					}
 				}

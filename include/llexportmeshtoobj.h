@@ -12,7 +12,7 @@ protected:
 	char *texname;
 	char *texmap;
 	char *mtlname;
-	int   createpedestals, flipu, flipv;
+	int   createpedestals, flipu, flipv, sort;
 	float trans_x, trans_y, trans_z, scale;
 
 	llPointList    *newpoints;

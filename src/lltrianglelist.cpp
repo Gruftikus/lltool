@@ -1565,3 +1565,55 @@ void llTriangleList::Add2Triangles(int _p1, int _p2, int _p3, int _p4) {
 		if (t2>-1) v[t2].SetCorrectParity();
 	} 
 }
+
+float llTriangleList::GetTriangleCenterX(int _n) {
+	if (_n < 0 || _n>=counter) return 0.;
+	return (points->GetX(GetPoint1(_n)) + points->GetX(GetPoint2(_n)) + points->GetX(GetPoint3(_n))) / 3.f;
+}
+
+float llTriangleList::GetTriangleCenterY(int _n) {
+	if (_n < 0 || _n>=counter) return 0.;
+	return (points->GetY(GetPoint1(_n)) + points->GetY(GetPoint2(_n)) + points->GetY(GetPoint3(_n))) / 3.f;
+}
+
+int llTriangleList::SortTrianglesCell(void) {
+	float cellsize_x = 0;
+	if (_llUtils()->GetValueF("_cellsize_x"))
+		cellsize_x = (float)(*_llUtils()->GetValueF("_cellsize_x"));
+	float cellsize_y = 0;
+	if (_llUtils()->GetValueF("_cellsize_y"))
+		cellsize_y = (float)(*_llUtils()->GetValueF("_cellsize_y"));
+	if (!cellsize_x || !cellsize_y) return 0;
+
+	std::vector<llTriangle> v_new;
+	v_new.resize(counter);
+
+	unsigned int newcount = 0;
+	for (int x=x00; x<x11; x+=cellsize_x) {
+		for (int y=y00; y<y11; y+=cellsize_y) {
+			for (int n=0; n<counter; n++) {
+				float xn = GetTriangleCenterX(n);
+				float yn = GetTriangleCenterY(n);
+				if (xn >= x && xn<(x+cellsize_x) && yn >= y && yn<(y+cellsize_y)) {
+					if (counter == newcount) {
+						_llLogger()->WriteNextLine(-LOG_WARNING, "Too many triangles in SortTrianglesCell");
+						return 0;
+					}
+					v_new[newcount] = *GetTriangle(n);
+					newcount++;
+				}
+			}
+		}
+	}
+
+	if (counter != newcount) {
+		_llLogger()->WriteNextLine(-LOG_WARNING, "SortTrianglesCell: %i triangles expected, only %i sorted", counter, newcount);
+		counter = newcount;
+	}
+
+	for (int n=0; n<newcount; n++) {
+		v[n] = v_new[n];
+	}
+
+	return 1;
+}

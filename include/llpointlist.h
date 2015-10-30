@@ -252,6 +252,11 @@ public:
 	int   UseANN(void);
 	int   GetClosestPoint(float _x, float _y);
 	float GetMinDistance(float _x, float _y, float _radius = -1.0f, llQuad *_quad = NULL);
+	int   IsNotTooClose(float _x, float _y, float _minab) {
+		if (_minab<=0) return 1;
+		if (GetMinDistance(_x, _y) > _minab) return 1;
+		return 0;
+	}
 	float GetMinDistance(float _x, float _y, float _radius, llQuadList *_quads);
 	float GetMinDistanceGrid(float _x, float _y, float _grid, int _flag = 0);
 

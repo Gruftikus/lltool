@@ -24,6 +24,7 @@ int llExportMeshToObj::Prepare(void) {
 	scale   = 1.0f;
 	flipu = 0;
 	flipv = 0;
+	sort  = 0;
 
 	return 1;
 }
@@ -43,6 +44,7 @@ int llExportMeshToObj::RegisterOptions(void) {
 	RegisterFlag ("-createpedestals", &createpedestals);
 	RegisterFlag ("-flipu",           &flipu);
 	RegisterFlag ("-flipv",           &flipv);
+	RegisterFlag ("-sort",            &sort);
 	
 	return 1;
 }
@@ -150,6 +152,7 @@ int llExportMeshToObj::MakeSelection() {
 	//Make temporary triangle list
 	if (newtriangles) delete newtriangles;
 	newtriangles = new llTriangleList(newpoints->GetN(), newpoints);
+	newtriangles->SetRange(x00, x11, y00, y11);
 
 	if (lowestz > 0) 
 		lowestz = 0;
@@ -307,6 +310,8 @@ int llExportMeshToObj::MakeSelection() {
 			}
 		}
 	}
+
+	if (sort) newtriangles->SortTrianglesCell();
 
 	newpoints->Resize();
 	if (Used("-scale")) newpoints->Scale(scale);

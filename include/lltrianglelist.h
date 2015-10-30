@@ -114,14 +114,14 @@ private:
 
 	std::vector<llTriangle> v;
 	unsigned int counter;
-	llPointList * points;
+	llPointList *points;
 	int next_strip_id;
-	std::vector< unsigned short > length_strip;
-	std::vector< unsigned short > vertices;
+	std::vector<unsigned short> length_strip;
+	std::vector<unsigned short> vertices;
 	int num_strips, pos_strip,lastflag;
 
-	float x00,x11,y00,y11;
-	llLogger * mesg;
+	float x00, x11, y00, y11;
+	llLogger *mesg;
 
 public:
 
@@ -133,7 +133,7 @@ public:
 	int  RemoveTriangle(unsigned int _n);
 	int  RemoveTriangles(void) {counter = 0; return 1;};
 
-	llTriangle * GetTriangle(unsigned int _n);
+	llTriangle *GetTriangle(unsigned int _n);
 	int GetTriangle(int _p1, int _p2); //returns triangle which shares p1 and p2
 
 	int GetParity(int _n) {return v[_n].GetParity();};
@@ -167,12 +167,19 @@ public:
 
 	void Print(void);
 
-	std::vector< unsigned short > GetVertices(void) {
+	std::vector<unsigned short> GetVertices(void) {
 		return vertices;
 	};
 	int AddTriangle(llTriangle *_tri, int _flag);
 	int HasLoop(int _tri);
 	int HasLoop(int _tri, int _source);
+
+	void SetRange(float _x00, float _x11, float _y00, float _y11) {
+		x00 = _x00; x11 = _x11; y00 = _y00; y11 = _y11; 
+	}
+	float GetTriangleCenterX(int _n);
+	float GetTriangleCenterY(int _n);
+	int SortTrianglesCell(void);
 };
 
 #endif

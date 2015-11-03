@@ -181,7 +181,7 @@ int llExportMeshToObj::MakeSelection() {
 				my_new2 = new3;
 				my_new3 = new1;
 			} 
-			if ((newpoints->GetAngle1(my_new1) > 0.01 || newpoints->GetAngle2(my_new1) > 0.01) && my_new1 > -1 && my_new2 > -1 && my_new3) {
+			if ((newpoints->GetAngle1(my_new1) > 0.01 || newpoints->GetAngle2(my_new1) > 0.01) && my_new1 > -1 && my_new2 > -1 && my_new3 > -1) {
 				//direction-specific height
 				float x1 = newpoints->GetX(my_new1);
 				float y1 = newpoints->GetY(my_new1);
@@ -192,6 +192,7 @@ int llExportMeshToObj::MakeSelection() {
 				int used_point = -1;
 				int do_loop    = 1;
 
+				//std::cout << "Enter Angle search" << std::endl;
 				//std::cout << newpoints->GetAngle1(my_new1) << ":" << newpoints->GetAngle2(my_new1) << std::endl;
 				//std::cout << "j:" << j << ":" << my_new1 << std::endl;
 

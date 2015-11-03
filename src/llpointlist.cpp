@@ -175,18 +175,18 @@ float llPointList::GetMinDistanceGrid(float _x, float _y, float _grid, int _flag
 
 	if (_grid < 0) return -_grid;  //Disabled, return a default value
 
-	float mingrid = float(floor(_x/_grid)*int(_grid));
+	float mingrid = floor(_x/_grid)*_grid;
 	float maxgrid = mingrid + _grid;
 
 	float min = _grid;
-	if (_flag ==0 || _flag == 1) {
+	if (_flag == 0 || _flag == 1) {
 		min = fabs(_x - mingrid);
 		if (fabs(maxgrid - _x) < min)  
 			min = fabs(maxgrid - _x);
 	}
 
-	mingrid = float(floor(_y/_grid)*int(_grid));
-	maxgrid = mingrid+_grid;
+	mingrid = floor(_y/_grid)*_grid;
+	maxgrid = mingrid + _grid;
 
 	if (_flag == 0 || _flag == 2) {
 		if (fabs(_y-mingrid) < min)  
@@ -222,6 +222,12 @@ int llPointList::RemoveInactiveVertices(void) {
 		}
 	}
 	counter = num;
+	if (quads) { 
+		//rebuild quad tree
+		quads->RemoveAllPoints();
+		for (unsigned int i=0; i<counter; i++) 
+			if (!quads->AddPoint(v[i].x, v[i].y, i)) return -1;
+	}
 	return num;
 }
 

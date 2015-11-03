@@ -115,21 +115,21 @@ int llExportMapToDDS::Exec(void) {
 
 			int tupel = 0;
 
-			int xl = x;
-			int yl = y;
-			if (flipx) xl = x2 - (x - x1);
-			if (flipy) yl = y2 - (y - y1);
-
 			if (Used("-scale")) {
-				tupel = map->GetTupelScaled(xl, yl, &byte1, &byte2, &byte3, &byte4, scale);			
+				tupel = map->GetTupelScaled(x, y, &byte1, &byte2, &byte3, &byte4, scale);			
 			} else {
-				tupel = map->GetTupel(xl, yl, &byte1, &byte2, &byte3, &byte4);
+				tupel = map->GetTupel(x, y, &byte1, &byte2, &byte3, &byte4);
 			}
 
+			int xl = x-x1;
+			int yl = y-y1;
+			if (flipx) xl = x2-x;
+			if (flipy) yl = y2-y; 
+
 			if (tupel) {
-				pSrc_image[(xl-x1)+(yl-y1)*width] = byte3 | (byte2 << 8) | (byte1 << 16) | (byte4 << 24);
+				pSrc_image[(xl)+(yl)*width] = byte3 | (byte2 << 8) | (byte1 << 16) | (byte4 << 24);
 			} else 
-				pSrc_image[(xl-x1)+(yl-y1)*width] = 0;
+				pSrc_image[(xl)+(yl)*width] = 0;
 		}
 	}
 

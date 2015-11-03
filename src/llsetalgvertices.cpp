@@ -164,14 +164,13 @@ int llSetAlgVertices::Exec(void) {
 			}
 
 			if (cellsize_x)
-				mingrid_x = points->GetMinDistanceGrid(map->GetCoordX(x), map->GetCoordY(y), cellsize_x, 1);
+				mingrid_x = points->GetMinDistanceGrid(tmpmap->GetCoordX(x), tmpmap->GetCoordY(y), cellsize_x, 1);
 			if (cellsize_y)
-				mingrid_y = points->GetMinDistanceGrid(map->GetCoordX(x), map->GetCoordY(y), cellsize_y, 2);
+				mingrid_y = points->GetMinDistanceGrid(tmpmap->GetCoordX(x), tmpmap->GetCoordY(y), cellsize_y, 2);
 
 			if (mingrid_x <= minab_grid || mingrid_y <= minab_grid) {
 				tmpmap->SetElementRaw(x, y, 0);
 			}
-
 		}
 	}
 

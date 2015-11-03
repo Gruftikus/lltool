@@ -71,6 +71,16 @@ public:
 		}
 	};
 
+	void RemoveAllPoints(void) {
+		npoints = 0;
+		if (has_sub_quads) {
+			if (subquads[0][0]) subquads[0][0]->RemoveAllPoints();
+			if (subquads[0][1]) subquads[0][1]->RemoveAllPoints();
+			if (subquads[1][0]) subquads[1][0]->RemoveAllPoints();
+			if (subquads[1][1]) subquads[1][1]->RemoveAllPoints();
+		}
+	}
+
 	int GetPointNum(int _i) {
 		return points[_i];
 	}
@@ -118,6 +128,9 @@ public:
 	};
 
 	int AddPoint(float _x, float _y, int _num); 
+	void RemoveAllPoints(void) {
+		for (unsigned int i=0; i<v.size(); i++) v[i]->RemoveAllPoints();
+	}
 
 	llQuad *AddQuad(int _p1, int _p2, float _x1, float _y1, float _x2, float _y2);
 

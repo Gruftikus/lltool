@@ -17,6 +17,7 @@ protected:
 	int   noAdaptiveBlocks;
 	int   makemips;
 	char *fmt_string;
+	int   crop;
 
 
 

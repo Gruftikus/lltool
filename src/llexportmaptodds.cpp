@@ -48,6 +48,7 @@ int llExportMapToDDS::Prepare(void) {
 	makemips   = 0;
 	fmt_string = "DXT1";
 	flipx = flipy = 0;
+	crop = 0;
 
 	return 1;
 }
@@ -57,9 +58,11 @@ int llExportMapToDDS::RegisterOptions(void) {
 
 	RegisterValue("-filename", &filename);
 	RegisterValue("-scale",    &scale);
+	RegisterValue("-crop",     &crop);
 	RegisterValue("-bitrate",  &bitrate);
 	RegisterValue("-quality",  &quality_level);
 	RegisterValue("-format",   &fmt_string);
+
 
 	RegisterFlag("-noAdaptiveBlocks",  &noAdaptiveBlocks);
 	RegisterFlag("-MakeMips", &makemips);
@@ -100,6 +103,13 @@ int llExportMapToDDS::Exec(void) {
 
 	int width  = x2-x1+1;
 	int height = y2-y1+1;
+
+	if (Used("-crop")) {
+		width  = crop;
+		height = crop;
+		x2 = width+x1-1;
+		y2 = height+y1-1;
+	}
 
 	using namespace crnlib;
 

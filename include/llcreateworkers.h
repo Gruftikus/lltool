@@ -15,6 +15,7 @@
 #include "../include/llmkdir.h"
 #ifdef _MSC_VER
 #include "../include/llfileiterator.h"
+#include "../include/llmatchregex.h"
 #include "../include/llcopyfile.h"
 #endif
 
@@ -97,6 +98,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llSetPath());
 	_batch->RegisterWorker(new llMkDir());
 #ifdef _MSC_VER	
+	_batch->RegisterWorker(new llMatchRegEx());
 	_batch->RegisterWorker(new llFileIterator());
 	_batch->RegisterWorker(new llCopyFile());
 #endif

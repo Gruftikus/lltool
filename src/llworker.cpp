@@ -237,10 +237,12 @@ int llWorker::Used(const char *_flag) {
 }
 
 int llWorker::RegisterOptions(void) {
+	RegisterFlag ("-silent", &silent);
 	return 1;
 }
 
 int llWorker::Prepare(void) {
+	silent = 0;
 	for (unsigned int i=0; i<name.size(); i++) {
 		used[i] = 0;
 	}
@@ -258,6 +260,8 @@ int llWorker::Exec(void) {
 }
 
 void llWorker::Print(void) {
+
+	if (silent) return;
 
 	_llLogger()->WriteNextLine(LOG_COMMAND, "%s", GetCommandName());
 

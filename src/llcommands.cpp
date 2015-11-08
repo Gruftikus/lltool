@@ -411,7 +411,9 @@ int llCommands::GetCommand(void) {
 	worker->ReplaceFlags();
 	worker->Print();
 	
+	if (worker->IsSilent()) _llLogger()->level=LOG_WARNING;
 	int retval = worker->Exec();
+	if (worker->IsSilent()) _llLogger()->level=LOG_INFO;
 	
 	if (worker->Repeat()) {
 		skip_next_block |= LLCOM_ITERATE_BLOCK;

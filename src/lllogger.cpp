@@ -26,6 +26,7 @@ llLogger::llLogger() {
 		lines[i] = NULL;
 	}
 	logfile = NULL;
+	level = LOG_INFO;
 }
 
 const char *llLogger::ReadNextLine(void) {
@@ -58,6 +59,8 @@ int llLogger::WriteNextLine(int _level, const char *_format, ...) {
 		writeout = 1;
 		_level = -_level;
 	}
+
+	if (_level < level) return 0;
 
 	if (tot_lines >= LOG_NUM_LINES-1) return 0;
 	
@@ -114,12 +117,9 @@ int llLogger::WriteNextLine(int _level, const char *_format, ...) {
 	}
 #endif
 
-	
-
 	lines[write_pointer] = new char[strlen(tmp2)+1];
 	strcpy_s(lines[write_pointer],strlen(tmp2)+1,tmp2);
 	write_pointer++;
-
 
 	if (writeout) {
 		Dump();

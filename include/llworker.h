@@ -16,6 +16,7 @@ class llWorker {
 	 int  command_index;
 	 int  checked_value, checked_pos;
 	 bool repeat_worker;
+	 int  silent;
 
 	 std::vector<const char*> name;
 	 std::vector<int*>    flag;
@@ -138,6 +139,10 @@ class llWorker {
 
 	virtual int IsRepeatWorker() {
 		return 0;
+	}
+
+	int IsSilent() {
+		return silent;
 	}
 
 	virtual void Print(void);

@@ -23,7 +23,8 @@ int llEcho::RegisterOptions(void) {
 int llEcho::Exec(void) {
 	if (!llWorker::Exec()) return 0;
 
-	std::cout << text << std::endl;
+	//std::cout << text << std::endl;
+	_llLogger()->WriteNextLine(-LOG_ECHO, text);
 
 	return 1;
 }

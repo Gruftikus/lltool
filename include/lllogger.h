@@ -39,6 +39,8 @@ public:
 	const char *ReadNextLine(void);
 	int         WriteNextLine(int _level, const char *_format, ...);
 
+	int level;
+
 	void SetLogFile(FILE *_file) {
 		logfile = _file;
 	};

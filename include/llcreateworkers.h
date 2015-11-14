@@ -49,6 +49,7 @@
 #include "../include/llselectall.h"
 #include "../include/lltriangulation.h"
 #include "../include/llcopymap.h"
+#include "../include/lldeletemap.h"
 #include "../include/llscalemap.h"
 
 //Vertex-setters:
@@ -130,6 +131,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llSetHeight());
 	_batch->RegisterWorker(new llSelectAll());
 	_batch->RegisterWorker(new llCopyMap());
+	_batch->RegisterWorker(new llDeleteMap());
 	_batch->RegisterWorker(new llScaleMap());
 
 	_batch->RegisterWorker(new llFillColorMap());

@@ -14,6 +14,7 @@ int llFilter::Prepare(void) {
 	makeshort = 0;
 	overwrite = 0;
 	makederivatives = 0;
+	rgb = 0;
 
 	return 1;
 }
@@ -24,6 +25,7 @@ int llFilter::RegisterOptions(void) {
 	RegisterValue("-name",            &targetname);
 	RegisterValue("-n",               &dist, LLWORKER_OBL_OPTION);
 	RegisterFlag ("-use16bit",        &makeshort);
+	RegisterFlag ("-rgb",             &rgb);
 	RegisterFlag ("-overwrite",       &overwrite);
 	RegisterFlag ("-MakeDerivatives", &makederivatives);
 
@@ -49,7 +51,11 @@ int llFilter::Exec(void) {
 	int widthy = map->GetWidthY();
 
 	float defaultheight = map->GetDefaultHeight();
-	newmap = new llMap(widthx, widthy, makeshort, defaultheight);
+	if (rgb)
+		newmap = new llMap(widthx, widthy, MAP_COLOR);
+	else
+		newmap = new llMap(widthx, widthy, makeshort, defaultheight);
+	if (map->IsEven()) newmap->SetEven();
 //	float minheight = defaultheight + 1.0f;
 
 	for (int y=0; y<widthy; y++) {
@@ -63,21 +69,39 @@ int llFilter::Exec(void) {
 			if (x2 > (int(widthx)-1)) x2 = widthx-1;
 			if (y2 > (int(widthy)-1)) y2 = widthy-1;
 			float mean=0., num=0.;
+			float mean_red=0., mean_blue=0., mean_green=0., mean_alpha=0.;
+			unsigned char red, blue, green, alpha;
 
 			for (int  xx=x1; xx<=x2; xx++) {
 				for (int  yy=y1; yy<=y2; yy++) {
-					float height = map->GetElementRaw(xx,yy);
-//					if (height > minheight) {
+					if (rgb) {
+						map->GetTupel(xx, yy, &blue, &green, &red, &alpha);
+						mean_blue  += (float)blue;
+						mean_green += (float)green;
+						mean_red   += (float)red;
+						mean_alpha += (float)alpha;
+						num++;
+					} else {
+						float height = map->GetElementRaw(xx,yy);
+						//					if (height > minheight) {
 						mean +=  height;
 						num++;
-//					}
+						//					}
+					}
 				}
 			}
-			if (num)
+			if (rgb) {
+				blue  = (unsigned char)(mean_blue/num);
+				green = (unsigned char)(mean_green/num);
+				red   = (unsigned char)(mean_red/num);
+				alpha = (unsigned char)(mean_alpha/num);
+				newmap->SetTupel(x, y, blue, green, red, alpha);
+			} else if (num) {
 				newmap->SetElementRaw(x,y,mean/num);
-			else
+			} else {
 				//newmap->SetElementRaw(x,y,defaultheight);
 				newmap->SetElementRaw(x,y,-15);
+			}
 		}
 	}
 

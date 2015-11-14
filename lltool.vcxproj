@@ -169,6 +169,7 @@
     <ClInclude Include="include\llcreatenormalmap.h" />
     <ClInclude Include="include\llcreatepolygon.h" />
     <ClInclude Include="include\llcreateworkers.h" />
+    <ClInclude Include="include\lldeletemap.h" />
     <ClInclude Include="include\lldiamondsquare.h" />
     <ClInclude Include="include\llecho.h" />
     <ClInclude Include="include\llexit.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="include\llmap.h" />
     <ClInclude Include="include\llmaplist.h" />
     <ClInclude Include="include\llmapworker.h" />
+    <ClInclude Include="include\llmatchregex.h" />
     <ClInclude Include="include\llmkdir.h" />
     <ClInclude Include="include\llpanorama.h" />
     <ClInclude Include="include\llpointlist.h" />
@@ -350,6 +352,7 @@
     <ClCompile Include="src\llcreatemap.cpp" />
     <ClCompile Include="src\llcreatenormalmap.cpp" />
     <ClCompile Include="src\llcreatepolygon.cpp" />
+    <ClCompile Include="src\lldeletemap.cpp" />
     <ClCompile Include="src\lldiamondsquare.cpp" />
     <ClCompile Include="src\llecho.cpp" />
     <ClCompile Include="src\llexit.cpp" />
@@ -371,6 +374,7 @@
     <ClCompile Include="src\llmap.cpp" />
     <ClCompile Include="src\llmaplist.cpp" />
     <ClCompile Include="src\llmapworker.cpp" />
+    <ClCompile Include="src\llmatchregex.cpp" />
     <ClCompile Include="src\llmkdir.cpp" />
     <ClCompile Include="src\llpanorama.cpp" />
     <ClCompile Include="src\llpointlist.cpp" />

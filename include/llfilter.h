@@ -10,7 +10,7 @@ protected:
 
 	char *targetname;
 	int   dist;
-	int   makeshort, overwrite, makederivatives;
+	int   makeshort, overwrite, makederivatives, rgb;
 
 public:
 

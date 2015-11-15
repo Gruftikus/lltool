@@ -148,7 +148,8 @@ public:
 		llMap *_map); //divide all triangles at x
 	void DivideBetween(float _x1, float _y1, float _x2, float _y2, llMap *_map);
 	int DivideAtZ(float _z, float _mindist,
-		      llMap *_map); //divide all triangles at z
+		llMap *_map); //divide all triangles at z
+	int DivideTriangleAtZ(unsigned int _n, float _z, int _flag=0);
 	int SplitFlatTriangles(float _min, float _max, float _z,
 		llMap *_map);
 	int RemoveBrokenTriangles(llMap *_map);

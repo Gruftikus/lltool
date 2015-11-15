@@ -45,6 +45,7 @@
 #include "../include/llimportmapfromdds.h"
 #include "../include/llmakederivatives.h"
 #include "../include/llquaditerator.h"
+#include "../include/llcelliterator.h"
 #include "../include/llsetheight.h"
 #include "../include/llselectall.h"
 #include "../include/lltriangulation.h"
@@ -128,6 +129,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llImportMap());
 	_batch->RegisterWorker(new llImportMapFromDDS());
 	_batch->RegisterWorker(new llQuadIterator());
+	_batch->RegisterWorker(new llCellIterator());
 	_batch->RegisterWorker(new llSetHeight());
 	_batch->RegisterWorker(new llSelectAll());
 	_batch->RegisterWorker(new llCopyMap());

@@ -852,6 +852,121 @@ getnext:
 	return has_found_terminal;
 }
 
+int llTriangleList::DivideTriangleAtZ(unsigned int _n, float _z, int _flag) {
+	//divides triangle _n at _z
+	//removes (optional) lower part if _flag=1
+	//removes (optional) upper part if _flag=2
+
+	llTriangle *loc = &(v[_n]);
+	float x[4],y[4],z[4];
+
+	x[1] =  points->GetX(GetPoint1(_n));
+	x[2] =  points->GetX(GetPoint2(_n));
+	x[3] =  points->GetX(GetPoint3(_n));
+	y[1] =  points->GetY(GetPoint1(_n));
+	y[2] =  points->GetY(GetPoint2(_n));
+	y[3] =  points->GetY(GetPoint3(_n));
+	z[1] =  points->GetZ(GetPoint1(_n));
+	z[2] =  points->GetZ(GetPoint2(_n));
+	z[3] =  points->GetZ(GetPoint3(_n));
+
+	int soliton=0;
+	if ((z[1]<_z && z[2]>=_z && z[3]>_z) || (z[1]<_z && z[2]>_z && z[3]>=_z))
+		soliton=-1;
+	if ((z[2]<_z && z[1]>=_z && z[3]>_z) || (z[2]<_z && z[1]>_z && z[3]>=_z))
+		soliton=-2;
+	if ((z[3]<_z && z[2]>=_z && z[1]>_z) || (z[3]<_z && z[2]>_z && z[1]>=_z))
+		soliton=-3;
+	if ((z[1]>_z && z[2]<=_z && z[3]<_z) || (z[1]>_z && z[2]<_z && z[3]<=_z))
+		soliton=1;
+	if ((z[2]>_z && z[1]<=_z && z[3]<_z) || (z[2]>_z && z[1]<_z && z[3]<=_z))
+		soliton=2;
+	if ((z[3]>_z && z[2]<=_z && z[1]<_z) || (z[3]>_z && z[2]<_z && z[1]<=_z))
+		soliton=3;
+	if (soliton==0) return 0;
+
+	float new_x[2], new_y[2], new_z[2], single_x, single_y, single_z;
+
+	if (soliton == 1 || soliton == -1) {
+		new_x[0] = x[1] + ( (z[1]-_z)/(z[1]-z[2]) )*(x[2]-x[1]);
+		new_x[1] = x[1] + ( (z[1]-_z)/(z[1]-z[3]) )*(x[3]-x[1]);
+		new_y[0] = y[1] + ( (z[1]-_z)/(z[1]-z[2]) )*(y[2]-y[1]);
+		new_y[1] = y[1] + ( (z[1]-_z)/(z[1]-z[3]) )*(y[3]-y[1]);
+	}
+	if (soliton == 2 || soliton == -2) {
+		new_x[0] = x[2] + ( (z[2]-_z)/(z[2]-z[1]) )*(x[1]-x[2]);
+		new_x[1] = x[2] + ( (z[2]-_z)/(z[2]-z[3]) )*(x[3]-x[2]);
+		new_y[0] = y[2] + ( (z[2]-_z)/(z[2]-z[1]) )*(y[1]-y[2]);
+		new_y[1] = y[2] + ( (z[2]-_z)/(z[2]-z[3]) )*(y[3]-y[2]);
+	}
+	if (soliton == 3 || soliton == -3) {
+		new_x[0] = x[3] + ( (z[3]-_z)/(z[3]-z[1]) )*(x[1]-x[3]);
+		new_x[1] = x[3] + ( (z[3]-_z)/(z[3]-z[2]) )*(x[2]-x[3]);
+		new_y[0] = y[3] + ( (z[3]-_z)/(z[3]-z[1]) )*(y[1]-y[3]);
+		new_y[1] = y[3] + ( (z[3]-_z)/(z[3]-z[2]) )*(y[2]-y[3]);
+	}
+
+	int point0 = points->GetPoint(new_x[0], new_x[0]);
+	if (point0<0)
+		point0=points->AddPoint(new_x[0], new_x[0], _z);
+	int point1 = points->GetPoint(new_x[1], new_x[1]);
+	if (point1<0)
+		point1=points->AddPoint(new_x[1], new_x[1], _z);
+
+	if ((soliton>0 && _flag==1) || (soliton<0 && _flag==2)) {
+		//only adjusts the existing triangle
+		if (soliton == 1 || soliton == -1) {
+			loc->SetPoint2(point0);
+			loc->SetPoint3(point1);
+			loc->SetCorrectParity();
+		} else if (soliton == 2 || soliton == -2) {
+			loc->SetPoint1(point0);
+			loc->SetPoint3(point1);
+			loc->SetCorrectParity();
+		} else {
+			loc->SetPoint1(point0);
+			loc->SetPoint2(point1);
+			loc->SetCorrectParity();
+		} 
+		return 1;
+	} else if (_flag) {
+		//2 triangles
+		if (soliton == 1 || soliton == -1) {
+			loc->SetPoint1(point0);
+			loc->SetCorrectParity();
+			AddTriangle(point0, point1, GetPoint3(_n));
+		} else if (soliton == 2 || soliton == -2) {
+			loc->SetPoint2(point0);
+			loc->SetCorrectParity();
+			AddTriangle(point0, point1, GetPoint1(_n));
+		} else {
+			loc->SetPoint3(point0);
+			loc->SetCorrectParity();
+			AddTriangle(point0, point1, GetPoint2(_n));
+		} 
+		return 1;
+	}
+
+	//Split the entire triangle
+	if (soliton == 1 || soliton == -1) {
+		loc->SetPoint2(point0);
+		loc->SetPoint3(point1);
+		loc->SetCorrectParity();
+		Add2Triangles(point0, point1, GetPoint2(_n), GetPoint3(_n));
+	} else if (soliton == 2 || soliton == -2) {
+		loc->SetPoint1(point0);
+		loc->SetPoint3(point1);
+		loc->SetCorrectParity();
+		Add2Triangles(point0, point1, GetPoint1(_n), GetPoint3(_n));
+	} else {
+		loc->SetPoint1(point0);
+		loc->SetPoint2(point1);
+		loc->SetCorrectParity();
+		Add2Triangles(point0, point1, GetPoint1(_n), GetPoint2(_n));
+	} 
+	return 1;
+}
+
 int llTriangleList::DivideAtZ(float _z_in, float _mindist, llMap *_map) { 
 	//divide all triangles at z (not fully tested to the end)
 	unsigned old_counter=counter;
@@ -1589,11 +1704,13 @@ int llTriangleList::SortTrianglesCell(void) {
 	v_new.resize(counter);
 
 	unsigned int newcount = 0;
-	for (int x=x00; x<x11; x+=cellsize_x) {
-		for (int y=y00; y<y11; y+=cellsize_y) {
+	for (float x=x00; x<x11; x+=cellsize_x) {
+		for (float y=y00; y<y11; y+=cellsize_y) {
 			for (int n=0; n<counter; n++) {
 				float xn = GetTriangleCenterX(n);
+				if ((x+cellsize_x)>=x11 && xn >= x) xn=x;
 				float yn = GetTriangleCenterY(n);
+				if ((y+cellsize_y)>=y11 && yn >= y) yn=y;
 				if (xn >= x && xn<(x+cellsize_x) && yn >= y && yn<(y+cellsize_y)) {
 					if (counter == newcount) {
 						_llLogger()->WriteNextLine(-LOG_WARNING, "Too many triangles in SortTrianglesCell");

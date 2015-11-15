@@ -906,12 +906,14 @@ int llTriangleList::DivideTriangleAtZ(unsigned int _n, float _z, int _flag) {
 		new_y[1] = y[3] + ( (z[3]-_z)/(z[3]-z[2]) )*(y[2]-y[3]);
 	}
 
-	int point0 = points->GetPoint(new_x[0], new_x[0]);
+	int point0 = points->GetPoint(new_x[0], new_y[0]);
 	if (point0<0)
-		point0=points->AddPoint(new_x[0], new_x[0], _z);
-	int point1 = points->GetPoint(new_x[1], new_x[1]);
+		point0=points->AddPoint(new_x[0], new_y[0], _z);
+	int point1 = points->GetPoint(new_x[1], new_y[1]);
 	if (point1<0)
-		point1=points->AddPoint(new_x[1], new_x[1], _z);
+		point1=points->AddPoint(new_x[1], new_y[1], _z);
+
+	if (point0 == point1) return 0;
 
 	if ((soliton>0 && _flag==1) || (soliton<0 && _flag==2)) {
 		//only adjusts the existing triangle
@@ -944,27 +946,54 @@ int llTriangleList::DivideTriangleAtZ(unsigned int _n, float _z, int _flag) {
 			loc->SetCorrectParity();
 			AddTriangle(point0, point1, GetPoint2(_n));
 		} 
-		return 1;
+		return 2;
 	}
 
 	//Split the entire triangle
 	if (soliton == 1 || soliton == -1) {
+		if (point0 == GetPoint2(_n))
+			AddTriangle(point0, point1, GetPoint3(_n));
+		else if (point1 == GetPoint3(_n))
+			AddTriangle(point0, point1, GetPoint2(_n));
+		else
+			Add2Triangles(point0, point1, GetPoint2(_n), GetPoint3(_n));
 		loc->SetPoint2(point0);
 		loc->SetPoint3(point1);
 		loc->SetCorrectParity();
-		Add2Triangles(point0, point1, GetPoint2(_n), GetPoint3(_n));
 	} else if (soliton == 2 || soliton == -2) {
+		if (point0 == GetPoint1(_n))
+			AddTriangle(point0, point1, GetPoint3(_n));
+		else if (point1 == GetPoint3(_n))
+			AddTriangle(point0, point1, GetPoint1(_n));
+		else
+			Add2Triangles(point0, point1, GetPoint1(_n), GetPoint3(_n));
 		loc->SetPoint1(point0);
 		loc->SetPoint3(point1);
-		loc->SetCorrectParity();
-		Add2Triangles(point0, point1, GetPoint1(_n), GetPoint3(_n));
+		loc->SetCorrectParity();	
 	} else {
+		if (point0 == GetPoint1(_n))
+			AddTriangle(point0, point1, GetPoint2(_n));
+		else if (point1 == GetPoint2(_n))
+			AddTriangle(point0, point1, GetPoint1(_n));
+		else
+			Add2Triangles(point0, point1, GetPoint1(_n), GetPoint2(_n));
 		loc->SetPoint1(point0);
 		loc->SetPoint2(point1);
-		loc->SetCorrectParity();
-		Add2Triangles(point0, point1, GetPoint1(_n), GetPoint2(_n));
+		loc->SetCorrectParity();		
 	} 
-	return 1;
+	return 3;
+}
+
+int llTriangleList::DivideAtZ(float _x1, float _y1, float _x2, float _y2, float _z, int _flag) {
+	unsigned int old_counter = counter;
+	unsigned int num_new     = 0;
+	for (unsigned int i=0; i<old_counter; i++) {
+		if (GetTriangleCenterX(i) > _x1 && GetTriangleCenterX(i) < _x2 &&
+			GetTriangleCenterY(i) > _y1 && GetTriangleCenterY(i) < _y2) {
+				num_new += DivideTriangleAtZ(i, _z, _flag);
+		}
+	}
+	return num_new;
 }
 
 int llTriangleList::DivideAtZ(float _z_in, float _mindist, llMap *_map) { 

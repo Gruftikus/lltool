@@ -162,6 +162,7 @@
     <ClInclude Include="include\llalgsecond.h" />
     <ClInclude Include="include\llalgslope.h" />
     <ClInclude Include="include\llalgstripe.h" />
+    <ClInclude Include="include\llcelliterator.h" />
     <ClInclude Include="include\llcommands.h" />
     <ClInclude Include="include\llcopyfile.h" />
     <ClInclude Include="include\llcopymap.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="include\llfileiterator.h" />
     <ClInclude Include="include\llfillcolormap.h" />
     <ClInclude Include="include\llfilter.h" />
+    <ClInclude Include="include\llgetheight.h" />
     <ClInclude Include="include\llimportmap.h" />
     <ClInclude Include="include\llimportmapfromdds.h" />
     <ClInclude Include="include\llinactivateallvertices.h" />
@@ -219,6 +221,7 @@
     <ClInclude Include="include\llsplitat.h" />
     <ClInclude Include="include\llsplitatgrid.h" />
     <ClInclude Include="include\llsplitatpolygonborder.h" />
+    <ClInclude Include="include\llsplitatz.h" />
     <ClInclude Include="include\llsplitbetween.h" />
     <ClInclude Include="include\llstencilpolygon.h" />
     <ClInclude Include="include\lltrianglelist.h" />
@@ -346,6 +349,7 @@
     <ClCompile Include="src\llalgsecond.cpp" />
     <ClCompile Include="src\llalgslope.cpp" />
     <ClCompile Include="src\llalgstripe.cpp" />
+    <ClCompile Include="src\llcelliterator.cpp" />
     <ClCompile Include="src\llcommands.cpp" />
     <ClCompile Include="src\llcopyfile.cpp" />
     <ClCompile Include="src\llcopymap.cpp" />
@@ -364,6 +368,7 @@
     <ClCompile Include="src\llfileiterator.cpp" />
     <ClCompile Include="src\llfillcolormap.cpp" />
     <ClCompile Include="src\llfilter.cpp" />
+    <ClCompile Include="src\llgetheight.cpp" />
     <ClCompile Include="src\llimportmap.cpp" />
     <ClCompile Include="src\llimportmapfromdds.cpp" />
     <ClCompile Include="src\llinactivateallvertices.cpp" />
@@ -402,6 +407,7 @@
     <ClCompile Include="src\llsplitat.cpp" />
     <ClCompile Include="src\llsplitatgrid.cpp" />
     <ClCompile Include="src\llsplitatpolygonborder.cpp" />
+    <ClCompile Include="src\llsplitatz.cpp" />
     <ClCompile Include="src\llsplitbetween.cpp" />
     <ClCompile Include="src\llstencilpolygon.cpp" />
     <ClCompile Include="src\lltool.cpp" />

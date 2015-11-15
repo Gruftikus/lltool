@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
 
 	std::cout << "Landscape and Heightmap Editing Tool" << std::endl;
 	std::cout << "Written by gruftikus@github" << std::endl;
-	std::cout << "V0.20 (alpha!), 18.04.2014" << std::endl;
+	std::cout << "V1.00, 15.11.2015" << std::endl;
 	std::cout << "***********************" << std::endl;
 
 	//******************

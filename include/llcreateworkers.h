@@ -47,6 +47,7 @@
 #include "../include/llquaditerator.h"
 #include "../include/llcelliterator.h"
 #include "../include/llsetheight.h"
+#include "../include/llgetheight.h"
 #include "../include/llselectall.h"
 #include "../include/lltriangulation.h"
 #include "../include/llcopymap.h"
@@ -78,6 +79,7 @@
 #include "../include/llactivatevisiblevertices.h"
 #include "../include/llremoveinactivetriangles.h"
 #include "../include/llsplitat.h"
+#include "../include/llsplitatz.h"
 #include "../include/llsplitatgrid.h"
 #include "../include/llsplitatpolygonborder.h"
 #include "../include/llsplitbetween.h"
@@ -131,6 +133,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llQuadIterator());
 	_batch->RegisterWorker(new llCellIterator());
 	_batch->RegisterWorker(new llSetHeight());
+	_batch->RegisterWorker(new llGetHeight());
 	_batch->RegisterWorker(new llSelectAll());
 	_batch->RegisterWorker(new llCopyMap());
 	_batch->RegisterWorker(new llDeleteMap());
@@ -162,6 +165,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llTriangulation());
 
 	_batch->RegisterWorker(new llSplitAt());
+	_batch->RegisterWorker(new llSplitAtZ());
 	_batch->RegisterWorker(new llSplitAtGrid());
 	_batch->RegisterWorker(new llSplitBetween());
 	_batch->RegisterWorker(new llSplitAtPolygonBorder());

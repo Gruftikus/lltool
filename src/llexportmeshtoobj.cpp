@@ -86,7 +86,8 @@ int llExportMeshToObj::MakeSelection() {
 
 				float x = points->GetX(i);
 				float y = points->GetY(i);
-				float z = map->GetZ(x, y);
+				//float z = map->GetZ(x, y);
+				float z = points->GetZ(i);
 				if (z < lowestz) 
 					lowestz = z;
 
@@ -146,6 +147,7 @@ int llExportMeshToObj::MakeSelection() {
 	if (!newpoints->GetN()) {
 		_llLogger()->WriteNextLine(LOG_WARNING, "The mesh %s is empty and was therefore not written", filename);
 	    delete newpoints;
+		newpoints = NULL;
 	    return 0;
 	}
 

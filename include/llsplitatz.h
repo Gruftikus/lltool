@@ -8,6 +8,7 @@ class llSplitAtZ : public llTriMod {
 private:
 
 	float z;
+	int below, above;
 
 public:
 
@@ -17,6 +18,7 @@ public:
 		return new llSplitAtZ(*this);
 	}
 
+	int Prepare(void);
 	int RegisterOptions(void);
 	int Exec(void);
 

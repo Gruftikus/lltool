@@ -856,19 +856,15 @@ int llTriangleList::DivideTriangleAtZ(unsigned int _n, float _z, int _flag) {
 	//divides triangle _n at _z
 	//removes (optional) lower part if _flag=1
 	//removes (optional) upper part if _flag=2
+	
+	float z[4];
 
-	llTriangle *loc = &(v[_n]);
-	float x[4],y[4],z[4];
-
-	x[1] =  points->GetX(GetPoint1(_n));
-	x[2] =  points->GetX(GetPoint2(_n));
-	x[3] =  points->GetX(GetPoint3(_n));
-	y[1] =  points->GetY(GetPoint1(_n));
-	y[2] =  points->GetY(GetPoint2(_n));
-	y[3] =  points->GetY(GetPoint3(_n));
 	z[1] =  points->GetZ(GetPoint1(_n));
 	z[2] =  points->GetZ(GetPoint2(_n));
 	z[3] =  points->GetZ(GetPoint3(_n));
+
+	if (_z>z[1] && _z>z[2] && _z>z[3]) return 0;
+	if (_z<z[1] && _z<z[2] && _z<z[3]) return 0;
 
 	int soliton=0;
 	if ((z[1]<_z && z[2]>=_z && z[3]>_z) || (z[1]<_z && z[2]>_z && z[3]>=_z))
@@ -885,7 +881,16 @@ int llTriangleList::DivideTriangleAtZ(unsigned int _n, float _z, int _flag) {
 		soliton=3;
 	if (soliton==0) return 0;
 
-	float new_x[2], new_y[2], new_z[2], single_x, single_y, single_z;
+	float x[4],y[4];
+
+	x[1] =  points->GetX(GetPoint1(_n));
+	x[2] =  points->GetX(GetPoint2(_n));
+	x[3] =  points->GetX(GetPoint3(_n));
+	y[1] =  points->GetY(GetPoint1(_n));
+	y[2] =  points->GetY(GetPoint2(_n));
+	y[3] =  points->GetY(GetPoint3(_n));
+
+	float new_x[2], new_y[2];
 
 	if (soliton == 1 || soliton == -1) {
 		new_x[0] = x[1] + ( (z[1]-_z)/(z[1]-z[2]) )*(x[2]-x[1]);
@@ -905,7 +910,7 @@ int llTriangleList::DivideTriangleAtZ(unsigned int _n, float _z, int _flag) {
 		new_y[0] = y[3] + ( (z[3]-_z)/(z[3]-z[1]) )*(y[1]-y[3]);
 		new_y[1] = y[3] + ( (z[3]-_z)/(z[3]-z[2]) )*(y[2]-y[3]);
 	}
-
+	
 	int point0 = points->GetPoint(new_x[0], new_y[0]);
 	if (point0<0)
 		point0=points->AddPoint(new_x[0], new_y[0], _z);
@@ -914,84 +919,111 @@ int llTriangleList::DivideTriangleAtZ(unsigned int _n, float _z, int _flag) {
 		point1=points->AddPoint(new_x[1], new_y[1], _z);
 
 	if (point0 == point1) return 0;
-
+	
 	if ((soliton>0 && _flag==1) || (soliton<0 && _flag==2)) {
 		//only adjusts the existing triangle
 		if (soliton == 1 || soliton == -1) {
-			loc->SetPoint2(point0);
-			loc->SetPoint3(point1);
-			loc->SetCorrectParity();
+			v[_n].SetPoint2(point0);
+			v[_n].SetPoint3(point1);
+			v[_n].SetCorrectParity();
 		} else if (soliton == 2 || soliton == -2) {
-			loc->SetPoint1(point0);
-			loc->SetPoint3(point1);
-			loc->SetCorrectParity();
+			v[_n].SetPoint1(point0);
+			v[_n].SetPoint3(point1);
+			v[_n].SetCorrectParity();
 		} else {
-			loc->SetPoint1(point0);
-			loc->SetPoint2(point1);
-			loc->SetCorrectParity();
+			v[_n].SetPoint1(point0);
+			v[_n].SetPoint2(point1);
+			v[_n].SetCorrectParity();
 		} 
 		return 1;
 	} else if (_flag) {
 		//2 triangles
 		if (soliton == 1 || soliton == -1) {
-			loc->SetPoint1(point0);
-			loc->SetCorrectParity();
+			v[_n].SetPoint1(point0);
+			v[_n].SetCorrectParity();
 			AddTriangle(point0, point1, GetPoint3(_n));
 		} else if (soliton == 2 || soliton == -2) {
-			loc->SetPoint2(point0);
-			loc->SetCorrectParity();
+			v[_n].SetPoint2(point0);
+			v[_n].SetCorrectParity();
 			AddTriangle(point0, point1, GetPoint1(_n));
 		} else {
-			loc->SetPoint3(point0);
-			loc->SetCorrectParity();
+			v[_n].SetPoint3(point0);
+			v[_n].SetCorrectParity();
 			AddTriangle(point0, point1, GetPoint2(_n));
 		} 
 		return 2;
 	}
 
+	int nn=2;
 	//Split the entire triangle
 	if (soliton == 1 || soliton == -1) {
 		if (point0 == GetPoint2(_n))
 			AddTriangle(point0, point1, GetPoint3(_n));
 		else if (point1 == GetPoint3(_n))
 			AddTriangle(point0, point1, GetPoint2(_n));
-		else
+		else {
 			Add2Triangles(point0, point1, GetPoint2(_n), GetPoint3(_n));
-		loc->SetPoint2(point0);
-		loc->SetPoint3(point1);
-		loc->SetCorrectParity();
+			nn=3;
+		}
+		v[_n].SetPoint2(point0);
+		v[_n].SetPoint3(point1);
+		v[_n].SetCorrectParity();
 	} else if (soliton == 2 || soliton == -2) {
 		if (point0 == GetPoint1(_n))
 			AddTriangle(point0, point1, GetPoint3(_n));
 		else if (point1 == GetPoint3(_n))
 			AddTriangle(point0, point1, GetPoint1(_n));
-		else
+		else {
 			Add2Triangles(point0, point1, GetPoint1(_n), GetPoint3(_n));
-		loc->SetPoint1(point0);
-		loc->SetPoint3(point1);
-		loc->SetCorrectParity();	
+			nn=3;
+		}
+		v[_n].SetPoint1(point0);
+		v[_n].SetPoint3(point1);
+		v[_n].SetCorrectParity();	
 	} else {
 		if (point0 == GetPoint1(_n))
 			AddTriangle(point0, point1, GetPoint2(_n));
 		else if (point1 == GetPoint2(_n))
 			AddTriangle(point0, point1, GetPoint1(_n));
-		else
+		else {
 			Add2Triangles(point0, point1, GetPoint1(_n), GetPoint2(_n));
-		loc->SetPoint1(point0);
-		loc->SetPoint2(point1);
-		loc->SetCorrectParity();		
+			nn=3;
+		}
+		v[_n].SetPoint1(point0);
+		v[_n].SetPoint2(point1);
+		v[_n].SetCorrectParity();		
 	} 
-	return 3;
+	return nn;
 }
 
 int llTriangleList::DivideAtZ(float _x1, float _y1, float _x2, float _y2, float _z, int _flag) {
-	unsigned int old_counter = counter;
-	unsigned int num_new     = 0;
-	for (unsigned int i=0; i<old_counter; i++) {
-		if (GetTriangleCenterX(i) > _x1 && GetTriangleCenterX(i) < _x2 &&
-			GetTriangleCenterY(i) > _y1 && GetTriangleCenterY(i) < _y2) {
+	unsigned int num_new = 0;
+	for (unsigned int i=0; i<counter; i++) {
+		float center_x = GetTriangleCenterX(i);
+		if (center_x > _x1 && center_x < _x2) {
+			float center_y = GetTriangleCenterY(i);
+			if (center_y > _y1 && center_y < _y2) {
 				num_new += DivideTriangleAtZ(i, _z, _flag);
+			}
 		}
+	}
+	return num_new;
+}
+
+int llTriangleList::RemoveZ(float _x1, float _y1, float _x2, float _y2, float _z, int _flag) {
+	unsigned int num_new = 0;
+	for (unsigned int i=0; i<counter; i++) {
+		if ((points->GetZ(GetPoint1(i)) + points->GetZ(GetPoint2(i)) + points->GetZ(GetPoint3(i)))/3. < _z && _flag==1) {
+			//num_new += RemoveTriangle(i);
+			//i--;
+			v[i].write_flag = 0;
+			num_new++;
+		} else if ((points->GetZ(GetPoint1(i)) + points->GetZ(GetPoint2(i)) + points->GetZ(GetPoint3(i)))/3. > _z && _flag==2) {
+			//num_new += RemoveTriangle(i);
+			//i--;
+			v[i].write_flag = 0;
+			num_new++;
+		} 
 	}
 	return num_new;
 }

@@ -12,8 +12,8 @@ protected:
 	char *texname;
 	char *texmap;
 	char *mtlname;
-	int   createpedestals, flipu, flipv, sort;
-	float trans_x, trans_y, trans_z, scale;
+	int   createpedestals, flipu, flipv, sort, nosplit;
+	float trans_x, trans_y, trans_z, scale, pedestalz, pedestaldiff;
 
 	llPointList    *newpoints;
 	llTriangleList *newtriangles;

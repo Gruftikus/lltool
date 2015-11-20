@@ -172,7 +172,7 @@ void llTriangle::FlipEdge(int _nei) {
 llTriangleList::llTriangleList(int _n, llPointList *_x) {
 
 	v.resize(_n + 1);
-	counter = 0;
+	counter = block = 0;
 	points  = _x;
 	next_strip_id = 1;
 	length_strip.resize(1);
@@ -1010,16 +1010,41 @@ int llTriangleList::DivideAtZ(float _x1, float _y1, float _x2, float _y2, float 
 	return num_new;
 }
 
-int llTriangleList::RemoveZ(float _x1, float _y1, float _x2, float _y2, float _z, int _flag) {
+int llTriangleList::DivideAtZBlock(float _x1, float _y1, float _x2, float _y2, float _z, int _flag) {
 	unsigned int num_new = 0;
-	for (unsigned int i=0; i<counter; i++) {
+	unsigned int old_counter = counter;
+	unsigned int old_block = block;
+
+	while (block < counter && GetTriangleCenterX(block) > _x1 && GetTriangleCenterX(block) <= _x2
+		&& GetTriangleCenterY(block) > _y1 && GetTriangleCenterY(block) <= _y2) {
+			//num_new += DivideTriangleAtZ(block, _z, _flag);
+			DivideTriangleAtZ(block, _z);
+			if ((points->GetZ(GetPoint1(block)) + points->GetZ(GetPoint2(block)) + points->GetZ(GetPoint3(block)))/3. < _z && _flag==1) {
+				v[block].write_flag = 0;
+				num_new++;
+			} else if ((points->GetZ(GetPoint1(block)) + points->GetZ(GetPoint2(block)) + points->GetZ(GetPoint3(block)))/3. > _z && _flag==2) {
+				v[block].write_flag = 0;
+				num_new++;
+			} 
+			block++;
+	}
+	//std::cout << "Block started at " << old_block << " and endet at " << block-1 << std::endl;
+	//afterburner for new triangles
+	num_new += RemoveZ(_x1, _y1, _x2, _y2, _z, _flag, old_counter);
+
+	return num_new;
+}
+
+int llTriangleList::RemoveZ(float _x1, float _y1, float _x2, float _y2, float _z, int _flag, unsigned int _start) {
+	unsigned int num_new = 0;
+	for (unsigned int i=_start; i<counter; i++) {
 		if ((points->GetZ(GetPoint1(i)) + points->GetZ(GetPoint2(i)) + points->GetZ(GetPoint3(i)))/3. < _z && _flag==1) {
-			//num_new += RemoveTriangle(i);
+			//num_new += RemoveTriangle(i); //Too slow
 			//i--;
 			v[i].write_flag = 0;
 			num_new++;
 		} else if ((points->GetZ(GetPoint1(i)) + points->GetZ(GetPoint2(i)) + points->GetZ(GetPoint3(i)))/3. > _z && _flag==2) {
-			//num_new += RemoveTriangle(i);
+			//num_new += RemoveTriangle(i); //Too slow
 			//i--;
 			v[i].write_flag = 0;
 			num_new++;
@@ -1752,37 +1777,52 @@ float llTriangleList::GetTriangleCenterY(int _n) {
 	return (points->GetY(GetPoint1(_n)) + points->GetY(GetPoint2(_n)) + points->GetY(GetPoint3(_n))) / 3.f;
 }
 
-int llTriangleList::SortTrianglesCell(void) {
-	float cellsize_x = 0;
-	if (_llUtils()->GetValueF("_cellsize_x"))
-		cellsize_x = (float)(*_llUtils()->GetValueF("_cellsize_x"));
-	float cellsize_y = 0;
-	if (_llUtils()->GetValueF("_cellsize_y"))
-		cellsize_y = (float)(*_llUtils()->GetValueF("_cellsize_y"));
-	if (!cellsize_x || !cellsize_y) return 0;
+int llTriangleList::SortTriangles(float _x, float _y, int _flag) {
 
 	std::vector<llTriangle> v_new;
 	v_new.resize(counter);
 
 	unsigned int newcount = 0;
-	for (float x=x00; x<x11; x+=cellsize_x) {
-		for (float y=y00; y<y11; y+=cellsize_y) {
-			for (int n=0; n<counter; n++) {
-				float xn = GetTriangleCenterX(n);
-				if ((x+cellsize_x)>=x11 && xn >= x) xn=x;
-				float yn = GetTriangleCenterY(n);
-				if ((y+cellsize_y)>=y11 && yn >= y) yn=y;
-				if (xn >= x && xn<(x+cellsize_x) && yn >= y && yn<(y+cellsize_y)) {
-					if (counter == newcount) {
-						_llLogger()->WriteNextLine(-LOG_WARNING, "Too many triangles in SortTrianglesCell");
-						return 0;
+
+	if (_flag) {
+		for (float x=x00; x<x11; x+=_x) {
+			for (float y=y00; y<y11; y+=_y) {
+				for (int n=0; n<counter; n++) {
+					float xn = GetTriangleCenterX(n);
+					if ((x+_x)>=x11 && xn >= x) xn=x;
+					float yn = GetTriangleCenterY(n);
+					if ((y+_y)>=y11 && yn >= y) yn=y;
+					if (xn >= x && xn<(x+_x) && yn >= y && yn<(y+_y)) {
+						if (counter == newcount) {
+							_llLogger()->WriteNextLine(-LOG_WARNING, "Too many triangles in SortTrianglesCell");
+							return 0;
+						}
+						v_new[newcount] = *GetTriangle(n);
+						newcount++;
 					}
-					v_new[newcount] = *GetTriangle(n);
-					newcount++;
 				}
 			}
 		}
-	}
+	} else {
+		for (float y=y00; y<y11; y+=_y) {
+			for (float x=x00; x<x11; x+=_x) {
+				for (int n=0; n<counter; n++) {
+					float xn = GetTriangleCenterX(n);
+					if ((x+_x)>=x11 && xn >= x) xn=x;
+					float yn = GetTriangleCenterY(n);
+					if ((y+_y)>=y11 && yn >= y) yn=y;
+					if (xn >= x && xn<(x+_x) && yn >= y && yn<(y+_y)) {
+						if (counter == newcount) {
+							_llLogger()->WriteNextLine(-LOG_WARNING, "Too many triangles in SortTrianglesCell");
+							return 0;
+						}
+						v_new[newcount] = *GetTriangle(n);
+						newcount++;
+					}
+				}
+			}
+		}
+	} 
 
 	if (counter != newcount) {
 		_llLogger()->WriteNextLine(-LOG_WARNING, "SortTrianglesCell: %i triangles expected, only %i sorted", counter, newcount);
@@ -1794,4 +1834,50 @@ int llTriangleList::SortTrianglesCell(void) {
 	}
 
 	return 1;
+}
+
+int llTriangleList::SortTrianglesQuick(float _x, float _y, int _flag) {
+	unsigned int size_x = (unsigned int)ceil((x11-x00)/_x)+1;
+	unsigned int size_y = (unsigned int)ceil((y11-y00)/_y)+1;
+	order.resize(counter);
+
+	for (int n=0; n<counter; n++) {
+		float xn = GetTriangleCenterX(n);
+		unsigned int pos_x = (unsigned int)floor(xn-x00)/_x;
+		if (pos_x >= size_x) pos_x = size_x;
+		float yn = GetTriangleCenterY(n);
+		unsigned int pos_y = (unsigned int)floor(yn-y00)/_y;
+		if (pos_y >= size_y) pos_y = size_y;
+
+		unsigned int pos = 0;
+		if (_flag) {	
+			pos = pos_x*size_x + pos_y;
+		} else {
+			pos = pos_y*size_y + pos_x;
+		}
+		order[n] = pos;
+	}
+
+	QuickSort(0, counter);
+
+	return 1;
+}
+
+void llTriangleList::QuickSort(unsigned int low, unsigned int high) {
+
+	if (high-low <= 1) return;
+	unsigned int pivot = order[high-1];
+	unsigned int split = low;
+	for (unsigned int i=low; i<high-1; i++) {
+		if (order[i] <pivot) {
+			std::swap(order[i], order[split]);
+			std::swap(v[i], v[split]);
+			split++;
+		}
+	}
+	std::swap(order[high-1], order[split]);
+	std::swap(v[high-1], v[split]);
+	QuickSort(low, split);
+	QuickSort(split+1, high);
+	return;
 }

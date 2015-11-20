@@ -19,12 +19,15 @@ int llExportMeshToObj::Prepare(void) {
 	texmap          = NULL;
 	mtlname         = NULL;
 	createpedestals = 0;
+	nosplit         = 0;
+	
 
 	trans_x = trans_y = trans_z = 0;
 	scale   = 1.0f;
 	flipu = 0;
 	flipv = 0;
 	sort  = 0;
+	pedestalz = pedestaldiff = 0.;
 
 	return 1;
 }
@@ -40,17 +43,20 @@ int llExportMeshToObj::RegisterOptions(void) {
 	RegisterValue("-transy",          &trans_y);
 	RegisterValue("-transz",          &trans_z);
 	RegisterValue("-scale",           &scale);
+	RegisterValue("-pedestalz",       &pedestalz);
+	RegisterValue("-pedestaldiff",    &pedestaldiff);
 
 	RegisterFlag ("-createpedestals", &createpedestals);
 	RegisterFlag ("-flipu",           &flipu);
 	RegisterFlag ("-flipv",           &flipv);
 	RegisterFlag ("-sort",            &sort);
+	RegisterFlag ("-nosplit",         &nosplit);
 	
 	return 1;
 }
 
 int llExportMeshToObj::MakeSelection() {
-	float lowestz = 0; //required for pedestals
+	float lowestz = pedestalz; //required for pedestals
 
 	float x00 = _llUtils()->x00;
 	float x11 = _llUtils()->x11;
@@ -58,10 +64,12 @@ int llExportMeshToObj::MakeSelection() {
 	float y11 = _llUtils()->y11;
 
 	//make sure that the selection has a boundary:
-	triangles->DivideAt(true,  x00, map);    
-    triangles->DivideAt(true,  x11, map);  
-    triangles->DivideAt(false, y00, map);    
-    triangles->DivideAt(false, y11, map);  
+	if (!nosplit) {
+		triangles->DivideAt(true,  x00, map);    
+		triangles->DivideAt(true,  x11, map);  
+		triangles->DivideAt(false, y00, map);    
+		triangles->DivideAt(false, y11, map);  
+	}
 
 	points->ClearSecondaryList();
 
@@ -156,11 +164,6 @@ int llExportMeshToObj::MakeSelection() {
 	newtriangles = new llTriangleList(newpoints->GetN(), newpoints);
 	newtriangles->SetRange(x00, x11, y00, y11);
 
-	if (lowestz > 0) 
-		lowestz = 0;
-	else 
-		lowestz -= 100;
-
 	for (int i=0; i<triangles->GetN(); i++) {
 
 		int old1 = triangles->GetPoint1(i);
@@ -242,6 +245,7 @@ int llExportMeshToObj::MakeSelection() {
 			//add optional pedestals
 			if (createpedestals) {
 				int p1=-1, p2=-1, opt=-1;
+				
 				if (fabs(newpoints->GetX(new1)-x00)<1.f && fabs(newpoints->GetX(new2)-x00)<1.f) {p1=new1; p2=new2; opt=0;}
 				if (fabs(newpoints->GetX(new1)-x00)<1.f && fabs(newpoints->GetX(new3)-x00)<1.f) {p1=new1; p2=new3; opt=0;}
 				if (fabs(newpoints->GetX(new2)-x00)<1.f && fabs(newpoints->GetX(new3)-x00)<1.f) {p1=new2; p2=new3; opt=0;}
@@ -250,13 +254,19 @@ int llExportMeshToObj::MakeSelection() {
 				if (fabs(newpoints->GetX(new2)-x11)<1.f && fabs(newpoints->GetX(new3)-x11)<1.f) {p1=new2; p2=new3; opt=1;}
 
 				if (p1 > -1) {
-					int p3 = newpoints->GetPoint(newpoints->GetX(p1), newpoints->GetY(p1), lowestz);
-					int p4 = newpoints->GetPoint(newpoints->GetX(p2), newpoints->GetY(p2), lowestz);
+					float myz1 = lowestz;
+					float myz2 = lowestz;
+					if (pedestaldiff) {
+						myz1 = map->GetZ(newpoints->GetX(p1), newpoints->GetY(p1)) - pedestaldiff;
+						myz2 = map->GetZ(newpoints->GetX(p2), newpoints->GetY(p2)) - pedestaldiff;
+					}
+					int p3 = newpoints->GetPoint(newpoints->GetX(p1), newpoints->GetY(p1), myz1);
+					int p4 = newpoints->GetPoint(newpoints->GetX(p2), newpoints->GetY(p2), myz2);
 					if (p3 < 0) {
-						p3 = newpoints->AddPoint(newpoints->GetX(p1), newpoints->GetY(p1), lowestz);
+						p3 = newpoints->AddPoint(newpoints->GetX(p1), newpoints->GetY(p1), myz1);
 					}
 					if (p4 < 0) {
-						p4 = newpoints->AddPoint(newpoints->GetX(p2), newpoints->GetY(p2), lowestz);
+						p4 = newpoints->AddPoint(newpoints->GetX(p2), newpoints->GetY(p2), myz2);
 					}
 					if (opt==0 && newpoints->GetY(p1)>newpoints->GetY(p2)) {
 						newtriangles->AddTriangle(p1, p3, p4);
@@ -284,13 +294,19 @@ int llExportMeshToObj::MakeSelection() {
 				if (fabs(newpoints->GetY(new2)-y11)<1.f && fabs(newpoints->GetY(new3)-y11)<1.f) {p1=new2; p2=new3; opt=3;}
 
 				if (p1 >- 1) {
-					int p3 = newpoints->GetPoint(newpoints->GetX(p1), newpoints->GetY(p1), lowestz);
-					int p4 = newpoints->GetPoint(newpoints->GetX(p2), newpoints->GetY(p2), lowestz);
+					float myz1 = lowestz;
+					float myz2 = lowestz;
+					if (pedestaldiff) {
+						myz1 = map->GetZ(newpoints->GetX(p1), newpoints->GetY(p1)) - pedestaldiff;
+						myz2 = map->GetZ(newpoints->GetX(p2), newpoints->GetY(p2)) - pedestaldiff;
+					}
+					int p3 = newpoints->GetPoint(newpoints->GetX(p1), newpoints->GetY(p1), myz1);
+					int p4 = newpoints->GetPoint(newpoints->GetX(p2), newpoints->GetY(p2), myz2);
 					if (p3 < 0) {
-						p3 = newpoints->AddPoint(newpoints->GetX(p1), newpoints->GetY(p1), lowestz);
+						p3 = newpoints->AddPoint(newpoints->GetX(p1), newpoints->GetY(p1), myz1);
 					}
 					if (p4 < 0) {
-						p4 = newpoints->AddPoint(newpoints->GetX(p2), newpoints->GetY(p2), lowestz);
+						p4 = newpoints->AddPoint(newpoints->GetX(p2), newpoints->GetY(p2), myz2);
 					}
 					
 					if (opt==2 && newpoints->GetX(p1)<newpoints->GetX(p2)) {
@@ -314,7 +330,17 @@ int llExportMeshToObj::MakeSelection() {
 		}
 	}
 
-	if (sort) newtriangles->SortTrianglesCell();
+	if (sort) {
+		float cellsize_x = 0;
+		if (_llUtils()->GetValueF("_cellsize_x"))
+			cellsize_x = (float)(*_llUtils()->GetValueF("_cellsize_x"));
+		float cellsize_y = 0;
+		if (_llUtils()->GetValueF("_cellsize_y"))
+			cellsize_y = (float)(*_llUtils()->GetValueF("_cellsize_y"));
+		if (cellsize_x && cellsize_y) {
+			newtriangles->SortTriangles(cellsize_x, cellsize_y);
+		}
+	}
 
 	newpoints->Resize();
 	if (Used("-scale")) newpoints->Scale(scale);

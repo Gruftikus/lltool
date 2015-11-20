@@ -8,7 +8,7 @@ class llSplitAtZ : public llTriMod {
 private:
 
 	float z;
-	int below, above;
+	int below, above, block;
 
 public:
 

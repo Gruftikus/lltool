@@ -85,6 +85,7 @@
 #include "../include/llsplitbetween.h"
 #include "../include/llstencilpolygon.h"
 #include "../include/llremovetriangulation.h"
+#include "../include/llsorttriangles.h"
 
 //Triangle-Exporters:
 #include "../include/llexportmeshtoobj.h"
@@ -174,6 +175,7 @@ void CreateWorkers(llCommands *_batch) {
 	_batch->RegisterWorker(new llRemoveInactiveTriangles());
 	_batch->RegisterWorker(new llActivateVisibleVertices());
 	_batch->RegisterWorker(new llRemoveTriangulation());
+	_batch->RegisterWorker(new llSortTriangles());
 
 	_batch->RegisterWorker(new llExportMeshToObj());
 	_batch->RegisterWorker(new llExportMeshToVRML());

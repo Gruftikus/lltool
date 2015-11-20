@@ -113,7 +113,7 @@ class llTriangleList {
 private:
 
 	std::vector<llTriangle> v;
-	unsigned int counter;
+	unsigned int counter, block;
 	llPointList *points;
 	int next_strip_id;
 	std::vector<unsigned short> length_strip;
@@ -122,6 +122,9 @@ private:
 
 	float x00, x11, y00, y11;
 	llLogger *mesg;
+
+	std::vector<unsigned int> order;
+	void QuickSort(unsigned int low, unsigned int high);
 
 public:
 
@@ -149,8 +152,9 @@ public:
 	void DivideBetween(float _x1, float _y1, float _x2, float _y2, llMap *_map);
 	int DivideAtZ(float _z, float _mindist, llMap *_map); //divide all triangles at z
 	int DivideAtZ(float _x1, float _y1, float _x2, float _y2, float _z, int _flag=0);
+	int DivideAtZBlock(float _x1, float _y1, float _x2, float _y2, float _z, int _flag=0);
 	int DivideTriangleAtZ(unsigned int _n, float _z, int _flag=0);	
-	int RemoveZ(float _x1, float _y1, float _x2, float _y2, float _z, int _flag=1);
+	int RemoveZ(float _x1, float _y1, float _x2, float _y2, float _z, int _flag=1, unsigned int _start=0);
 
 	int SplitFlatTriangles(float _min, float _max, float _z,
 		llMap *_map);
@@ -182,7 +186,8 @@ public:
 	}
 	float GetTriangleCenterX(int _n);
 	float GetTriangleCenterY(int _n);
-	int SortTrianglesCell(void);
+	int SortTriangles(float _x, float _y, int _flag = 1);
+	int SortTrianglesQuick(float _x, float _y, int _flag = 1);
 };
 
 #endif

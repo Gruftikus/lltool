@@ -1018,6 +1018,7 @@ int llTriangleList::DivideAtZBlock(float _x1, float _y1, float _x2, float _y2, f
 	while (block < counter && GetTriangleCenterX(block) > _x1 && GetTriangleCenterX(block) <= _x2
 		&& GetTriangleCenterY(block) > _y1 && GetTriangleCenterY(block) <= _y2) {
 			//num_new += DivideTriangleAtZ(block, _z, _flag);
+#if 1
 			DivideTriangleAtZ(block, _z);
 			if ((points->GetZ(GetPoint1(block)) + points->GetZ(GetPoint2(block)) + points->GetZ(GetPoint3(block)))/3. < _z && _flag==1) {
 				v[block].write_flag = 0;
@@ -1026,6 +1027,7 @@ int llTriangleList::DivideAtZBlock(float _x1, float _y1, float _x2, float _y2, f
 				v[block].write_flag = 0;
 				num_new++;
 			} 
+#endif
 			block++;
 	}
 	//std::cout << "Block started at " << old_block << " and endet at " << block-1 << std::endl;

@@ -761,7 +761,12 @@ int llUtils::SetValue(const char *_name, double _value) {
 	for (unsigned int i=0; i<num_flags; i++) {
 		if (_stricmp(_name, flag_list[i]) == 0) {
 			char delme[1000];
-			sprintf(delme, "%f", _value);
+			if (_llUtils()->GetValue("_flag_format")) {
+				char format[1024];
+				sprintf_s(format, 1024, "%%%slf", _llUtils()->GetValue("_flag_format"));
+				sprintf_s(delme, format, _value);
+			} else
+				sprintf(delme, "%g", _value);
 			if (flag_value[i]) delete (flag_value[i]);
 			flag_value[i] = _llUtils()->NewString(delme);
 			flag_value_f[i] = _value;

@@ -404,7 +404,7 @@ public:
 		return 1;
 	}
 
-	llQuadList *GenerateQuadList(void);
+	llQuadList *GenerateQuadList(float _quadoffsetx, float _quadoffsety);
 
 };
 

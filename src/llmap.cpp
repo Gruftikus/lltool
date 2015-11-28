@@ -133,7 +133,7 @@ loop:
 	return rnd + rnd_y1;
 }
 
-llQuadList *llMap::GenerateQuadList(void) {
+llQuadList *llMap::GenerateQuadList(float _quadoffsetx, float _quadoffsety) {
 
 	float quadsize_x = 0;
 	if (_llUtils()->GetValueF("_quadsize_x"))
@@ -163,12 +163,10 @@ llQuadList *llMap::GenerateQuadList(void) {
 
 	while (levels) {
 
-		//std::cout << x1 << ":" << y1 << ":" <<  x2 << ":" << y2 << std::endl;
-
-		int quadx1 = int(floor((x1+.5f) / quadsize_x));
-		int quady1 = int(floor((y1+.5f) / quadsize_y));
-		int quadx2 = int(floor((x2-.5f) / quadsize_x));
-		int quady2 = int(floor((y2-.5f) / quadsize_y));
+		int quadx1 = int(floor((x1+.5f-_quadoffsetx) / quadsize_x));
+		int quady1 = int(floor((y1+.5f-_quadoffsety) / quadsize_y));
+		int quadx2 = int(floor((x2-.5f-_quadoffsetx) / quadsize_x));
+		int quady2 = int(floor((y2-.5f-_quadoffsety) / quadsize_y));
 
 		int nquads = (quadx2-quadx1+1) * (quady2-quady1+1);
 	
@@ -181,10 +179,10 @@ llQuadList *llMap::GenerateQuadList(void) {
 
 		for (int ix=quadx1; ix<=quadx2; ix++) {
 			for (int iy=quady1; iy<=quady2; iy++) {
-				llQuad *myquad = quads->AddQuad(ix, iy, float(ix) * quadsize_x,
-					float(iy)   * quadsize_y,
-					float(ix+1) * quadsize_x,
-					float(iy+1) * quadsize_y);
+				llQuad *myquad = quads->AddQuad(ix, iy, float(ix) * quadsize_x + _quadoffsetx,
+					float(iy)   * quadsize_y + _quadoffsety,
+					float(ix+1) * quadsize_x + _quadoffsetx,
+					float(iy+1) * quadsize_y + _quadoffsety);
 				if (last) {
 					//connect data structures:
 					llQuad *lastquad = last->GetQuad   (int(floor(float(ix)/2.0)), int(floor(float(iy)/2.0)));

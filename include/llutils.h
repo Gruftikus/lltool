@@ -42,6 +42,7 @@ typedef struct {
 
 
 int ReadUShort(FILE *fptr,short unsigned *n,int swap);
+int ReadShort(FILE *fptr,short signed *n,int swap);
 int WriteUShort(FILE *fptr,short unsigned n,int swap);
 int ReadUInt(FILE *fptr,unsigned int *n,int swap);
 int ReadInt(FILE *fptr, int *n,int swap);

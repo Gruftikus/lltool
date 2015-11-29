@@ -212,6 +212,21 @@ int ReadUShort(FILE *fptr,short unsigned *n,int swap)
    return(1);
 }
 
+int ReadShort(FILE *fptr,short signed *n,int swap)
+{
+   unsigned char *cptr,tmp;
+
+   if (fread(n,2,1,fptr) != 1)
+       return(0);
+   if (swap) {
+       cptr = (unsigned char *)n;
+       tmp = cptr[0];
+       cptr[0] = cptr[1];
+       cptr[1] =tmp;
+   }
+   return(1);
+}
+
 /*
    Write a possibly byte swapped unsigned short integer
 */

@@ -82,6 +82,7 @@ llQuadList::llQuadList(int _pos_x, int _pos_y, int _x, int _y, float _x1, float 
 } 
 
 llQuad *llQuadList::AddQuad(int _p1, int _p2, float _x1, float _y1, float _x2, float _y2) {
+	//std::cout << _x1 << ":" << _y1 << ":" << _x2 << ":" << _y2 << std::endl;
 	llQuad *newquad = new llQuad(_p1, _p2, _x1, _y1, _x2, _y2);
 	v.push_back(newquad);
 	subs.push_back(NULL);

@@ -44,6 +44,12 @@ llAlgCollection *llAlgList::GetAlgCollection(char* _name) {
 	return NULL;
 }
 
+int llAlgCollection::UpdateMaps() {
+	for (int i=0; i<GetSize(); i++) {
+		if (!alg_list[i]->UpdateMap()) return 0;
+	}
+	return 1;
+}
 
 llCreateAlgCollection::llCreateAlgCollection() : llWorker() {
 	SetCommandName("CreateAlgCollection");
@@ -65,3 +71,4 @@ int llCreateAlgCollection::Exec(void) {
 
 	return 1;
 }
+

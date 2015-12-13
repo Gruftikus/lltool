@@ -104,30 +104,53 @@ repeat:
 
 	float widthx_per_raw = map->GetWidthXPerRaw();
 	float widthy_per_raw = map->GetWidthYPerRaw();
+	int defaultheight = map->GetDefaultHeight();
+	
+	float threshold = 100000/map->GetZScale(), diff;
 
 	x1max=0;
 	for (unsigned int y=0; y<widthy; y++) {
-		data1x->SetElement(y*widthx, (map->GetElementRaw(1,y) - map->GetElementRaw(0,y)));
-		data1x->SetElement(y*widthx+widthx-1, (map->GetElementRaw(widthx-1,y) - map->GetElementRaw(widthx-2,y)));
+		diff = map->GetElementRaw(1,y) - map->GetElementRaw(0,y);
+		if (diff > threshold)  diff = threshold;
+		if (diff < -threshold) diff = -threshold;
+		data1x->SetElement(y*widthx, diff);
+		diff = map->GetElementRaw(widthx-1,y) - map->GetElementRaw(widthx-2,y);
+		if (diff > threshold)  diff = threshold;
+		if (diff < -threshold) diff = -threshold;
+		data1x->SetElement(y*widthx+widthx-1, diff);
 		for (unsigned int x=1; x<widthx-1; x++) {
+			diff = map->GetElementRaw(x-1,y) - map->GetElementRaw(x+1,y);
+			if (diff > threshold)  diff = threshold;
+			if (diff < -threshold) diff = -threshold;
 			//if ((map->GetElementRaw(x-1,y) > minheight && map->GetElementRaw(x+1,y) > minheight)) {
-				data1x->SetElement(x+y*widthx, (map->GetElementRaw(x-1,y) - map->GetElementRaw(x+1,y)) / (2.0f));
-				//cout << (oldmap->GetElementRaw(x-1,y) - oldmap->GetElementRaw(x+1,y)) / (2.0f) << endl;
-				if (fabs(((*data1x)[x+y*widthx])) > x1max) 
-					x1max = fabs(((*data1x)[x+y*widthx]));
+			if ((int)map->GetElementRaw(x-1,y) != defaultheight && (int)map->GetElementRaw(x+1,y) != defaultheight)
+				data1x->SetElement(x+y*widthx, diff / (2.0f));
+			//cout << (oldmap->GetElementRaw(x-1,y) - oldmap->GetElementRaw(x+1,y)) / (2.0f) << endl;
+			if (fabs(((*data1x)[x+y*widthx])) > x1max) 
+				x1max = fabs(((*data1x)[x+y*widthx]));
 			//}
 		}
 	}
 
 	y1max=0;
 	for (unsigned int x=0; x<widthx; x++) {
-		data1y->SetElement(x, (map->GetElementRaw(x,1) - map->GetElementRaw(x,0)));
-		data1y->SetElement(x+(widthy-1)*widthx, (map->GetElementRaw(x,widthy-1) - map->GetElementRaw(x,widthy-2)));
+		diff = map->GetElementRaw(x,1) - map->GetElementRaw(x,0);
+		if (diff > threshold)  diff = threshold;
+		if (diff < -threshold) diff = -threshold;
+		data1y->SetElement(x, diff);
+		diff = map->GetElementRaw(x,widthy-1) - map->GetElementRaw(x,widthy-2);
+		if (diff > threshold)  diff = threshold;
+		if (diff < -threshold) diff = -threshold;
+		data1y->SetElement(x+(widthy-1)*widthx, diff);
 		for (unsigned int y=1; y<widthy-1; y++) {
+			diff = map->GetElementRaw(x,y-1) - map->GetElementRaw(x,y+1);
+			if (diff > threshold)  diff = threshold;
+			if (diff < -threshold) diff = -threshold;
 			//if ((map->GetElementRaw(x,y-1) > minheight && map->GetElementRaw(x,y+1) > minheight)) {
-				data1y->SetElement(x+y*widthx, (map->GetElementRaw(x,y-1) - map->GetElementRaw(x,y+1)) / (2.0f));
-				if (fabs(((*data1y)[x+y*widthx])) > y1max) 
-					y1max = fabs(((*data1y)[x+y*widthx]));
+			if ((int)map->GetElementRaw(x,y-1) != defaultheight && (int)map->GetElementRaw(x,y+1) != defaultheight)
+				data1y->SetElement(x+y*widthx, diff / (2.0f));
+			if (fabs(((*data1y)[x+y*widthx])) > y1max) 
+				y1max = fabs(((*data1y)[x+y*widthx]));
 			//}
 		}
 	}

@@ -26,11 +26,13 @@ public:
 		return alg_list.size();
 	}
 
-	llAlg * GetAlg(int _n) {
+	llAlg *GetAlg(int _n) {
 		if (_n < GetSize())
 			return alg_list[_n];
 		return NULL;
 	}
+
+	int UpdateMaps();
 
 	double GetValue(float _x, float _y, double *_value = NULL, double *_ceiling = NULL) {
 		if (GetSize() == 0) return 1.;

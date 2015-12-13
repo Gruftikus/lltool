@@ -28,6 +28,17 @@ int llAlg::RegisterOptions(void) {
 	return 1;
 }
 
+int llAlg::UpdateMap(void) {
+	if (mapname) {
+		map = _llMapList()->GetMap(mapname);
+		if (!map) {
+			_llLogger()->WriteNextLine(-LOG_FATAL, "%s: map [%s] not found", command_name, mapname);
+			return 0;
+		}
+	}
+	return 1;
+}
+
 int llAlg::Exec(void) {
 	llWorker::Exec();
 

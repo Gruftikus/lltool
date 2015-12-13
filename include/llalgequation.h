@@ -12,7 +12,10 @@ private:
 
 	MTParser *parser;
 	char     *parser_string;
-	MTDOUBLE  x, y;
+	MTDOUBLE  x, y, z;
+
+	int blue, red, green, alpha;
+	float zmin, zmax;
 
 public:
 

@@ -37,6 +37,7 @@ class llAlg : public llWorker {
 	virtual int Prepare(void);
 	virtual int RegisterOptions(void);
 	virtual int Exec(void);
+	int UpdateMap(void);
 
 };
 

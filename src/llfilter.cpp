@@ -47,8 +47,10 @@ int llFilter::Exec(void) {
 		_llMapList()->DeleteMap(targetname);
 	}
 
-	int widthx = map->GetWidthX();
-	int widthy = map->GetWidthY();
+	unsigned int widthx = map->GetWidthX();
+	unsigned int widthy = map->GetWidthY();
+
+	float threshold = 100000/map->GetZScale();
 
 	float defaultheight = map->GetDefaultHeight();
 	if (rgb)
@@ -56,10 +58,13 @@ int llFilter::Exec(void) {
 	else
 		newmap = new llMap(widthx, widthy, makeshort, defaultheight);
 	if (map->IsEven()) newmap->SetEven();
+
 //	float minheight = defaultheight + 1.0f;
 
-	for (int y=0; y<widthy; y++) {
-		for (int x=0; x<widthx; x++) {
+	for (unsigned int y=0; y<widthy; y++) {
+		for (unsigned int x=0; x<widthx; x++) {
+			float orig_height = 0;
+			if (!rgb) orig_height = map->GetElementRaw(x, y);
 			int x1 = x - dist;
 			int x2 = x + dist;
 			int y1 = y - dist;
@@ -72,21 +77,23 @@ int llFilter::Exec(void) {
 			float mean_red=0., mean_blue=0., mean_green=0., mean_alpha=0.;
 			unsigned char red, blue, green, alpha;
 
-			for (int  xx=x1; xx<=x2; xx++) {
-				for (int  yy=y1; yy<=y2; yy++) {
-					if (rgb) {
-						map->GetTupel(xx, yy, &blue, &green, &red, &alpha);
-						mean_blue  += (float)blue;
-						mean_green += (float)green;
-						mean_red   += (float)red;
-						mean_alpha += (float)alpha;
-						num++;
-					} else {
-						float height = map->GetElementRaw(xx,yy);
-						//					if (height > minheight) {
-						mean +=  height;
-						num++;
-						//					}
+			if (rgb || (int(orig_height) != int(defaultheight))) {
+				for (int  xx=x1; xx<=x2; xx++) {
+					for (int  yy=y1; yy<=y2; yy++) {
+						if (rgb) {
+							map->GetTupel(xx, yy, &blue, &green, &red, &alpha);
+							mean_blue  += (float)blue;
+							mean_green += (float)green;
+							mean_red   += (float)red;
+							mean_alpha += (float)alpha;
+							num++;
+						} else {
+							float height = map->GetElementRaw((unsigned int) xx, (unsigned int) yy);
+							if (fabs(height - orig_height) < threshold && (int(height) != int(defaultheight))) {
+								mean +=  height;
+								num++;
+							}
+						}
 					}
 				}
 			}
@@ -97,10 +104,11 @@ int llFilter::Exec(void) {
 				alpha = (unsigned char)(mean_alpha/num);
 				newmap->SetTupel(x, y, blue, green, red, alpha);
 			} else if (num) {
-				newmap->SetElementRaw(x,y,mean/num);
+				newmap->SetElementRaw(x, y, mean/num);
+				//std::cout << (int)(mean/num) << ":" << (int)orig_height << "  ";
 			} else {
 				//newmap->SetElementRaw(x,y,defaultheight);
-				newmap->SetElementRaw(x,y,-15);
+				newmap->SetElementRaw(x, y, orig_height);
 			}
 		}
 	}
@@ -108,8 +116,8 @@ int llFilter::Exec(void) {
 	newmap->SetCoordSystem(map->GetX1(), map->GetY1(), map->GetX2(), map->GetY2(), map->GetZScale());
 	
 	if (overwrite) {
-		for (int y=0; y<widthy; y++) {
-			for (int x=0; x<widthx; x++) {
+		for (unsigned int y=0; y<widthy; y++) {
+			for (unsigned int x=0; x<widthx; x++) {
 				map->SetElementRaw(x, y, newmap->GetElementRaw(x,y));
 			}
 		}

@@ -11,6 +11,11 @@ int llAlgEquation::Prepare(void) {
 
 	parser->defineVar(_T("x"), &x);
 	parser->defineVar(_T("y"), &y);
+	parser->defineVar(_T("z"), &z);
+
+	blue = red = green = alpha = 0;
+	zmin = -999999999.f;
+	zmax =  999999999.f;
 
 	return 1;
 }
@@ -19,6 +24,14 @@ int llAlgEquation::RegisterOptions(void) {
 	if (!llAlg::RegisterOptions()) return 0;
 
 	RegisterValue("-equation", &parser_string, LLWORKER_OBL_OPTION);
+
+	RegisterValue("-zmin", &zmin);
+	RegisterValue("-zmax", &zmax);
+
+	RegisterFlag("-blue",   &blue);
+	RegisterFlag("-red",    &red);
+	RegisterFlag("-green",  &green);
+	RegisterFlag("-alpha",  &alpha);
 
 	return 1;
 }
@@ -42,6 +55,29 @@ double llAlgEquation::GetValue(float _x, float _y, double *_value) {
 
 	x = _x;
 	y = _y;
+
+	if (map) { //works because std_map is NULL
+		if (!blue && !red && !green && !alpha) {
+			float c = map->GetZ(_x, _y);
+			if (c < zmin) c = zmin;
+			if (c > zmax) c = zmax;
+			z = c;
+		} else {
+			unsigned char byte1;
+			unsigned char byte2;
+			unsigned char byte3;
+			unsigned char byte4;
+			map->GetTupel(map->GetRawX(_x), map->GetRawY(_y), &byte1, &byte2, &byte3, &byte4);
+			float c = 1;
+			if (blue)  c *= float(byte1)/255.f;
+			if (green) c *= float(byte2)/255.f;
+			if (red)   c *= float(byte3)/255.f;
+			if (alpha) c *= float(byte4)/255.f;
+			if (c < zmin) c = zmin;
+			if (c > zmax) c = zmax;
+			z = c;
+		}	
+	}
 
 	double loc_value = parser->evaluate();
 

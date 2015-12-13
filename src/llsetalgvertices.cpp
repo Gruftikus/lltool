@@ -275,6 +275,7 @@ end:
 #endif
 
 		delete tmpmap;
+		//_llMapList()->AddMap("tmp" , tmpmap, NULL, NULL, NULL, NULL);
 		delete seek;
 		return 1;
 	}

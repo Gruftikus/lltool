@@ -44,6 +44,7 @@ int llFillColorMap::Exec(void) {
 			_llLogger()->WriteNextLine(-LOG_ERROR, "%s: alg collection '%s' not found for blue channel", command_name, alg_list_blue);
 			return 0;
 		}
+		algs_blue->UpdateMaps();
 	}
 	llAlgCollection *algs_red = NULL;
 	if (Used("-algred")) {
@@ -52,6 +53,7 @@ int llFillColorMap::Exec(void) {
 			_llLogger()->WriteNextLine(-LOG_ERROR, "%s: alg collection '%s' not found for red channel", command_name, alg_list_red);
 			return 0;
 		}
+		algs_red->UpdateMaps();
 	}
 	llAlgCollection *algs_green = NULL;
 	if (Used("-alggreen")) {
@@ -60,6 +62,7 @@ int llFillColorMap::Exec(void) {
 			_llLogger()->WriteNextLine(-LOG_ERROR, "%s: alg collection '%s' not found for green channel", command_name, alg_list_green);
 			return 0;
 		}
+		algs_green->UpdateMaps();
 	}
 	llAlgCollection *algs_alpha = NULL;
 	if (Used("-algalpha")) {
@@ -68,6 +71,7 @@ int llFillColorMap::Exec(void) {
 			_llLogger()->WriteNextLine(-LOG_ERROR, "%s: alg collection '%s' not found for alpha channel", command_name, alg_list_alpha);
 			return 0;
 		}
+		algs_alpha->UpdateMaps();
 	}
 
 	unsigned int widthx = map->GetWidthX();

@@ -12,6 +12,8 @@ llWorker::llWorker() {
 	f_value.resize(0);
 	d_value.resize(0);
 	s_value.resize(0);
+
+	my_fixed_index = 0;
 }
 
 int llWorker::RegisterFlag(const char *_name, int *_flag, int _opt) {

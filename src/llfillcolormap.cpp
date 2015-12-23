@@ -80,22 +80,30 @@ int llFillColorMap::Exec(void) {
 	for (unsigned int x=0; x<widthx; x++) {
 		for (unsigned int y=0; y<widthy; y++) {
 			if (algs_blue) {
-				unsigned char blue = (unsigned char)(255*algs_blue->GetValue(map->GetCoordX(x), map->GetCoordY(y)));
+				double f_blue = 255. * algs_blue->GetValue(map->GetCoordX(x), map->GetCoordY(y));
+				if (f_blue > 255.) f_blue = 255.;
+				unsigned char blue = (unsigned char)(f_blue);
 				map->SetBlue(x, y, blue);
 			} else
 				map->SetBlue(x, y, 0);
 			if (algs_red) {
-				unsigned char red = (unsigned char)(255*algs_red->GetValue(map->GetCoordX(x), map->GetCoordY(y)));
+				double f_red = 255. * algs_red->GetValue(map->GetCoordX(x), map->GetCoordY(y));
+				if (f_red > 255.) f_red = 255.;
+				unsigned char red = (unsigned char)(f_red);
 				map->SetRed(x, y, red);
 			} else
 				map->SetRed(x, y, 0);
 			if (algs_green) {
-				unsigned char green = (unsigned char)(255*algs_green->GetValue(map->GetCoordX(x), map->GetCoordY(y)));
+				double f_green = 255. * algs_green->GetValue(map->GetCoordX(x), map->GetCoordY(y));
+				if (f_green > 255.) f_green = 255.;
+				unsigned char green = (unsigned char)(f_green);
 				map->SetGreen(x, y, green);
 			} else
 				map->SetGreen(x, y, 0);
 			if (algs_alpha) {
-				unsigned char alpha = (unsigned char)(255*algs_alpha->GetValue(map->GetCoordX(x), map->GetCoordY(y)));
+				double f_alpha = 255. * algs_alpha->GetValue(map->GetCoordX(x), map->GetCoordY(y));
+				if (f_alpha > 255.) f_alpha = 255.;
+				unsigned char alpha = (unsigned char)(f_alpha);
 				map->SetAlpha(x, y, alpha);
 			} else
 				map->SetAlpha(x, y, 0);

@@ -14,13 +14,19 @@ llLogFile::llLogFile() : llWorker() {
 int llLogFile::RegisterOptions(void) {
 	if (!llWorker::RegisterOptions()) return 0;
 
-	RegisterValue("-filename", &filename, LLWORKER_OBL_OPTION);
+	RegisterValue("-filename", &filename);
+	RegisterValue("-value", &filename); //compatible with old MPGUI syntax
 
 	return 1;
 }
 
 int llLogFile::Exec(void) {
 	llWorker::Exec();
+
+	if (!filename) {   
+		_llLogger()->WriteNextLine(-LOG_ERROR, "%s: no filename", command_name);
+		return 0;
+    }
 
 	if (file) fclose(file);
 

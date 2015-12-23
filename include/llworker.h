@@ -17,6 +17,7 @@ class llWorker {
 	 int  checked_value, checked_pos;
 	 bool repeat_worker;
 	 int  silent;
+	 int my_fixed_index;
 
 	 std::vector<const char*> name;
 	 std::vector<int*>    flag;
@@ -126,11 +127,18 @@ class llWorker {
 	virtual int Exec(void);
 
 	void SetCommandIndex(int _com) {
-		command_index = _com;
+		if (my_fixed_index) 
+			command_index = my_fixed_index;
+		else
+			command_index = _com;
 	}
 
 	int GetCommandIndex() {
 		return command_index;
+	}
+
+	void SetFixedIndex(int _my_fixed_index) {
+		my_fixed_index = _my_fixed_index;
 	}
 
 	int Repeat() {

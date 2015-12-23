@@ -4,7 +4,6 @@
 #define LLCOM_MAX_LINE 		10000
 #define LLCOM_MAX_LINE2		20000
 //#define LLCOM_MAX_FLAGS		2000
-#define LLCOM_MAX_GAMES		10
 
 #define LLCOM_MAX_WORKERS	2000
 
@@ -68,12 +67,7 @@ class llCommands {
 	int          section_is_good;
 	unsigned int current_dump_line;
 
-	int gamemode, noskipinfo, skip_next_block;
-
-	const char *game[LLCOM_MAX_GAMES];
-	const char *plugin[LLCOM_MAX_GAMES];
-	const char *pattern[LLCOM_MAX_GAMES];
-	const char *std_ws[LLCOM_MAX_GAMES];
+	int noskipinfo, skip_next_block;
 
  public:
 
@@ -82,8 +76,9 @@ class llCommands {
 	llCommands();
 
 	void SetDefaults(void);
+	void SetSection(char *_section) {section = _section;};
 
-	int Reopen(const char *_section);
+	//int Reopen(const char *_section);
 	int Open(const char *_file, const char *_section = NULL);
 	int ReadCache(void);
 	int ReadStdin(void);

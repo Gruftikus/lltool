@@ -27,6 +27,7 @@ llLogger::llLogger() {
 	}
 	logfile = NULL;
 	level = LOG_INFO;
+	autowrite = 1;
 }
 
 const char *llLogger::ReadNextLine(void) {
@@ -56,7 +57,7 @@ int llLogger::WriteNextLine(int _level, const char *_format, ...) {
 	int writeout = 0;
 
 	if (_level < 0) {
-		writeout = 1;
+		if (autowrite) writeout = 1;
 		_level = -_level;
 	}
 
@@ -95,8 +96,8 @@ int llLogger::WriteNextLine(int _level, const char *_format, ...) {
 		sprintf_s(tmp2,LOG_MAX_LENGTH,"%i [Algorithm] %s",counter,tmp);
 	else sprintf_s(tmp2,LOG_MAX_LENGTH,"%i: %s",counter,tmp); 
 	
-#if 0
-	if (logfile) {
+#if 1
+	if (logfile && !autowrite ) {
 		if (_level == LOG_DEBUG)
 			fprintf(logfile,"%i [Debug] %s\n",counter,tmp); 
 		else if (_level == LOG_INFO)

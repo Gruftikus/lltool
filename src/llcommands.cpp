@@ -1,7 +1,7 @@
 //#include "StdAfx.h"
 
 #include "../include/llcommands.h"
-#include "../include/llmaplist.h"
+//#include "../include/llmaplist.h"
 
 #ifndef _MSC_VER
 #include "../include/def.h"
@@ -104,9 +104,9 @@ int llCommands::SaveFile(const char *_file) {
 		return 0;
 	}
 
-	if (gamemode) {
+	if (_llUtils()->GetValue("_gamemode")) {
 		fprintf(wfile, "[_gamemode]\n");
-		fprintf(wfile, "%s -name=\"%s\"\n", LLCOM_GAMEMODE_CMD, game[gamemode]);
+		fprintf(wfile, "%s -name=\"%s\"\n", LLCOM_GAMEMODE_CMD, _llUtils()->GetValue("_gamemode"));
 	}
 
 	int save=1;
@@ -152,12 +152,20 @@ char *llCommands::GetNextLine(int _cmd) {
 	return lines[current_dump_line - 1];
 };
 
+#if 0
 int llCommands::Reopen(const char *_section) {
 	section = _section;
 
+	worker_pointer = 0;
+
+	for (int i=0; i<worker_cache.size(); i++) {
+		if (worker_cache[i] != NULL) delete worker_cache[i];
+	}
+	worker_cache.resize(0);
+
 	if (lines.size()) {
 		line_pointer = 0;
-		return 1;
+		lines.resize(0);
 	}
 
 	if (!filename) return 0;
@@ -173,6 +181,7 @@ int llCommands::Reopen(const char *_section) {
 
 	return 1;
 }
+#endif
 
 int llCommands::CompileScript(int _compile_all_sections) {
 	char *current_section = "";

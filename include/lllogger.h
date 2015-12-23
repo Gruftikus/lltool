@@ -31,7 +31,7 @@ private:
 
 	unsigned int write_pointer, read_pointer, tot_lines;
 	char *lines[LOG_NUM_LINES];
-	int counter;
+	int counter, autowrite;
 
 public:
 
@@ -44,6 +44,12 @@ public:
 	void SetLogFile(FILE *_file) {
 		logfile = _file;
 	};
+
+	void CloseLogfile(void) {
+		if (logfile)
+			fclose(logfile);
+		logfile = NULL;
+	}
 
 	void Log(const char *_log) {
 		if (logfile) fprintf(logfile, "%s", _log);
@@ -99,6 +105,8 @@ public:
 			x = ReadNextLine();
 		}			
 	}
+
+	void NoAutoDump() {autowrite=0;};
 
 };
 

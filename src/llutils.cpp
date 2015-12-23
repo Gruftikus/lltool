@@ -13,8 +13,10 @@
 #include "../include/def.h"
 #else
 
+#ifndef MYMPGUI
 #include "../externals/mtparser/MTParserLib/MTParser.h"
 #include "../externals/mtparser/MTParserLib/MTParserLocalizer.h"
+#endif
 
 #include <iostream>
 
@@ -559,6 +561,7 @@ check_again2:
 				}
 			}
 		}
+#ifndef MYMPGUI
 		if (bracket_position2) {
 			tmp[bracket_position2] = '\0';
 			tmp[bracket_position1] = '\0';
@@ -579,6 +582,7 @@ check_again2:
 			delete parser;
 			goto check_again2;
 		}
+#endif
 	}
 #endif
 

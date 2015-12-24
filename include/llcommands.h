@@ -67,7 +67,7 @@ class llCommands {
 	int          section_is_good;
 	unsigned int current_dump_line;
 
-	int noskipinfo, skip_next_block;
+	int noskipinfo, skip_next_block, noworkerprint;
 
  public:
 
@@ -76,9 +76,12 @@ class llCommands {
 	llCommands();
 
 	void SetDefaults(void);
-	void SetSection(char *_section) {section = _section;};
+	void OpenSection(char *_section) {
+		section = _section;
+		worker_pointer = 0;
+	};
 
-	//int Reopen(const char *_section);
+	int Close(void);
 	int Open(const char *_file, const char *_section = NULL);
 	int ReadCache(void);
 	int ReadStdin(void);
@@ -115,6 +118,8 @@ class llCommands {
 		if (logfile)
 			fclose(logfile);
 	}
+
+	void NoWorkerPrint() {noworkerprint = 1;};
 
 };
 

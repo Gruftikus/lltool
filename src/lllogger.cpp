@@ -40,7 +40,7 @@ const char *llLogger::ReadNextLine(void) {
 	} 
 
 	read_pointer++;
-	if (read_pointer == LOG_NUM_LINES)  read_pointer = 0;
+	if (read_pointer == LOG_NUM_LINES) read_pointer = 0;
 	tot_lines--;
 
 	const char *s = ":";

@@ -25,6 +25,7 @@ void llCommands::SetDefaults() {
 	worker_pointer = 0;
 	line_pointer   = 0;
 	block_level    = 0;
+	noworkerprint  = 0;
 }
 
 //constructor
@@ -117,7 +118,7 @@ int llCommands::SaveFile(const char *_file) {
 		else if (strlen(lines[i])>0 && _strnicmp(lines[i],"[",1)==0)
 			save = 1;
 		if (save)
-			fprintf(wfile,"%s", lines[i]);
+			fprintf(wfile,"%s\n", lines[i]);
 	}
 
 	//save all variables which are not hidden:
@@ -152,9 +153,8 @@ char *llCommands::GetNextLine(int _cmd) {
 	return lines[current_dump_line - 1];
 };
 
-#if 0
-int llCommands::Reopen(const char *_section) {
-	section = _section;
+int llCommands::Close() {
+	section = NULL;
 
 	worker_pointer = 0;
 
@@ -168,20 +168,20 @@ int llCommands::Reopen(const char *_section) {
 		lines.resize(0);
 	}
 
-	if (!filename) return 0;
+	worker_flags.resize(0);
+	sections.resize(0);
 
+	line_pointer   = 0;
+	block_level    = 0;
+
+	if (filename) filename = NULL;
 	if (file) {
 		fclose(file);
 		file = NULL;
 	}
-	
-	if (fopen_s(&file, filename, "r")) {
-		return 0;
-	}
 
 	return 1;
 }
-#endif
 
 int llCommands::CompileScript(int _compile_all_sections) {
 	char *current_section = "";
@@ -418,7 +418,7 @@ int llCommands::GetCommand(void) {
 	
 	//afterburner	
 	worker->ReplaceFlags();
-	worker->Print();
+	if (!noworkerprint) worker->Print();
 	
 	if (worker->IsSilent()) _llLogger()->level=LOG_WARNING;
 	int retval = worker->Exec();

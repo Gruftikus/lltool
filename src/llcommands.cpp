@@ -76,14 +76,14 @@ int llCommands::Open(const char *_file, const char *_section) {
 	return 1;
 }
 
-int llCommands::ReadCache(void) {
+int llCommands::ReadCache(int no_end) {
 
 	if (!file) {
 		_llLogger()->WriteNextLine(-LOG_ERROR, "llCommands::ReadCache: no file open");
 		return 0;
 	}
 	
-	while ((fgets(dummyline, LLCOM_MAX_LINE, file)) && _strnicmp(dummyline, "@end", 3) != 0) {
+	while ((fgets(dummyline, LLCOM_MAX_LINE, file)) && ((_strnicmp(dummyline, "@end", 3) != 0) || no_end )) {
 		for (unsigned int i=0; i<strlen(dummyline); i++) { //covert DOS files
 			if (dummyline[i]=='\r' || dummyline[i]=='\n') dummyline[i]='\0';
 		}
@@ -170,6 +170,7 @@ int llCommands::Close() {
 
 	worker_flags.resize(0);
 	sections.resize(0);
+	section_cache.resize(0);
 
 	line_pointer   = 0;
 	block_level    = 0;
@@ -194,13 +195,37 @@ int llCommands::CompileScript(int _compile_all_sections) {
 		_llUtils()->StripComment(linex);
 		_llUtils()->StripSpaces(&linex);
 		
+		//_llLogger()->WriteNextLine(LOG_INFO, "linex %s", linex);
+
 		if (strlen(linex) > 0) {
 			if (linex[0] == '[') {
-				char *sec = _llUtils()->NewString(linex);
-				sections.push_back(sec);
-				current_section = sec;
+				//avoid re-compiling of an existing section:
+				int is_existing = 0;
+				if (_compile_all_sections) { //dont care
+					is_existing = 1;
+				} else {
+					if (_stricmp(linex, section) != 0) { //never create section if section is not used
+						//_llLogger()->WriteNextLine(LOG_INFO, "sec skip %s", linex);
+						is_existing = 1;
+					} else {
+						//_llLogger()->WriteNextLine(LOG_INFO, "sec todo %s", linex);
+						for (int i=0; i<sections.size(); i++) {
+							if (_stricmp(linex, sections[i]) == 0) is_existing = 1;
+						}
+					}
+				}
+				if (!is_existing) {
+					char *sec = _llUtils()->NewString(linex);
+					sections.push_back(sec);
+					current_section = sec;
+					//_llLogger()->WriteNextLine(LOG_INFO, "sec current %s", current_section);
+				} else {
+					current_section = "delme";
+				}
 			} else if (_compile_all_sections || _stricmp(current_section, section) == 0) {
 				ExtendWorkerCache();
+
+				//_llLogger()->WriteNextLine(LOG_INFO, "sec comp %s", section);
 				
 				//check for flags
 repeat:				

@@ -1,7 +1,7 @@
 #ifndef _PLLSETFLAG_H_
 #define _PLLSETFLAG_H_
 
-#include "../include/llmapworker.h"
+#include "../include/llworker.h"
 #include "../include/llutils.h"
 
 class llSetFlag : public llWorker {

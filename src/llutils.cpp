@@ -734,7 +734,7 @@ int llUtils::DisableFlag(const char *_name) {
 }
 
 int llUtils::IsEnabled(const char *_name) {
-	unsigned int pos=strlen(_name);
+	unsigned int pos = strlen(_name);
 	for (unsigned int i=0; i<strlen(_name); i++) {
 		if (_name[i] == '=') 
 			pos = i;
@@ -747,14 +747,21 @@ int llUtils::IsEnabled(const char *_name) {
 				char *val     = (char *)GetValue(flag_list[i]);
 				char *newname = new char[strlen(_name+pos+1)+1];			
 				strcpy_s(newname, strlen(_name+pos+1)+1, _name+pos+1);
+				char *orig = newname;
 				StripQuot(&newname);
 				char *newname2 = ReplaceFlags(newname);
+				if (!newname2) {
+					delete orig;
+					if (strlen(val) == 0) 
+						return 1;
+					return 0;
+				}
 				if (_stricmp(newname2, val) == 0) {	
-					delete newname;
+					delete orig;
 					delete newname2;
 					return flag_enable[i];
 				}
-				delete newname;
+				delete orig;
 				delete newname2;
 			}
 		}

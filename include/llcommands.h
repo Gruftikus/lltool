@@ -76,14 +76,14 @@ class llCommands {
 	llCommands();
 
 	void SetDefaults(void);
-	void OpenSection(char *_section) {
+	void OpenSection(const char *_section) {
 		section = _section;
 		worker_pointer = 0;
 	};
 
 	int Close(void);
 	int Open(const char *_file, const char *_section = NULL);
-	int ReadCache(void);
+	int ReadCache(int no_end = 0);
 	int ReadStdin(void);
 	void ReadStdin(const char *_section) {
 		section = _section;

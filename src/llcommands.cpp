@@ -158,7 +158,7 @@ int llCommands::Close() {
 
 	worker_pointer = 0;
 
-	for (int i=0; i<worker_cache.size(); i++) {
+	for (unsigned int i=0; i<worker_cache.size(); i++) {
 		if (worker_cache[i] != NULL) delete worker_cache[i];
 	}
 	worker_cache.resize(0);
@@ -209,7 +209,7 @@ int llCommands::CompileScript(int _compile_all_sections) {
 						is_existing = 1;
 					} else {
 						//_llLogger()->WriteNextLine(LOG_INFO, "sec todo %s", linex);
-						for (int i=0; i<sections.size(); i++) {
+						for (unsigned int i=0; i<sections.size(); i++) {
 							if (_stricmp(linex, sections[i]) == 0) is_existing = 1;
 						}
 					}

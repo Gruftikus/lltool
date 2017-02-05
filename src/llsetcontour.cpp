@@ -123,8 +123,8 @@ int llSetContour::Exec(void) {
 					if (lastflag==-1 && flag==1 && minz<99998) { 
 						if (points->GetMinDistance(minx,y) > minab) { //  && 
 							if (!cellsize_x || points->GetMinDistanceGrid(minx,y,cellsize_x,1) > minab) {
-								//points->AddPoint(minx,y,heightmap->GetZ(minx,y));	
-								points->AddPoint(minx, y, z);
+								points->AddPoint(minx,y,map->GetZ(minx,y));	
+								//points->AddPoint(minx, y, z);
 								con_points++;	
 								minz = 99999;
 							}
@@ -133,8 +133,8 @@ int llSetContour::Exec(void) {
 					if (lastflag==1 && flag==-1 && maxz>-99998) { 
 						if (points->GetMinDistance(maxx,y) > minab) { //  && 
 							if (!cellsize_x || points->GetMinDistanceGrid(maxx,y,cellsize_x,1) > minab) {
-								//points->AddPoint(minx,y,heightmap->GetZ(minx,y));	
-								points->AddPoint(maxx, y, z);
+								points->AddPoint(maxx,y,map->GetZ(maxx,y));	
+								//points->AddPoint(maxx, y, z);
 								con_points++;	
 								maxz = -99999;
 							}
@@ -232,8 +232,8 @@ int llSetContour::Exec(void) {
 					if (lastflag==-1 && flag==1 && minz<99998) { 
 						if (points->GetMinDistance(x,miny) > minab) { 
 							if (!cellsize_y || points->GetMinDistanceGrid(x,miny,cellsize_y,2) > minab) {
-								//points->AddPoint(x,miny,heightmap->GetZ(x,miny));	
-								points->AddPoint(x, miny, z);
+								points->AddPoint(x,miny,map->GetZ(x,miny));	
+								//points->AddPoint(x, miny, z);
 								con_points++;	
 								minz = 99999;
 							}
@@ -242,8 +242,8 @@ int llSetContour::Exec(void) {
 					if (lastflag==1 && flag==-1 && maxz>-99998) { 
 						if (points->GetMinDistance(x,maxy) > minab) { 
 							if (!cellsize_y || points->GetMinDistanceGrid(x,maxy,cellsize_y,2) > minab) {
-								//points->AddPoint(x,miny,heightmap->GetZ(x,miny));	
-								points->AddPoint(x, maxy, z);
+								points->AddPoint(x,maxy,map->GetZ(x,maxy));	
+								//points->AddPoint(x, maxy, z);
 								con_points++;	
 								minz = 99999;
 							}

@@ -62,6 +62,7 @@ int llExportMapToDDS::RegisterOptions(void) {
 	RegisterValue("-bitrate",  &bitrate);
 	RegisterValue("-quality",  &quality_level);
 	RegisterValue("-format",   &fmt_string);
+	RegisterValue("-swizzle",  &swizzle);
 
 
 	RegisterFlag("-noAdaptiveBlocks",  &noAdaptiveBlocks);
@@ -87,16 +88,16 @@ int llExportMapToDDS::Exec(void) {
 		filename = filename_tmp;
 	}
 
-	int x1 = map->GetRawX(_llUtils()->x00);
-	int y1 = map->GetRawY(_llUtils()->y00);
-	int x2 = map->GetRawX(_llUtils()->x11);
-	int y2 = map->GetRawY(_llUtils()->y11);
+	int x1 = map->GetRawIntX(_llUtils()->x00);
+	int y1 = map->GetRawIntY(_llUtils()->y00);
+	int x2 = map->GetRawIntX(_llUtils()->x11);
+	int y2 = map->GetRawIntY(_llUtils()->y11);
 
 	if (!map->IsUneven()) {
-		x1 = map->GetRawX(_llUtils()->x00 + map->GetWidthXPerRaw()*.01f);
-		y1 = map->GetRawY(_llUtils()->y00 + map->GetWidthYPerRaw()*.01f);
-		x2 = map->GetRawX(_llUtils()->x11 - map->GetWidthXPerRaw()*.01f);
-		y2 = map->GetRawY(_llUtils()->y11 - map->GetWidthYPerRaw()*.01f);
+		x1 = map->GetRawIntX(_llUtils()->x00 + map->GetWidthXPerRaw()*.01f);
+		y1 = map->GetRawIntY(_llUtils()->y00 + map->GetWidthYPerRaw()*.01f);
+		x2 = map->GetRawIntX(_llUtils()->x11 - map->GetWidthXPerRaw()*.01f);
+		y2 = map->GetRawIntY(_llUtils()->y11 - map->GetWidthYPerRaw()*.01f);
 	}
 
 	//std::cout << x1 << ":" << y1 << ":" << x2 << ":" << y2 << std::endl;
@@ -125,16 +126,49 @@ int llExportMapToDDS::Exec(void) {
 
 			int tupel = 0;
 
-			if (Used("-scale")) {
-				tupel = map->GetTupelScaled(x, y, &byte1, &byte2, &byte3, &byte4, scale);			
-			} else {
-				tupel = map->GetTupel(x, y, &byte1, &byte2, &byte3, &byte4);
+			if (x>=0 && y>=0) {
+				if (Used("-scale")) {
+					tupel = map->GetTupelScaled(x, y, &byte1, &byte2, &byte3, &byte4, scale);			
+				} else {
+					tupel = map->GetTupel(x, y, &byte1, &byte2, &byte3, &byte4);
+				}
 			}
 
 			int xl = x-x1;
 			int yl = y-y1;
 			if (flipx) xl = x2-x;
 			if (flipy) yl = y2-y; 
+
+			if (_stricmp(swizzle, "gr") == 0 || _stricmp(swizzle, "rg") == 0) {
+				unsigned char tmp = byte2;
+				byte2 = byte3;
+				byte3 = tmp;
+			}
+			if (_stricmp(swizzle, "bg") == 0 || _stricmp(swizzle, "gb") == 0) {
+				unsigned char tmp = byte1;
+				byte1 = byte2;
+				byte2 = tmp;
+			}
+			if (_stricmp(swizzle, "br") == 0 || _stricmp(swizzle, "rb") == 0) {
+				unsigned char tmp = byte1;
+				byte1 = byte3;
+				byte3 = tmp;
+			}
+			if (_stricmp(swizzle, "ba") == 0 || _stricmp(swizzle, "ab") == 0) {
+				unsigned char tmp = byte1;
+				byte1 = byte4;
+				byte4 = tmp;
+			}
+			if (_stricmp(swizzle, "ga") == 0 || _stricmp(swizzle, "ag") == 0) {
+				unsigned char tmp = byte2;
+				byte2 = byte4;
+				byte4 = tmp;
+			}
+			if (_stricmp(swizzle, "ra") == 0 || _stricmp(swizzle, "ar") == 0) {
+				unsigned char tmp = byte3;
+				byte3 = byte4;
+				byte4 = tmp;
+			}
 
 			if (tupel) {
 				pSrc_image[(xl)+(yl)*width] = byte3 | (byte2 << 8) | (byte1 << 16) | (byte4 << 24);

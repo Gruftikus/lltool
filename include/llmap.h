@@ -236,6 +236,14 @@ public:
 		unsigned int yy = (unsigned int)((_y - y1 + widthy_per_raw2) / widthy_per_raw);
 		return yy;
 	}
+	int GetRawIntX(float _x) {
+		int xx = (int)((_x - x1 + widthx_per_raw2) / widthx_per_raw);
+		return xx;
+	}
+	int GetRawIntY(float _y) {
+		int yy = (int)((_y - y1 + widthy_per_raw2) / widthy_per_raw);
+		return yy;
+	}
 	float GetCoordX(unsigned int _x) {
 		return ((float)_x * widthx_per_raw + x1);
 	}

@@ -152,6 +152,7 @@ class llUtils {
 	//********************
 
 	float x00, y00, x11, y11; //focus
+	char *myflagname, *myflagvalue; //kept for compatibility
 
 	uint8_t* data;
 	size_t   size;

@@ -343,7 +343,8 @@ int llExportMeshToObj::MakeSelection() {
 	}
 
 	newpoints->Resize();
-	if (Used("-scale")) newpoints->Scale(scale);
+	if (Used("-scale")) 
+		newpoints->Scale(scale);
 	newpoints->Translation(trans_x, trans_y, trans_z);
 
 	if (flipu) {

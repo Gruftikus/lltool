@@ -49,6 +49,7 @@ int llExportMapToDDS::Prepare(void) {
 	fmt_string = "DXT1";
 	flipx = flipy = 0;
 	crop = 0;
+	swizzle = NULL;
 
 	return 1;
 }
@@ -139,35 +140,37 @@ int llExportMapToDDS::Exec(void) {
 			if (flipx) xl = x2-x;
 			if (flipy) yl = y2-y; 
 
-			if (_stricmp(swizzle, "gr") == 0 || _stricmp(swizzle, "rg") == 0) {
-				unsigned char tmp = byte2;
-				byte2 = byte3;
-				byte3 = tmp;
-			}
-			if (_stricmp(swizzle, "bg") == 0 || _stricmp(swizzle, "gb") == 0) {
-				unsigned char tmp = byte1;
-				byte1 = byte2;
-				byte2 = tmp;
-			}
-			if (_stricmp(swizzle, "br") == 0 || _stricmp(swizzle, "rb") == 0) {
-				unsigned char tmp = byte1;
-				byte1 = byte3;
-				byte3 = tmp;
-			}
-			if (_stricmp(swizzle, "ba") == 0 || _stricmp(swizzle, "ab") == 0) {
-				unsigned char tmp = byte1;
-				byte1 = byte4;
-				byte4 = tmp;
-			}
-			if (_stricmp(swizzle, "ga") == 0 || _stricmp(swizzle, "ag") == 0) {
-				unsigned char tmp = byte2;
-				byte2 = byte4;
-				byte4 = tmp;
-			}
-			if (_stricmp(swizzle, "ra") == 0 || _stricmp(swizzle, "ar") == 0) {
-				unsigned char tmp = byte3;
-				byte3 = byte4;
-				byte4 = tmp;
+			if (swizzle) {
+				if (_stricmp(swizzle, "gr") == 0 || _stricmp(swizzle, "rg") == 0) {
+					unsigned char tmp = byte2;
+					byte2 = byte3;
+					byte3 = tmp;
+				}
+				if (_stricmp(swizzle, "bg") == 0 || _stricmp(swizzle, "gb") == 0) {
+					unsigned char tmp = byte1;
+					byte1 = byte2;
+					byte2 = tmp;
+				}
+				if (_stricmp(swizzle, "br") == 0 || _stricmp(swizzle, "rb") == 0) {
+					unsigned char tmp = byte1;
+					byte1 = byte3;
+					byte3 = tmp;
+				}
+				if (_stricmp(swizzle, "ba") == 0 || _stricmp(swizzle, "ab") == 0) {
+					unsigned char tmp = byte1;
+					byte1 = byte4;
+					byte4 = tmp;
+				}
+				if (_stricmp(swizzle, "ga") == 0 || _stricmp(swizzle, "ag") == 0) {
+					unsigned char tmp = byte2;
+					byte2 = byte4;
+					byte4 = tmp;
+				}
+				if (_stricmp(swizzle, "ra") == 0 || _stricmp(swizzle, "ar") == 0) {
+					unsigned char tmp = byte3;
+					byte3 = byte4;
+					byte4 = tmp;
+				}
 			}
 
 			if (tupel) {

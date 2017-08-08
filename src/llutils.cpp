@@ -686,6 +686,8 @@ int llUtils::AddFlag(const char *_name) {
 	if (EnableFlag(tmp)) { //already there
 		if (val)
 			SetValue(tmp, _llUtils()->NewString(val));
+		else
+			myflagname = _llUtils()->NewString(_name);
 		delete tmp;
 		return 1;
 	}
@@ -707,6 +709,9 @@ int llUtils::AddFlag(const char *_name) {
 	flag_description[num_flags] = NULL;
 	flag_enable[num_flags]      = 1;
 	flag_hidden[num_flags]      = 0;
+	myflagname = _llUtils()->NewString(_name);
+	if (flag_value[num_flags])
+		myflagvalue = _llUtils()->NewString(flag_value[num_flags]);
 
 	num_flags++;
 	return 1;
@@ -726,6 +731,7 @@ int llUtils::EnableFlag(const char *_name) {
 int llUtils::DisableFlag(const char *_name) {
 	for (unsigned int i=0; i<num_flags; i++) {
 		if (_stricmp(_name, flag_list[i]) == 0) {
+			myflagname = _llUtils()->NewString(_name);
 			flag_enable[i] = 0;
 			return 1;
 		}
@@ -775,6 +781,8 @@ int llUtils::SetValue(const char *_name, const char *_value) {
 		if (_stricmp(_name, flag_list[i]) == 0) {
 			if (flag_value[i]) delete (flag_value[i]);
 			flag_value[i] = _llUtils()->NewString(_value);
+			myflagname = _llUtils()->NewString(_name);
+			myflagvalue = _llUtils()->NewString(flag_value[i]);
 			sscanf_s(_value, "%lf", &(flag_value_f[i]));
 			return 1;
 		}

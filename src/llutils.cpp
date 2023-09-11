@@ -698,7 +698,7 @@ int llUtils::AddFlag(const char *_name) {
 	}
 
 	flag_list[num_flags] = _llUtils()->NewString(tmp);
-	delete tmp;
+	//delete tmp; JdG: we still need this
 	if (val) 
 		flag_value[num_flags] = _llUtils()->NewString(val);
 	else
@@ -714,6 +714,7 @@ int llUtils::AddFlag(const char *_name) {
 		myflagvalue = _llUtils()->NewString(flag_value[num_flags]);
 
 	num_flags++;
+	delete tmp; // JdG: now it can go
 	return 1;
 }
 
